@@ -1,0 +1,8 @@
+# Ignore C++ build files
+**/build
+
+# Ignore .vscode folder
+**/.vscode
+
+# Ignore .DS_Store files from macOS
+**/.DS_Store
