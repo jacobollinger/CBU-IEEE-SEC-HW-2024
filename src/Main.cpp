@@ -2,11 +2,11 @@
 
 int main()
 {
-    DEBUG("Initializing...");
+    // DEBUG("Initializing...");
     init();
-    DEBUG("Initialization complete. Waiting to start.");
+    // DEBUG("Initialization complete. Waiting to start.");
     waitToStart();
-    DEBUG("Starting...");
+    // DEBUG("Starting...");
     start();
     
     // TODO: Main block of code
@@ -33,5 +33,5 @@ void start()
 void stop()
 {
     timer.stop();
-    DEBUG("Time elapsed: " << timer.getDuration() << " seconds.");
+    // DEBUG("Time elapsed: " << timer.getDuration() << " seconds.");
 }
