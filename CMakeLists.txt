@@ -5,7 +5,7 @@ set(CMAKE_CXX_STANDARD 11)
 
 set(SOURCE_DIR "${PROJECT_SOURCE_DIR}/src")
 set(SOURCE_FILES 
-    ${SOURCE_DIR}/main.cpp
+    ${SOURCE_DIR}/Main.cpp
 )
 
 option(USE_SUPERBUILD "Use Superbuild" ON)

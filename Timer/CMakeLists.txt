@@ -1,7 +1,7 @@
 project(${CMAKE_PROJECT_NAME}_TIMER)
 
 set(SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
-set(SOURCE_FILES ${SOURCE_DIR}/timer.cpp)
+set(SOURCE_FILES ${SOURCE_DIR}/Timer.cpp)
 
 add_library(${PROJECT_NAME} ${SOURCE_FILES})
 
