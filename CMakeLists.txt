@@ -27,3 +27,6 @@ target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/i
 
 add_subdirectory(Timer)
 target_link_libraries(${CMAKE_PROJECT_NAME} ${CMAKE_PROJECT_NAME}_TIMER)
+
+add_subdirectory(Arduino)
+add_dependencies(${CMAKE_PROJECT_NAME} ${CMAKE_PROJECT_NAME}_ARDUINO)
