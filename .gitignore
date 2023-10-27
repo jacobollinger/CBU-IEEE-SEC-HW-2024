@@ -1,6 +1,3 @@
-# Ignore C++ build files
-**/build
-
 # Ignore .vscode folder
 **/.vscode
 

@@ -1,6 +1,6 @@
 # CBU's Robot For the IEEE SoutheastCon Hardware Competition 2024
 
-Welcome to the README for the codebase developed for the 2024 IEEE SoutheastCon Hardware Competition. This codebase is written in C++ and is designed to meet the requirements and challenges of the competition. Below, you will find information about the competition, the codebase, and how to set up the codebase.
+Welcome to the README for the codebase developed for the 2024 IEEE SoutheastCon Hardware Competition. This codebase is written in Python and is designed to meet the requirements and challenges of the competition. Below, you will find information about the competition, the codebase, and how to set up the codebase.
 
 ## Table of Contents
 - [Competition Overview](#competition-overview)
