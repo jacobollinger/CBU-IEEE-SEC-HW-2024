@@ -62,7 +62,7 @@ def move_backward(distance):
     thread2.join()
 
 def turn_left(angle):
-    distance = chasis_circumference/wheel_circumference
+    distance = (chasis_circumference/360)*angle
     degree_for_servo1 = degree(distance)
     degree_for_servo2 = -1*(degree_for_servo1)
     thread1 = threading.Thread(target=move_servo, args=(servo_pin1, degree_for_servo1,))
@@ -73,7 +73,7 @@ def turn_left(angle):
     thread2.join()
 
 def turn_right(angle):
-    distance = chasis_circumference/wheel_circumference
+    distance = (chasis_circumference/360)*angle
     degree_for_servo2 = degree(distance)
     degree_for_servo1 = -1*(degree_for_servo1)
     thread1 = threading.Thread(target=move_servo, args=(servo_pin1, degree_for_servo1,))
