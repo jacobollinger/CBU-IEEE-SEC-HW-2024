@@ -107,4 +107,62 @@ class Wheels:
         thread2.join()
 
 class Arm:
-    pass
+    # Define constants or configuration settings
+    GPIO.setmode(GPIO.BOARD)
+    SERVO_PIN = 4 # change as needed
+    GPIO.setup(SERVO_PIN, GPIO.OUT)
+    SERVO_LOCK = threading.Lock()
+
+    # Degree calculation function for the arm
+    def degree(self, distance):
+        return ((distance / self.WHEEL_CIRCUMFERENCE) * 360.0)
+
+    # Arm movement functions
+
+    # Function that allows robot to move arm up
+    def move_arm_up(self, distance):
+        # For this function the arm will move up
+        degree_for_motor = self.degree(distance)
+        # Create thread for the motor
+        thread = threading.Thread(target=self.move_motor, args=(self.SERVO_PIN, degree_for_motor,))
+        # Start thread
+        thread.start()
+        # Wait for thread to finish
+        thread.join()
+
+    # Function that allows robot to move arm down
+    def move_arm_down(self, distance):
+        # For this function the arm will move down
+        degree_for_motor = self.degree(distance)
+        # Create thread for the motor
+        thread = threading.Thread(target=self.move_motor, args=(self.SERVO_PIN, degree_for_motor,))
+        # Start thread
+        thread.start()
+        # Wait for thread to finish
+        thread.join()
+
+    # Function that allows robot to move arm left
+    def move_arm_left(self, distance):
+        # For this function the arm will move left
+        degree_for_motor = self.degree(distance)
+        # Create thread for the motor
+        thread = threading.Thread(target=self.move_motor, args=(self.SERVO_PIN, degree_for_motor,))
+        # Start thread
+        thread.start()
+        # Wait for thread to finish
+        thread.join()
+
+    # Function that allows robot to move arm right
+    def move_arm_right(self, distance):
+        # For this function the arm will move right
+        degree_for_motor = self.degree(distance)
+        # Create thread for the motor
+        thread = threading.Thread(target=self.move_motor, args=(self.SERVO_PIN, degree_for_motor,))
+        # Start thread
+        thread.start()
+        # Wait for thread to finish
+        thread.join()
+
+    # Function that allows robot to move arm forward
+    def move_arm_forward(self, distance):
+        # For this
