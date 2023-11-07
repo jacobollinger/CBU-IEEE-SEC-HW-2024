@@ -1,6 +1,5 @@
-<<<<<<< HEAD
-=======
-from actuators import Wheels
+from actuators import Wheels, Arm
+from ml import GameObjectCNNModel, GameObjectDataset
 
 
 def main():
@@ -8,4 +7,3 @@ def main():
 
 if __name__ == "__main__":
     main()
->>>>>>> ff4789e9195d764d8483455f5286a00e4dae3425
