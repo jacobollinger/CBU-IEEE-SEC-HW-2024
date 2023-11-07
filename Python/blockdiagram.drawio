@@ -1,11 +1,11 @@
 <mxfile host="65bd71144e">
     <diagram id="yba9DU9IvSz2d7m307n7" name="Page-1">
-        <mxGraphModel dx="653" dy="373" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+        <mxGraphModel dx="576" dy="329" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
             <root>
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
                 <mxCell id="19" value="" style="rounded=1;whiteSpace=wrap;html=1;fontFamily=Helvetica;fillColor=#e51400;fontColor=#ffffff;strokeColor=#B20000;" vertex="1" parent="1">
-                    <mxGeometry x="95" y="60" width="510" height="355" as="geometry"/>
+                    <mxGeometry x="95" y="60" width="510" height="330" as="geometry"/>
                 </mxCell>
                 <mxCell id="18" value="" style="rounded=1;whiteSpace=wrap;html=1;fontFamily=Helvetica;fillColor=#76608a;fontColor=#ffffff;strokeColor=#432D57;" vertex="1" parent="1">
                     <mxGeometry x="380" y="170" width="180" height="180" as="geometry"/>
@@ -66,6 +66,56 @@
                 </mxCell>
                 <mxCell id="22" value="IEEE Robot" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontFamily=Helvetica;fontSize=20;" vertex="1" parent="1">
                     <mxGeometry x="290" y="70" width="120" height="30" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+    <diagram id="gPIYVHlD-2qUs39aNfa7" name="Page-2">
+        <mxGraphModel dx="980" dy="560" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="eKI4cqfa9-Rharql0XHc-14" value="" style="rounded=1;whiteSpace=wrap;html=1;fontFamily=Helvetica;fontSize=14;fillColor=#a0522d;fontColor=#ffffff;strokeColor=#6D1F00;" vertex="1" parent="1">
+                    <mxGeometry x="50" y="50" width="720" height="300" as="geometry"/>
+                </mxCell>
+                <mxCell id="eKI4cqfa9-Rharql0XHc-13" value="" style="rounded=1;whiteSpace=wrap;html=1;fontFamily=Helvetica;fontSize=14;fillColor=#6d8764;fontColor=#ffffff;strokeColor=#3A5431;" vertex="1" parent="1">
+                    <mxGeometry x="410" y="100" width="310" height="220" as="geometry"/>
+                </mxCell>
+                <mxCell id="eKI4cqfa9-Rharql0XHc-12" value="" style="rounded=1;whiteSpace=wrap;html=1;fontFamily=Helvetica;fontSize=14;fillColor=#647687;fontColor=#ffffff;strokeColor=#314354;" vertex="1" parent="1">
+                    <mxGeometry x="90" y="100" width="310" height="100" as="geometry"/>
+                </mxCell>
+                <mxCell id="eKI4cqfa9-Rharql0XHc-1" value="Right Motor" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="250" y="130" width="120" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="eKI4cqfa9-Rharql0XHc-2" value="Left Motor" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="110" y="130" width="120" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="eKI4cqfa9-Rharql0XHc-3" value="Shoulder Servo" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="440" y="130" width="120" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="eKI4cqfa9-Rharql0XHc-4" value="Elbow Servo" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="440" y="190" width="120" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="eKI4cqfa9-Rharql0XHc-5" value="Wrist Rotate Servo" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="570" y="130" width="120" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="eKI4cqfa9-Rharql0XHc-6" value="Wrist Flex Servo" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="570" y="190" width="120" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="eKI4cqfa9-Rharql0XHc-7" value="Grabber Servo" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="440" y="250" width="120" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="eKI4cqfa9-Rharql0XHc-10" value="Base Motor" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="570" y="250" width="120" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="jGfPJIpKgg9jU8iKTUKb-1" value="actuators.py" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontFamily=Helvetica;fontSize=20;" vertex="1" parent="1">
+                    <mxGeometry x="340" y="60" width="120" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="Qk5B2i8teWZLi-dVHSIC-1" value="Wheels" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontFamily=Helvetica;fontSize=14;" vertex="1" parent="1">
+                    <mxGeometry x="210" y="100" width="60" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="Qk5B2i8teWZLi-dVHSIC-2" value="Arm" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontFamily=Helvetica;fontSize=14;" vertex="1" parent="1">
+                    <mxGeometry x="530" y="100" width="60" height="30" as="geometry"/>
                 </mxCell>
             </root>
         </mxGraphModel>
