@@ -1,17 +1,21 @@
-from math import degrees
 import threading
 import time
 import Jetson.GPIO as GPIO
 
 class Wheels:
     # Define constants or configuration settings
+    # Set the pin numbering scheme to the numbering shown on the robot itself
     GPIO.setmode(GPIO.BOARD)
+    # The pins for the motors will be defined here
     MOTOR_PIN1 = 2 # right motor, change as needed
     MOTOR_PIN2 = 3 # left motor, change as needed
+    # Set the pins as outputs
     GPIO.setup(MOTOR_PIN1, GPIO.OUT)
     GPIO.setup(MOTOR_PIN2, GPIO.OUT)
+    # Create locks for the motors
     MOTOR1_LOCK = threading.Lock()
     MOTOR2_LOCK = threading.Lock()
+    # Define constants for the wheels
     WHEEL_CIRCUMFERENCE = .08 * 3.14159265359 # 80mm is the radius of the wheel
     CHASIS_CIRCUMFERENCE = 5 * 3.14159265359 # 5 is the distance between the wheels, change later
 
@@ -25,16 +29,12 @@ class Wheels:
             # Define PWM settings for the motor
             pwm_frequency = 50  # Hz
             pwm = GPIO.PWM(motor_pin, pwm_frequency)
-
             # Calculate duty cycle for the specified degree
             duty_cycle = (degrees / 180.0) * 10.0 + 2.5  # Mapping degrees to duty cycle (adjust as needed)
-
             # Start PWM with the calculated duty cycle
             pwm.start(duty_cycle)
-
             # Allow time for the motor to reach the desired position, will be changed later
             time.sleep(1)
-
             # Stop PWM
             pwm.stop()
         finally:
@@ -108,61 +108,52 @@ class Wheels:
 
 class Arm:
     # Define constants or configuration settings
+    # Set the pin numbering scheme to the numbering shown on the robot itself
     GPIO.setmode(GPIO.BOARD)
-    SERVO_PIN = 4 # change as needed
-    GPIO.setup(SERVO_PIN, GPIO.OUT)
-    SERVO_LOCK = threading.Lock()
+    # The pins for the servos will be defined here
+    SERVO_PIN1 = 4 # 360 degree base (YAW), change as needed
+    SERVO_PIN2 = 5 # Sholder joint servo (PITCH), change as needed
+    SERVO_PIN3 = 6 # Elbow joint servo (PITCH), change as needed
+    SERVO_PIN4 = 7 # 360 degree wrist servo (ROLL), change as needed
+    SERVO_PIN5 = 8 # Wrist joint servo (PITCH), change as needed
+    SERVO_PIN6 = 9 # Grabber servo, change as needed
+    # Set the pins as outputs
+    GPIO.setup(SERVO_PIN1, GPIO.OUT)
+    GPIO.setup(SERVO_PIN2, GPIO.OUT)
+    GPIO.setup(SERVO_PIN3, GPIO.OUT)
+    GPIO.setup(SERVO_PIN4, GPIO.OUT)
+    GPIO.setup(SERVO_PIN5, GPIO.OUT)
+    GPIO.setup(SERVO_PIN6, GPIO.OUT)
+    # Create locks for the servos
+    SERVO1_LOCK = threading.Lock()
+    SERVO2_LOCK = threading.Lock()
+    SERVO3_LOCK = threading.Lock()
+    SERVO4_LOCK = threading.Lock()
+    SERVO5_LOCK = threading.Lock()
+    SERVO6_LOCK = threading.Lock()
+    # Define constants for the arm
+    # Set Later
 
     # Degree calculation function for the arm
     def degree(self, distance):
         return ((distance / self.WHEEL_CIRCUMFERENCE) * 360.0)
 
     # Arm movement functions
+    
+    def rotate_base(degrees):
+    # Code to rotate base servo to the specified degrees
 
-    # Function that allows robot to move arm up
-    def move_arm_up(self, distance):
-        # For this function the arm will move up
-        degree_for_motor = self.degree(distance)
-        # Create thread for the motor
-        thread = threading.Thread(target=self.move_motor, args=(self.SERVO_PIN, degree_for_motor,))
-        # Start thread
-        thread.start()
-        # Wait for thread to finish
-        thread.join()
+    def move_shoulder(angle):
+    # Code to move shoulder servo to the specified angle
 
-    # Function that allows robot to move arm down
-    def move_arm_down(self, distance):
-        # For this function the arm will move down
-        degree_for_motor = self.degree(distance)
-        # Create thread for the motor
-        thread = threading.Thread(target=self.move_motor, args=(self.SERVO_PIN, degree_for_motor,))
-        # Start thread
-        thread.start()
-        # Wait for thread to finish
-        thread.join()
+    def bend_elbow(angle):
+    # Code to move elbow servo to the specified angle
 
-    # Function that allows robot to move arm left
-    def move_arm_left(self, distance):
-        # For this function the arm will move left
-        degree_for_motor = self.degree(distance)
-        # Create thread for the motor
-        thread = threading.Thread(target=self.move_motor, args=(self.SERVO_PIN, degree_for_motor,))
-        # Start thread
-        thread.start()
-        # Wait for thread to finish
-        thread.join()
+    def rotate_wrist(degrees):
+    # Code to rotate wrist servo
 
-    # Function that allows robot to move arm right
-    def move_arm_right(self, distance):
-        # For this function the arm will move right
-        degree_for_motor = self.degree(distance)
-        # Create thread for the motor
-        thread = threading.Thread(target=self.move_motor, args=(self.SERVO_PIN, degree_for_motor,))
-        # Start thread
-        thread.start()
-        # Wait for thread to finish
-        thread.join()
+    def flex_wrist(angle):
+    # Code to move wrist flex servo
 
-    # Function that allows robot to move arm forward
-    def move_arm_forward(self, distance):
-        # For this
+    def actuate_gripper(open_close):
+    # Code to open or close the gripper servo
