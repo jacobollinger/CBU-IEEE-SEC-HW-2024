@@ -1,0 +1,30 @@
+while(not started)
+    wait(); // Detect start of run (button?).
+
+while(the green LED is off)
+    wait(); // Wait for the green LED to turn on.
+
+start timer.
+
+begin collecting small packages.
+cross ramp and deposit packages in the small package delivery area.
+
+return to start and collect large packages.
+cross ramp and deposit packages in the large package delivery area.
+
+move to the fuel tank storage area.
+if there is enough time left.
+    collect fuel tanks.
+
+approach crater and deploy bridge.
+
+cross bridge.
+for each rocket thruster.
+    if there is enough time left.
+        approach rocket thruster.
+        assemble rocket thrusters.
+
+press button to end run.
+stop timer.
+
+log time taken.
