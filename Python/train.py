@@ -75,7 +75,7 @@ with torch.no_grad():
 
         outputs = model(images)
         _, predicted = torch.max(outputs.data, 1)
-        print(f"Predicted: {predicted.item()}, Actual: {classes[labels.item()]}, Correct: {predicted == labels}")
+        print(f"Predicted: {classes[predicted.item()]}, Actual: {classes[labels.item()]}, Correct: {predicted == labels}")
         total += labels.size(0)
         correct += (predicted == labels).sum().item()
     
