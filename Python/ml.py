@@ -1,12 +1,15 @@
+
+
 try:
+    from datetime import datetime
     import torch
     import torch.nn as nn
     import torch.nn.functional as F
     import torchvision
-    from torchvision.io import read_image
     import torchvision.transforms as transforms
     import pandas as pd
     from PIL import Image
+    import glob
     import os
 except ModuleNotFoundError:
     print(
@@ -54,7 +57,7 @@ class GameObjectDataset(torch.utils.data.Dataset):
         #     index = index.tolist()
 
         image_path = os.path.join(self.IMAGE_DIR, self.IMAGE_LABELS.iloc[index, 1], self.IMAGE_LABELS.iloc[index, 0])
-        image = Image.open(image_path)
+        image = Image.open(image_path).convert("RGB")
         label = self.IMAGE_LABELS.iloc[index, 2]
         if self.transform:
             image = self.transform(image)
@@ -67,13 +70,53 @@ class GameObjectModel(nn.Module):
     A model for the game object dataset.
     """
 
-    def __init__(self):
+    def __init__(self, load=False):
         """
         Initializes the model.
         """
         super(GameObjectModel, self).__init__()
         self.resnet = torchvision.models.resnet50(pretrained=True) #? maybe change to a different resnet model
         self.resnet.fc = nn.Linear(self.resnet.fc.in_features, 4)
+        
+        if load:
+            self.load()
 
     def forward(self, x):
         return self.resnet(x)
+    
+    def save(self, path=None, postfix=""):
+        if path is None:
+            path = f"models/model_{datetime.now().strftime('%Y%m%d_%H%M%S') + postfix}.pth"
+        
+        #! make sure models/ directory exists
+        os.makedirs("models", exist_ok=True)
+        
+        torch.save(self.state_dict(), path)
+        
+        print(f"Model saved to {path}")
+        
+    def epoch_save(self, epoch, loss):
+        name = f"model_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
+        path = f"models/{name}/{name}_e{epoch}_l{loss:.3f}.pth"
+        self.save(path)
+
+    def load(self, path=None):
+        if path is None:
+            # load latest model
+            # format: model_20210907_142912-e1-a0.75.pth
+            files = sorted(glob.glob("models/*.pth"))
+            
+            if len(files) == 0:
+                print("No models found in models/ directory")
+                return self
+
+            path = files[-1]
+            
+        try:
+            self.load_state_dict(torch.load(path))
+            self.eval()
+            print(f"Model loaded from {path}")
+        except FileNotFoundError:
+            print(f"Model not found at {path}")
+        
+        return self
