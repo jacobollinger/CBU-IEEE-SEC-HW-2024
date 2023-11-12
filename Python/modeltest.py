@@ -55,6 +55,15 @@ class ImageClassifierApp:
         # Display the result
         self.result_label.config(text=f"Prediction: {prediction}")
 
+        # Update the canvas with the captured image
+        self.display_captured_image(frame_rgb)
+
+    def display_captured_image(self, frame_rgb):
+        # Convert the OpenCV frame to a PhotoImage for display in the Tkinter canvas
+        photo = ImageTk.PhotoImage(image=Image.fromarray(frame_rgb))
+        self.canvas.photo = photo  # Keep a reference to avoid garbage collection
+        self.canvas.create_image(0, 0, anchor=tk.NW, image=photo)
+
     def classify_image(self, image):
         classes = ("package", "thruster", "fuel_tank")
         # Transform the image and prepare it for the model
@@ -76,12 +85,18 @@ class ImageClassifierApp:
         ret, frame = self.cap.read()
         if ret:
             frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-            image = Image.fromarray(frame)
-            photo = ImageTk.PhotoImage(image=image)
-            self.canvas.create_image(0, 0, anchor=tk.NW, image=photo)
+            self.display_captured_image(frame)
             self.root.after(10, self.update)
+        else:
+            print("Error capturing frame from the camera.")
+
+    def __del__(self):
+        # Release the camera when the application is closed
+        if hasattr(self, 'cap') and self.cap.isOpened():
+            self.cap.release()
 
 if __name__ == "__main__":
     root = tk.Tk()
     app = ImageClassifierApp(root)
+    root.protocol("WM_DELETE_WINDOW", app.__del__)  # Handle the window close event
     root.mainloop()
