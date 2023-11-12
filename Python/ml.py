@@ -97,7 +97,7 @@ class GameObjectModel(nn.Module):
         
     def epoch_save(self, epoch, loss):
         name = f"model_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
-        path = f"models/{name}/{name}_e{epoch}_l{loss:.3f}.pth"
+        path = f"models/{name}_e{epoch}_l{loss:.3f}.pth"
         self.save(path)
 
     def load(self, path=None):
