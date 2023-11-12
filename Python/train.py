@@ -34,6 +34,7 @@ optimizer = torch.optim.SGD(model.parameters(), lr=0.001, momentum=0.9)
 epochs = 5
 total_steps = 0
 step_time = start_time
+average_step_time = 0
 
 for epoch in range(epochs):
     total_loss = 0
@@ -49,14 +50,14 @@ for epoch in range(epochs):
         total_loss += loss.item()
         optimizer.step()
 
-        total_steps += i
+        total_steps += 1
         previous_step_time = step_time
         step_time = time.time()
         average_step_time = average_step_time * (total_steps - 1) / total_steps + (step_time - previous_step_time) / total_steps
     
         if i % 1 == 0:
             steps_remaining = (epochs - epoch) * len(train_dataloader) - i
-            print(f"Epoch {epoch+1}/{epochs}, Step {i+1}/{len(train_dataloader)}, Loss: {loss.item():.4f}, ETA: {datetime.utcfromtimestamp(average_step_time * steps_remaining).strftime('%H:%M:%S')})")
+            print(f"Epoch {epoch+1}/{epochs}, Step {i+1}/{len(train_dataloader)}, Loss: {loss.item():.4f}, ETA: {datetime.utcfromtimestamp(average_step_time * steps_remaining).strftime('%H:%M:%S')}")
 
     model.epoch_save(epoch, total_loss / len(train_dataloader))
 
