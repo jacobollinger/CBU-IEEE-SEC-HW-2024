@@ -1,12 +1,7 @@
-try:
-    from datetime import datetime
-    import time
-    import torch
-    from torch.utils.data import DataLoader, random_split
-except ModuleNotFoundError:
-    print(
-        'Modules are missing, please install the required packages using "pip3 install -r requirements.txt"'
-    )
+from datetime import datetime
+import time
+import torch
+from torch.utils.data import DataLoader, random_split
 
 from ml import GameObjectDataset, GameObjectModel
 
@@ -26,7 +21,7 @@ test_dataloader = DataLoader(test_dataset)
 
 classes = ("package", "thruster", "fuel_tank")
 
-model = GameObjectModel(load=True).to(DEVICE)
+model = GameObjectModel().to(DEVICE)
 
 criterion = torch.nn.CrossEntropyLoss()
 optimizer = torch.optim.SGD(model.parameters(), lr=0.001, momentum=0.9)
