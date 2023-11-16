@@ -23,13 +23,3 @@ class Timer:
     def __str__(self):
         minutes, seconds = divmod(self.get_time(), 60)
         return f"Time Taken: {int(minutes):02}:{seconds:06.3f}"
-    
-if __name__ == "__main__":
-    timer = Timer()
-    print(timer)
-    timer.start()
-    while timer.get_time() < 10:
-        time.sleep(1)
-        print(timer)
-    timer.stop()
-    print(timer)
