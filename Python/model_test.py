@@ -14,7 +14,7 @@ class ImageClassifierApp:
         self.init_gui()
 
         # Load the pre-trained ResNet model
-        self.model = GameObjectModel(True)
+        self.model = GameObjectModel()
 
         # Define the image transformation
         self.transform = transforms.Compose([
@@ -43,7 +43,7 @@ class ImageClassifierApp:
 
     def take_picture(self):
         # Capture a frame from the camera
-        ret, frame = self.cap.read()
+        _, frame = self.cap.read()
 
         # Convert the OpenCV frame to a PIL Image
         frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
