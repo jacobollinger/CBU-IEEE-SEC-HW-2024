@@ -70,7 +70,7 @@ class GameObjectModel(nn.Module):
     A model for the game object dataset.
     """
 
-    def __init__(self, load=False):
+    def __init__(self, load_from_file=True, file_path=None):
         """
         Initializes the model.
         """
@@ -78,8 +78,8 @@ class GameObjectModel(nn.Module):
         self.resnet = torchvision.models.resnet50(pretrained=True) #? maybe change to a different resnet model
         self.resnet.fc = nn.Linear(self.resnet.fc.in_features, 4)
         
-        if load:
-            self.load()
+        if load_from_file:
+            self.load(path=file_path)
 
     def forward(self, x):
         return self.resnet(x)
