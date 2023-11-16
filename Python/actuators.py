@@ -139,21 +139,27 @@ class Arm:
         return ((distance / self.WHEEL_CIRCUMFERENCE) * 360.0)
 
     # Arm movement functions
-    
-    def rotate_base(degrees):
-    # Code to rotate base servo to the specified degrees
 
-    def move_shoulder(angle):
-    # Code to move shoulder servo to the specified angle
+    def rotate_base(self, degrees):
+        # Code to rotate base servo to the specified degrees
+        pass
 
-    def bend_elbow(angle):
-    # Code to move elbow servo to the specified angle
+    def move_shoulder(self, angle):
+        # Code to move shoulder servo to the specified angle
+        pass
 
-    def rotate_wrist(degrees):
-    # Code to rotate wrist servo
+    def bend_elbow(self, angle):
+        # Code to move elbow servo to the specified angle
+        pass
 
-    def flex_wrist(angle):
-    # Code to move wrist flex servo
+    def rotate_wrist(self, degrees):
+        # Code to rotate wrist servo
+        pass
 
-    def actuate_gripper(open_close):
-    # Code to open or close the gripper servo
+    def flex_wrist(self, angle):
+        # Code to move wrist flex servo
+        pass
+
+    def actuate_gripper(self, open_close):
+        # Code to open or close the gripper servo
+        pass
