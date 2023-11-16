@@ -1,6 +1,27 @@
 import threading
 import time
-import Jetson.GPIO as GPIO
+
+try:
+    import Jetson.GPIO as GPIO
+except ImportError:
+
+    class GPIO:
+        BOARD = None
+        OUT = None
+        PWM = None
+
+        @staticmethod
+        def setmode(*args):
+            pass
+
+        @staticmethod
+        def setup(*args):
+            pass
+
+        @staticmethod
+        def PWM(*args):
+            pass
+
 
 class Wheels:
     # Define constants or configuration settings
