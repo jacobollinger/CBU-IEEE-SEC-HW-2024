@@ -34,8 +34,8 @@ class Wheels:
     GPIO.setup(MOTOR_PIN1, GPIO.OUT)
     GPIO.setup(MOTOR_PIN2, GPIO.OUT)
     # Create locks for the motors
-    MOTOR1_LOCK = threading.Lock()
-    MOTOR2_LOCK = threading.Lock()
+    MOTOR1_LOCK = threading.Lock() #? Is this ever used?
+    MOTOR2_LOCK = threading.Lock() #? Is this ever used?
     # Define constants for the wheels
     WHEEL_CIRCUMFERENCE = 0.08 * 3.14159265359  # 80mm is the radius of the wheel
     CHASSIS_CIRCUMFERENCE = (
