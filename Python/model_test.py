@@ -77,7 +77,7 @@ class ImageClassifierApp:
         # Get the predicted class label
         _, predicted_idx = torch.max(output, 1)
         predicted_label = classes[predicted_idx]
-
+        print(predicted_label)
         return predicted_label
 
     def update(self):
