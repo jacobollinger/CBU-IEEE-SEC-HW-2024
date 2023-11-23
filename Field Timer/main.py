@@ -24,6 +24,7 @@ tm.brightness(1)
 
 interrupt_flag = 0
 debounce_time = 0
+#? Finish button?
 pin = Pin(15, Pin.IN, Pin.PULL_UP)
 
 
