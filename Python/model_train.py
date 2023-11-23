@@ -21,7 +21,7 @@ test_dataloader = DataLoader(test_dataset)
 
 classes = ("package", "thruster", "fuel_tank")
 
-model = GameObjectModel().to(DEVICE)
+model = GameObjectModel(load_from_file=False).to(DEVICE)
 
 criterion = torch.nn.CrossEntropyLoss()
 optimizer = torch.optim.SGD(model.parameters(), lr=0.001, momentum=0.9)
