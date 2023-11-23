@@ -31,14 +31,20 @@ class ImageClassifierApp:
 
         # Initialize the camera
         self.cap = cv2.VideoCapture(0)
-        self.update()
+        if not self.cap.isOpened():
+            print("Error: Could not open camera.")
+            root.destroy()  # Close the application if the camera cannot be opened
+            return
+
+        # Schedule the initial call to the update method
+        self.root.after(10, self.update)
 
     def init_gui(self):
         # Create the GUI components
         self.label = ttk.Label(self.root, text="Click 'Capture' to take a picture")
         self.label.pack(pady=10)
 
-        self.canvas = tk.Canvas(self.root, width=300, height=300)
+        self.canvas = tk.Canvas(self.root, width=224, height=224)
         self.canvas.pack()
 
         self.btn_capture = ttk.Button(self.root, text="Capture", command=self.take_picture)
@@ -92,9 +98,11 @@ class ImageClassifierApp:
         if ret:
             frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
             self.display_captured_image(frame)
-            self.root.after(10, self.update)
         else:
             print("Error capturing frame from the camera.")
+
+        # Schedule the next call to the update method
+        self.root.after(10, self.update)
 
     def __del__(self):
         # Release the camera when the application is closed
