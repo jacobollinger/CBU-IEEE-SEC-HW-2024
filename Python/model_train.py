@@ -7,7 +7,11 @@ from .ml import GameObjectDataset, GameObjectModel
 
 start_time = time.time()
 
-DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
+DEVICE = "cpu"
+if torch.backends.mps.is_available():
+    DEVICE = torch.device("mps")
+elif torch.cuda.is_available():
+    DEVICE = "cuda"
 
 dataset = GameObjectDataset()
 
