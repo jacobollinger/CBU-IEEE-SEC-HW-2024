@@ -1,21 +1,14 @@
+from datetime import datetime
+import torch
+import torch.nn as nn
+import torch.nn.functional as F
+import torchvision
+import torchvision.transforms as transforms
+import pandas as pd
+from PIL import Image
+import glob
+import os
 
-
-try:
-    from datetime import datetime
-    import torch
-    import torch.nn as nn
-    import torch.nn.functional as F
-    import torchvision
-    import torchvision.transforms as transforms
-    import pandas as pd
-    from PIL import Image
-    import glob
-    import os
-except ModuleNotFoundError:
-    print(
-        'Modules are missing, please run the "python3 setup.py" script or \
-        install the required packages using"pip3 install -r requirements.txt"'
-    )
 
 ANNOTATIONS_FILE = "./data/annotations.csv"
 IMAGES_PATH = "./data/images/raw"
