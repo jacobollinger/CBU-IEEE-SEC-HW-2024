@@ -1,10 +1,11 @@
+import cv2
+from PIL import Image, ImageTk
 import tkinter as tk
 from tkinter import ttk
-from PIL import Image, ImageTk
-import cv2
 import torch
 from torchvision import transforms
-from ml import GameObjectModel
+
+from .ml import GameObjectModel
 
 class ImageClassifierApp:
     def __init__(self, root):
