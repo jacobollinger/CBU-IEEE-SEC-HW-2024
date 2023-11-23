@@ -5,7 +5,10 @@ torch>=2.1.0
 torchvision>=0.16.0
 
 # Jetson Nano
-Jetson.GPIO>=2.1.4; platform_machine == 'aarch64'
+Jetson.GPIO; platform_machine == 'aarch64'
+
+# Raspberry Pi
+RPi.GPIO; platform_machine == 'armv7l'
 
 # Open CV
 opencv-python
