@@ -1,32 +1,11 @@
 import threading
 import time
 
-try:
-    import Jetson.GPIO as GPIO
-except ImportError:
-
-    class GPIO:
-        BOARD = None
-        OUT = None
-        PWM = None
-
-        @staticmethod
-        def setmode(*args):
-            pass
-
-        @staticmethod
-        def setup(*args):
-            pass
-
-        @staticmethod
-        def PWM(*args):
-            pass
-
+from gpio import GPIO
 
 class Wheels:
     # Define constants or configuration settings
     # Set the pin numbering scheme to the numbering shown on the robot itself
-    GPIO.setmode(GPIO.BOARD)
     # The pins for the motors will be defined here
     MOTOR_PIN1 = 2  # right motor, change as needed
     MOTOR_PIN2 = 3  # left motor, change as needed
