@@ -1,6 +1,6 @@
-from actuators import Wheels, Arm
-from ml import GameObjectModel, GameObjectDataset
-from sensors import Camera
+from .actuators import Wheels, Arm
+from .ml import GameObjectModel, GameObjectDataset
+from .sensors import Camera
 
 model = GameObjectModel(True)
 
