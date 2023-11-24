@@ -72,6 +72,8 @@ class GameObjectModel(nn.Module):
     """
     A model for the game object dataset.
     """
+    
+    DEVICE = "cuda" if torch.cuda.is_available() else "mps" if torch.mps.is_available() else "cpu"
 
     def __init__(self, load_from_file=True, file_path=None):
         """
@@ -85,6 +87,8 @@ class GameObjectModel(nn.Module):
 
         if load_from_file:
             self.load(path=file_path)
+            
+        self.to(self.DEVICE)
 
     def forward(self, x):
         return self.resnet(x)

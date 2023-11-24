@@ -9,18 +9,13 @@ from ml import GameObjectModel
 
 class ImageClassifierApp:
     def __init__(self, root):
-        self.DEVICE = "cpu"
-        if torch.backends.mps.is_available():
-            self.DEVICE = torch.device("mps")
-        elif torch.cuda.is_available():
-            self.DEVICE = "cuda"
         self.root = root
         self.root.title("Camera Image Classifier")
 
         self.init_gui()
 
         # Load the pre-trained ResNet model
-        self.model = GameObjectModel().to(self.DEVICE)
+        self.model = GameObjectModel()
 
         # Define the image transformation
         self.transform = transforms.Compose([
@@ -80,7 +75,7 @@ class ImageClassifierApp:
         classes = ("package", "thruster", "fuel_tank")
         # Transform the image and prepare it for the model
         input_tensor = self.transform(image)
-        input_batch = input_tensor.unsqueeze(0).to(self.DEVICE)
+        input_batch = input_tensor.unsqueeze(0).to(self.model.DEVICE)
 
         # Perform inference
         with torch.no_grad():
