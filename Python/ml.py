@@ -79,7 +79,7 @@ class GameObjectModel(nn.Module):
         """
         super(GameObjectModel, self).__init__()
         self.resnet = torchvision.models.resnet50(
-            pretrained=True
+            pretrained=not load_from_file #* Pretrained if training from scratch
         )  # ? maybe change to a different resnet model
         self.resnet.fc = nn.Linear(self.resnet.fc.in_features, 4)
 
