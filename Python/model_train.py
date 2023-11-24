@@ -7,12 +7,6 @@ from .ml import GameObjectDataset, GameObjectModel
 
 start_time = time.time()
 
-DEVICE = "cpu"
-if torch.backends.mps.is_available():
-    DEVICE = torch.device("mps")
-elif torch.cuda.is_available():
-    DEVICE = "cuda"
-
 dataset = GameObjectDataset()
 
 train_len = int(len(dataset) * 0.8)
@@ -25,7 +19,7 @@ test_dataloader = DataLoader(test_dataset)
 
 classes = ("package", "thruster", "fuel_tank")
 
-model = GameObjectModel(load_from_file=False).to(DEVICE)
+model = GameObjectModel(load_from_file=False)
 
 criterion = torch.nn.CrossEntropyLoss()
 optimizer = torch.optim.SGD(model.parameters(), lr=0.001, momentum=0.9)
@@ -39,8 +33,8 @@ for epoch in range(epochs):
     total_loss = 0
     for i, (images, labels) in enumerate(train_dataloader):
         
-        images = images.to(DEVICE)
-        labels = labels.to(DEVICE)
+        images = images.to(model.DEVICE)
+        labels = labels.to(model.DEVICE)
 
         optimizer.zero_grad()
         outputs = model(images)
@@ -69,8 +63,8 @@ with torch.no_grad():
     correct = 0
     total = 0
     for images, labels in test_dataloader:
-        images = images.to(DEVICE)
-        labels = labels.to(DEVICE)
+        images = images.to(model.DEVICE)
+        labels = labels.to(model.DEVICE)
 
         outputs = model(images)
         _, predicted = torch.max(outputs.data, 1)
