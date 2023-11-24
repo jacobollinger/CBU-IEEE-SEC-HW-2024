@@ -10,8 +10,8 @@ import glob
 import os
 
 
-ANNOTATIONS_FILE = "./data/annotations.csv"
-IMAGES_PATH = "./data/images/raw"
+ANNOTATIONS_FILE = "./data/in/annotations.csv"
+IMAGES_PATH = "./data/in/images/raw"
 
 transform = transforms.Compose(
     [
@@ -96,7 +96,7 @@ class GameObjectModel(nn.Module):
     def save(self, path=None, postfix=""):
         if path is None:
             path = (
-                f"models/model_{datetime.now().strftime('%Y%m%d_%H%M%S') + postfix}.pth"
+                f"data/out/models/model_{datetime.now().strftime('%Y%m%d_%H%M%S') + postfix}.pth"
             )
 
         #! make sure models/ directory exists
@@ -108,14 +108,14 @@ class GameObjectModel(nn.Module):
 
     def epoch_save(self, epoch, loss):
         name = f"model_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
-        path = f"models/{name}_e{epoch}_l{loss:.3f}.pth"
+        path = f"data/out/models/{name}_e{epoch}_l{loss:.3f}.pth"
         self.save(path)
 
     def load(self, path=None):
         if path is None:
             # load latest model
             # format: model_20210907_142912-e1-a0.75.pth
-            files = sorted(glob.glob("models/*.pth"))
+            files = sorted(glob.glob("data/out/models/*.pth"))
 
             if len(files) == 0:
                 print("No models found in models/ directory")
