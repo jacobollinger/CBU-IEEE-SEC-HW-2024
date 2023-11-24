@@ -5,7 +5,7 @@ from tkinter import ttk
 import torch
 from torchvision import transforms
 
-from .ml import GameObjectModel
+from ml import GameObjectModel
 
 class ImageClassifierApp:
     def __init__(self, root):
