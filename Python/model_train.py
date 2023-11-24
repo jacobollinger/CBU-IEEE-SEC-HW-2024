@@ -3,7 +3,7 @@ import time
 import torch
 from torch.utils.data import DataLoader, random_split
 
-from .ml import GameObjectDataset, GameObjectModel
+from ml import GameObjectDataset, GameObjectModel
 
 start_time = time.time()
 
