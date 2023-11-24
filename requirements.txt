@@ -12,3 +12,6 @@ RPi.GPIO; platform_machine == 'armv7l'
 
 # Open CV
 opencv-python
+
+# CV Zone
+cvzone
