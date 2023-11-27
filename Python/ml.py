@@ -73,7 +73,7 @@ class GameObjectModel(nn.Module):
     A model for the game object dataset.
     """
     
-    DEVICE = "cuda" if torch.cuda.is_available() else "mps" if torch.mps.is_available() else "cpu"
+    DEVICE = "cuda" if torch.cuda.is_available() else "mps" if torch.backends.mps.is_available() else "cpu"
 
     def __init__(self, load_from_file=True, file_path=None):
         """
@@ -124,7 +124,7 @@ class GameObjectModel(nn.Module):
             path = files[-1]
 
         try:
-            self.load_state_dict(torch.load(path))
+            self.load_state_dict(torch.load(path, map_location=self.DEVICE))
             self.eval()
             print(f"Model loaded from {path}")
         except FileNotFoundError:
