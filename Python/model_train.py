@@ -50,7 +50,7 @@ for epoch in range(epochs):
     
         if i % 1 == 0:
             steps_remaining = (epochs - epoch) * len(train_dataloader) - i
-            print(f"Epoch {epoch+1}/{epochs}, Step {i+1}/{len(train_dataloader)}, Loss: {loss.item():.4f}, ETA: {datetime.utcfromtimestamp(average_step_time * steps_remaining).strftime('%H:%M:%S')}")
+            print(f"Epoch {epoch+1}/{epochs}, Step {i+1}/{len(train_dataloader)}, Loss: {loss.item():.4f}, ETA: {str(datetime.timedelta(seconds=int(average_step_time * steps_remaining)))}")
 
     model.epoch_save(epoch, total_loss / len(train_dataloader))
 
