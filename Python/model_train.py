@@ -17,7 +17,7 @@ train_dataset, test_dataset = random_split(dataset, [train_len, test_len])
 train_dataloader = DataLoader(train_dataset)
 test_dataloader = DataLoader(test_dataset)
 
-classes = ("package", "thruster", "fuel_tank")
+classes = ("", "small_package", "thruster", "large_package", "fuel_tank_thruster_assembly", "fuel_tank")
 
 model = GameObjectModel(load_from_file=False)
 

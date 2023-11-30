@@ -83,7 +83,7 @@ class GameObjectModel(nn.Module):
         self.resnet = torchvision.models.resnet50(
             pretrained=not load_from_file #* Pretrained if training from scratch
         )  # ? maybe change to a different resnet model
-        self.resnet.fc = nn.Linear(self.resnet.fc.in_features, 4)
+        self.resnet.fc = nn.Linear(self.resnet.fc.in_features, 6)
 
         if load_from_file:
             self.load(path=file_path)
