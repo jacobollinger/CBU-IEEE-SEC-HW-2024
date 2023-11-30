@@ -81,7 +81,7 @@ class GameObjectModel(nn.Module):
         """
         super(GameObjectModel, self).__init__()
         self.resnet = torchvision.models.resnet50(
-            pretrained=not load_from_file #* Pretrained if training from scratch
+            weights=torchvision.models.ResNet50_Weights.DEFAULT if not load_from_file else None
         )  # ? maybe change to a different resnet model
         self.resnet.fc = nn.Linear(self.resnet.fc.in_features, 6)
 
@@ -100,7 +100,7 @@ class GameObjectModel(nn.Module):
             )
 
         #! make sure models/ directory exists
-        os.makedirs("models", exist_ok=True)
+        os.makedirs(os.path.dirname(path), exist_ok=True)
 
         torch.save(self.state_dict(), path)
 
