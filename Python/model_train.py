@@ -9,7 +9,7 @@ from ml import GameObjectDataset, GameObjectModel
 start_time = time.time()
 
 tfs = transforms.Compose([
-    transforms.Resize((5)),
+    transforms.Resize((224)),
     transforms.ToTensor(),
     transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
 ])
@@ -21,8 +21,9 @@ test_len = len(dataset) - train_len
 
 train_dataset, test_dataset = random_split(dataset, [train_len, test_len])
 
-train_dataloader = DataLoader(train_dataset, batch_size=64, shuffle=True)
-test_dataloader = DataLoader(test_dataset, batch_size=16, shuffle=True)
+batch_size = 64
+train_dataloader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
+test_dataloader = DataLoader(test_dataset, batch_size=batch_size, shuffle=True)
 
 classes = ("", "small_package", "thruster", "large_package", "fuel_tank_thruster_assembly", "fuel_tank")
 
@@ -81,9 +82,12 @@ with torch.no_grad():
         total += labels.size(0)
         correct += (predicted == labels).sum().item()
     
-    print(f"Accuracy: {100 * correct / total}%")
+    accuracy = 100 * correct / total
+    print(f"Accuracy: {accuracy}%")
     
     end_time_test = time.time()
     print(f"Training time: {str(datetime.timedelta(seconds=int(end_time_train - start_time)))}")
     print(f"Testing time: {str(datetime.timedelta(seconds=int(end_time_test - end_time_train)))}")
     print(f"Total time: {str(datetime.timedelta(seconds=int(end_time_test - start_time)))}")
+    
+    model.save(postfix=f"_a{accuracy:.2f}")

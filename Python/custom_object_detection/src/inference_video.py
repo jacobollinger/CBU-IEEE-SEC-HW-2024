@@ -17,11 +17,11 @@ np.random.seed(42)
 parser = argparse.ArgumentParser()
 parser.add_argument(
     '-i', '--input', help='path to input video',
-    default='data/number_plate/inference_data/video_1.mp4'
+    default='./data/Microcontroller_Detection/video/raspberry.mp4'
 )
 parser.add_argument(
     '--imgsz', 
-    default=None,
+    default=640,
     type=int,
     help='image resize shape'
 )
@@ -35,7 +35,7 @@ args = vars(parser.parse_args())
 
 os.makedirs(f'{OUT_DIR}/inference_outputs/videos', exist_ok=True)
 
-COLORS = [[0, 0, 0], [255, 0, 0]]
+COLORS = [[0, 0, 0], [255, 0, 0], [255, 0, 0], [255, 0, 0], [255, 0, 0], [255, 0, 0]]
 
 # Load the best model and trained weights.
 model = create_model(num_classes=NUM_CLASSES, size=640)
