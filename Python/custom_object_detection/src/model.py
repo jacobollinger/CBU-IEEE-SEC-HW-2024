@@ -13,11 +13,11 @@ from torchvision.models.detection.ssd import (
 #Average FPS: 51
 
 def create_model(num_classes=91, size=300, nms=0.45):
-    model_backbone = torchvision.models.resnet34(
-        weights=torchvision.models.ResNet34_Weights.DEFAULT
+    model_backbone = torchvision.models.resnet18(
+        weights=torchvision.models.ResNet18_Weights.DEFAULT
     )
 
-    #conv1 = model_backbone.conv1
+    conv1 = model_backbone.conv1
     bn1 = model_backbone.bn1
     relu = model_backbone.relu
     max_pool = model_backbone.maxpool
@@ -26,8 +26,7 @@ def create_model(num_classes=91, size=300, nms=0.45):
     layer3 = model_backbone.layer3
     layer4 = model_backbone.layer4
     backbone = nn.Sequential(
-        #conv1,
-        bn1, relu, max_pool, 
+        conv1, bn1, relu, max_pool, 
         layer1, layer2, layer3, layer4
     )
     out_channels = [512, 512, 512, 512, 512, 512]

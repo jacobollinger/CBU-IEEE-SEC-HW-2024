@@ -18,6 +18,7 @@ np.random.seed(42)
 parser = argparse.ArgumentParser()
 parser.add_argument(
     '-i', '--input', 
+    default='./data/Microcontroller_Detection/test',
     help='path to input image directory',
 )
 parser.add_argument(
@@ -28,7 +29,7 @@ parser.add_argument(
 )
 parser.add_argument(
     '--threshold',
-    default=0.25,
+    default=0.30,
     type=float,
     help='detection threshold'
 )
