@@ -15,3 +15,10 @@ opencv-python
 
 # CV Zone
 cvzone
+
+# Custom object detection
+albumentations
+tqdm
+matplotlib
+torchmetrics
+pycocotools

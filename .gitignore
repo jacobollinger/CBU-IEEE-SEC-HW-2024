@@ -3,3 +3,7 @@
 
 # Ignore .DS_Store files from macOS
 **/.DS_Store
+
+**/*.pth
+**/*.pt
+**/*.jpg
