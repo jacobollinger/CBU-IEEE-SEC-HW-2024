@@ -5,6 +5,7 @@
 **/.DS_Store
 
 # data
+data/**/*
 **/*.pth
 **/*.pt
 **/*.jpg
