@@ -4,7 +4,11 @@
 # Ignore .DS_Store files from macOS
 **/.DS_Store
 
+# data
 **/*.pth
 **/*.pt
 **/*.jpg
+**/*.mov
 **/*.mp4
+**/*.zip
+**/*.7z
