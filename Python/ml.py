@@ -73,7 +73,7 @@ class GameObjectModel(nn.Module):
     A model for the game object dataset.
     """
     
-    DEVICE = "cuda" if torch.cuda.is_available() else "mps" if torch.mps.is_available() else "cpu"
+    DEVICE = "cuda" if torch.cuda.is_available() else "mps" if torch.backends.mps.is_available() else "cpu"
 
     def __init__(self, load_from_file=True, file_path=None):
         """
@@ -81,9 +81,9 @@ class GameObjectModel(nn.Module):
         """
         super(GameObjectModel, self).__init__()
         self.resnet = torchvision.models.resnet50(
-            pretrained=not load_from_file #* Pretrained if training from scratch
+            weights=torchvision.models.ResNet50_Weights.DEFAULT if not load_from_file else None
         )  # ? maybe change to a different resnet model
-        self.resnet.fc = nn.Linear(self.resnet.fc.in_features, 4)
+        self.resnet.fc = nn.Linear(self.resnet.fc.in_features, 6)
 
         if load_from_file:
             self.load(path=file_path)
@@ -100,7 +100,7 @@ class GameObjectModel(nn.Module):
             )
 
         #! make sure models/ directory exists
-        os.makedirs("models", exist_ok=True)
+        os.makedirs(os.path.dirname(path), exist_ok=True)
 
         torch.save(self.state_dict(), path)
 
@@ -124,7 +124,7 @@ class GameObjectModel(nn.Module):
             path = files[-1]
 
         try:
-            self.load_state_dict(torch.load(path))
+            self.load_state_dict(torch.load(path, map_location=self.DEVICE))
             self.eval()
             print(f"Model loaded from {path}")
         except FileNotFoundError:

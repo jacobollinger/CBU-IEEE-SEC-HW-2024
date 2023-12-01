@@ -12,7 +12,6 @@ with torch.no_grad():
     for i in range(iterations):
         output = model(torch.rand(1, 3, 224, 224).to(model.DEVICE))
         current_time = time.time()
-        
         if i % 10 == 0:
             print(f"FPS: {1 / (current_time - previous_time):4.2f}\tProgress: {(i / iterations * 100):5.2f}%")
             
