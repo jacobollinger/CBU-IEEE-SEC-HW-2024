@@ -25,9 +25,9 @@ batch_size = 64
 train_dataloader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
 test_dataloader = DataLoader(test_dataset, batch_size=batch_size, shuffle=True)
 
-classes = ("", "small_package", "thruster", "large_package", "fuel_tank_thruster_assembly", "fuel_tank")
-
 model = GameObjectModel(load_from_file=True)
+
+classes = model.CLASSES
 
 criterion = torch.nn.CrossEntropyLoss()
 optimizer = torch.optim.SGD(model.parameters(), lr=0.001, momentum=0.9)

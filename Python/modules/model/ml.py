@@ -73,6 +73,7 @@ class GameObjectModel(nn.Module):
     A model for the game object dataset.
     """
     
+    CLASSES = ("small_package", "thruster", "large_package", "fuel_tank_thruster_assembly", "fuel_tank")
     DEVICE = "cuda" if torch.cuda.is_available() else "mps" if torch.backends.mps.is_available() else "cpu"
 
     def __init__(self, load_from_file=True, file_path=None):

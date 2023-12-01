@@ -1,6 +1,6 @@
-from .actuators import Wheels, Arm, Containers, Bridge
-from .sensors import Camera, Ultrasonic, Phototransistor, LineSensor
-from .timer import Timer
+from Python.modules.hardware.actuators import Wheels, Arm, Containers, Bridge
+from Python.modules.hardware.sensors import Camera, Ultrasonic, Phototransistor, LineSensor
+from Python.modules.timer import Timer
 
 def main():
     timer = Timer()
@@ -19,7 +19,7 @@ def main():
         
     # TODO: Collect small packages
     
-    while Ultrasonic.get_distance(Ultrasonic.FRONT)) > 10:
+    while Ultrasonic.get_distance(Ultrasonic.FRONT) > 10:
         Wheels.move_forward(10)
         
     Wheels.turn_right(90)
@@ -60,7 +60,7 @@ def main():
     Wheels.move_forward(10)
     
     Wheels.turn_left(90)
-    for i in range(3) # number of thrusters
+    for i in range(3): # number of thrusters
         # TODO: Place fuel tank on right most thruster
         Wheels.turn_left(90)
         Wheels.move_forward(10) # TODO: move forward x cm

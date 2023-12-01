@@ -1,6 +1,6 @@
-from actuators import Wheels, Arm
-from ml import GameObjectModel, GameObjectDataset
-from sensors import Camera, Phototransistor, Ultrasonic
+from Python.modules.hardware.actuators import Wheels, Arm
+from Python.modules.hardware.sensors import Camera, Phototransistor, Ultrasonic
+from Python.modules.model.ml import GameObjectModel, GameObjectDataset
 
 model = GameObjectModel(True)
 
