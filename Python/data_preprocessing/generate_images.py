@@ -4,7 +4,7 @@ import os
 def strip_video(path, fps):
     if os.path.isdir(path):
         for i in os.listdir(path):
-            strip_video(os.path.join(path, i))
+            strip_video(os.path.join(path, i), fps)
     elif os.path.basename(path) == ".DS_Store":
         # Ignore .DS_Store files
         pass
