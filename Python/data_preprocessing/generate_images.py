@@ -1,13 +1,12 @@
 import ffmpeg
 import os
 
-fps = 1
-
-def strip_video(path):
+def strip_video(path, fps):
     if os.path.isdir(path):
         for i in os.listdir(path):
             strip_video(os.path.join(path, i))
-    elif(os.path.basename(path) == ".DS_Store"):
+    elif os.path.basename(path) == ".DS_Store":
+        # Ignore .DS_Store files
         pass
     else:
         file = os.path.basename(path)
@@ -24,8 +23,8 @@ def strip_video(path):
         
         ffmpeg.input(path).output(f"./data/in/images/raw/{type}/{basename}_%d.jpg", vf=f"fps={fps}", pix_fmt="yuvj420p").run()
 
-def generate_images():
-    strip_video("./data/in/videos")
+def generate_images(fps):
+    strip_video("./data/in/videos", fps)
 
 if __name__ == "__main__":
-    generate_images()
+    generate_images(10)
