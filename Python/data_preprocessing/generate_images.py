@@ -24,5 +24,8 @@ def strip_video(path):
         
         ffmpeg.input(path).output(f"./data/in/images/raw/{type}/{basename}_%d.jpg", vf=f"fps={fps}", pix_fmt="yuvj420p").run()
 
-if __name__ == "__main__":
+def generate_images():
     strip_video("./data/in/videos")
+
+if __name__ == "__main__":
+    generate_images()
