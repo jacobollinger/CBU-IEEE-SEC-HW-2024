@@ -13,10 +13,10 @@ print("Decompressing data...")
 decompress_data()
 
 print("Generating images...")
-generate_images()
+generate_images(fps=10)
 
 print("Generating annotations...")
-generate_annotations(fps=10)
+generate_annotations()
 
 os.remove("data_in.zip")
 os.remove("data_out.zip")
