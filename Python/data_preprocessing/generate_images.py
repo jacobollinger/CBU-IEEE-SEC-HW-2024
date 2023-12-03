@@ -19,12 +19,15 @@ def strip_video(path, fps):
             print(f"Creating directory data/in/images/raw/{type}")
             os.makedirs(f"./data/in/images/raw/{type}")
 
-        print(f"Stripping {path} to ./data/in/images/raw/{type}/{basename}_%d.jpg")
-        
-        ffmpeg.input(path).output(f"./data/in/images/raw/{type}/{basename}_%d.jpg", vf=f"fps={fps}", pix_fmt="yuvj420p").run()
+        if fps is None:
+            ffmpeg.input(path).output(f"./data/in/images/raw/{type}/{basename}_%d.jpg", pix_fmt="yuvj420p").run()
+            print(f"Stripping {path} to ./data/in/images/raw/{type}/{basename}_%d.jpg")
+        else:
+            print(f"Stripping {path} to ./data/in/images/raw/{type}/{basename}_%d.jpg at {fps} fps")
+            ffmpeg.input(path).output(f"./data/in/images/raw/{type}/{basename}_%d.jpg", vf=f"fps={fps}", pix_fmt="yuvj420p").run()
 
-def generate_images(fps):
+def generate_images(fps=None):
     strip_video("./data/in/videos", fps)
 
 if __name__ == "__main__":
-    generate_images(10)
+    generate_images()

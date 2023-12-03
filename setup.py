@@ -18,6 +18,6 @@ generate_images(fps=10)
 print("Generating annotations...")
 generate_annotations()
 
-os.remove("data_in.zip")
-os.remove("data_out.zip")
+# os.remove("data_in.zip")
+# os.remove("data_out.zip")
 print("Setup complete!")
