@@ -7,7 +7,10 @@ from Python.data_preprocessing.generate_annotations import generate_annotations
 
 # get data:
 print("Downloading data...")
-download_data()
+download_data(
+    "https://mega.nz/file/ITs1gACR#3W8t6PR2inOByLBI5450d9ebAcd06_9eCOY24p8QCLA",
+    "https://mega.nz/file/VT9WQSaA#XGYL9DlEbiCd8HwrLdyTT8uhP_H-X58JYmlclGQKyHE",
+)
 
 print("Decompressing data...")
 decompress_data()
