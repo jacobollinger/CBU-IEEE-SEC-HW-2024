@@ -72,7 +72,7 @@ class ImageClassifierApp:
         self.canvas.create_image(0, 0, anchor=tk.NW, image=photo)
 
     def classify_image(self, image):
-        classes = ("package", "thruster", "fuel_tank")
+        classes = self.model.CLASSES
         # Transform the image and prepare it for the model
         input_tensor = self.transform(image)
         input_batch = input_tensor.unsqueeze(0).to(self.model.DEVICE)
@@ -84,7 +84,7 @@ class ImageClassifierApp:
         # Get the predicted class label
         _, predicted_idx = torch.max(output, 1)
         predicted_label = classes[predicted_idx]
-        print(predicted_label)
+        print(predicted_label, predicted_idx)
         return predicted_label
 
     def update(self):
