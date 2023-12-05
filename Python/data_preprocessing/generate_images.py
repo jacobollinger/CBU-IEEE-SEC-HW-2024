@@ -11,22 +11,23 @@ def strip_video(path, fps):
     else:
         file = os.path.basename(path)
         basename, _ = os.path.splitext(file)
+        object_class = os.path.basename(os.path.dirname(path))
 
-        # get the last directory in the path
-        type = os.path.basename(os.path.dirname(path))
+        if not os.path.exists(f"./data/in/images/raw/{object_class}"):
+            print(f"Creating directory data/in/images/raw/{object_class}")
+            os.makedirs(f"./data/in/images/raw/{object_class}")
 
-        if not os.path.exists(f"./data/in/images/raw/{type}"):
-            print(f"Creating directory data/in/images/raw/{type}")
-            os.makedirs(f"./data/in/images/raw/{type}")
+        loglevel = "error"
 
         if fps is None:
-            ffmpeg.input(path).output(f"./data/in/images/raw/{type}/{basename}_%d.jpg", pix_fmt="yuvj420p").run()
-            print(f"Stripping {path} to ./data/in/images/raw/{type}/{basename}_%d.jpg")
+            print(f"Stripping {path} to ./data/in/images/raw/{object_class}/{basename}_%d.jpg")
+            ffmpeg.input(path).output(f"./data/in/images/raw/{object_class}/{basename}_%d.jpg", loglevel=loglevel).run()
         else:
-            print(f"Stripping {path} to ./data/in/images/raw/{type}/{basename}_%d.jpg at {fps} fps")
-            ffmpeg.input(path).output(f"./data/in/images/raw/{type}/{basename}_%d.jpg", vf=f"fps={fps}", pix_fmt="yuvj420p").run()
+            print(f"Stripping {path} to ./data/in/images/raw/{object_class}/{basename}_%d.jpg at {fps} fps")
+            ffmpeg.input(path).output(f"./data/in/images/raw/{object_class}/{basename}_%d.jpg", vf=f"fps={fps}", loglevel=loglevel).run()
 
 def generate_images(fps=None):
+    print("Generating images...")
     strip_video("./data/in/videos", fps)
 
 if __name__ == "__main__":

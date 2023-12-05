@@ -2,10 +2,12 @@ from zipfile import ZipFile
 
 
 def decompress_data():
-    with ZipFile("./data_in.zip", 'r') as zip_ref:
+    print("Decompressing data_in.zip...")
+    with ZipFile("./data/data_in.zip", 'r') as zip_ref:
         zip_ref.extractall("./data/in/videos")
-        
-    with ZipFile("./data_out.zip", 'r') as zip_ref:
+
+    print("Decompressing data_out.zip...")
+    with ZipFile("./data/data_out.zip", 'r') as zip_ref:
         zip_ref.extractall("./data/out/models")
 
 if __name__ == "__main__":
