@@ -1,6 +1,6 @@
 # Data Processing
-gdown
 ffmpeg-python
+mega.py@git+https://github.com/pgp/mega.py.git
 pandas
 
 # PyTorch
