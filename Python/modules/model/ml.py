@@ -13,12 +13,11 @@ import os
 ANNOTATIONS_FILE = "./data/in/annotations.csv"
 IMAGES_PATH = "./data/in/images/raw"
 
-transform = transforms.Compose(
-    [
-        transforms.ToTensor(),
-        transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.299, 0.224, 0.225]),
-    ]
-)
+transform = transforms.Compose([
+    transforms.Resize((224)),
+    transforms.ToTensor(),
+    transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
+])
 
 
 class GameObjectDataset(torch.utils.data.Dataset):

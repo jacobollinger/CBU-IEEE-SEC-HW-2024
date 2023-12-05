@@ -8,13 +8,7 @@ from ml import GameObjectDataset, GameObjectModel
 
 start_time = time.time()
 
-tfs = transforms.Compose([
-    transforms.Resize((224)),
-    transforms.ToTensor(),
-    transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
-])
-
-dataset = GameObjectDataset(transform=tfs)
+dataset = GameObjectDataset()
 
 train_len = int(len(dataset) * 0.8)
 test_len = len(dataset) - train_len
