@@ -10,9 +10,9 @@ if not os.path.exists("./data/data_in.zip"):
 if not os.path.exists("./data/data_out.zip"):
     download_data(data_in=False)
 
-decompress_data()
+# decompress_data()
 
-generate_images(fps=10)
+generate_images(fps=1)
 
 generate_annotations()
 
