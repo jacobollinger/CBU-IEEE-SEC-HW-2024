@@ -73,7 +73,7 @@ class GameObjectModel(nn.Module):
     A model for the game object dataset.
     """
     
-    CLASSES = ("small_package", "thruster", "large_package", "fuel_tank_thruster_assembly", "fuel_tank")
+    CLASSES = ("blank_field", "small_package", "thruster", "large_package", "fuel_tank_thruster_assembly", "fuel_tank")
     DEVICE = "cuda" if torch.cuda.is_available() else "mps" if torch.backends.mps.is_available() else "cpu"
 
     def __init__(self, load_from_file=True, file_path=None):
@@ -84,7 +84,7 @@ class GameObjectModel(nn.Module):
         self.resnet = torchvision.models.resnet50(
             weights=torchvision.models.ResNet50_Weights.DEFAULT if not load_from_file else None
         )  # ? maybe change to a different resnet model
-        self.resnet.fc = nn.Linear(self.resnet.fc.in_features, 6)
+        self.resnet.fc = nn.Linear(self.resnet.fc.in_features, len(self.CLASSES))
 
         if load_from_file:
             self.load(path=file_path)
