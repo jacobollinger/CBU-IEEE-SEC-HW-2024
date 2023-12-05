@@ -21,11 +21,11 @@ test_len = len(dataset) - train_len
 
 train_dataset, test_dataset = random_split(dataset, [train_len, test_len])
 
-batch_size = 64
+batch_size = 16
 train_dataloader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
 test_dataloader = DataLoader(test_dataset, batch_size=batch_size, shuffle=True)
 
-model = GameObjectModel(load_from_file=True)
+model = GameObjectModel(load_from_file=False)
 
 classes = model.CLASSES
 
