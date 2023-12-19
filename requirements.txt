@@ -1,5 +1,5 @@
 # Data Processing
-ffmpeg-python
+python-ffmpeg
 mega.py@git+https://github.com/pgp/mega.py.git
 pandas
 

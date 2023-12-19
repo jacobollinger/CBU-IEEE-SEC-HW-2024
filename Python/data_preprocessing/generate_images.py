@@ -19,12 +19,9 @@ def strip_video(path, fps):
 
         if fps is None:
             print(f"Stripping {path} to ./data/in/images/raw/{object_class}/{basename}_%d.jpg")
-            # ffmpeg.input(path).output(f"./data/in/images/raw/{object_class}/{basename}_%d.jpg", loglevel=loglevel).run()
             FFmpeg().input(path).output(f"./data/in/images/raw/{object_class}/{basename}_%d.jpg").execute()
-            # FFmpeg.execute()
         else:
             print(f"Stripping {path} to ./data/in/images/raw/{object_class}/{basename}_%d.jpg at {fps} fps")
-            # ffmpeg.input(path).output(f"./data/in/images/raw/{object_class}/{basename}_%d.jpg", vf=f"fps={fps}", loglevel=loglevel).run()
             FFmpeg().input(path).output(f"./data/in/images/raw/{object_class}/{basename}_%d.jpg", vf=f"fps={fps}").execute()
 
 def generate_images(fps=None):
