@@ -16,7 +16,7 @@ with torch.no_grad():
         output = model(dataset[rand][0].unsqueeze(0))
         current_time = time.time()
         if i % 10 == 0:
-            print(f"FPS: {1 / (current_time - previous_time):4.2f}\tProgress: {(i / iterations * 100):5.2f}%")
+            print(f"FPS: {1 / (current_time - previous_time):4.2f}\tTime per frame: {(current_time - previous_time) * 1000:4.2f}ms\tProgress: {(i / iterations * 100):5.2f}%")
 
         previous_time = current_time
         
