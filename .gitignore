@@ -4,6 +4,9 @@
 # Ignore .DS_Store files from macOS
 **/.DS_Store
 
+# Ignore build directories
+**/build
+
 # data
 data/**/*
 **/*.pth
