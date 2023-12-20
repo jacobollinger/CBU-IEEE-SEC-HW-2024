@@ -10,6 +10,9 @@ torchvision>=0.16.0
 # Open CV
 opencv-python
 
+# Orin-Mega Communication
+spidev
+
 # CV Zone
 cvzone
 
