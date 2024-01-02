@@ -3,7 +3,7 @@ import os
 from Python.data_preprocessing.download_data import download_data
 from Python.data_preprocessing.decompress_data import decompress_data
 from Python.data_preprocessing.generate_images import generate_images
-from Python.data_preprocessing.generate_annotations import generate_annotations
+from Python.data_preprocessing.generate_classification_annotations import generate_classification_annotations
 
 if not os.path.exists("./data/data_in.zip"):
     download_data(data_out=False)
@@ -14,6 +14,6 @@ decompress_data()
 
 generate_images(fps=1)
 
-generate_annotations()
+generate_classification_annotations()
 
 print("Setup complete!")
