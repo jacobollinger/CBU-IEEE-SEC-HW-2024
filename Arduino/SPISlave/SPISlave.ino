@@ -3,6 +3,7 @@
 void setup()
 {
     Serial.begin(115200);
+    Serial.println("Starting SPI Slave");
     SPIReceiver::initSPIReceiver();
     Serial.println("Initialized\tEOT: " + String(SPI_EOT));
 }
@@ -21,7 +22,6 @@ void loop()
         SPIReceiver::printBufferAsHexadecimal();
         Serial.print("UTF-8: ");
         SPIReceiver::printBufferAsASCII();
-
 
         Serial.println();
         SPIReceiver::clearBuffer();
