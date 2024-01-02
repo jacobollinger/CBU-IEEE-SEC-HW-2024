@@ -3,7 +3,7 @@ import os
 
 from Python.modules.model.ml import GameObjectModel
 
-def generate_annotations():
+def generate_classification_annotations():
     print("Generating annotations...")
     object_class_to_number = {c: n for n, c in enumerate(GameObjectModel.CLASSES)}
 
@@ -19,4 +19,4 @@ def generate_annotations():
                 writer.writerow([file, object_class, number])
 
 if __name__ == "__main__":
-    generate_annotations()
+    generate_classification_annotations()
