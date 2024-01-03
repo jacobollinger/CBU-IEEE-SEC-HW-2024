@@ -4,8 +4,8 @@ mega.py@git+https://github.com/pgp/mega.py.git
 pandas
 
 # PyTorch
-torch=2.1.0
-torchvision=0.16.1
+torch==2.1.0
+torchvision==0.16.0
 
 # Open CV
 opencv-python
