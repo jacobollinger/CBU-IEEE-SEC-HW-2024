@@ -3,6 +3,8 @@ import os
 
 def strip_video(path, fps):
     if os.path.isdir(path):
+        if os.path.basename(path) == ".ignore":
+            return
         for i in os.listdir(path):
             strip_video(os.path.join(path, i), fps)
     elif os.path.basename(path) == ".DS_Store":
