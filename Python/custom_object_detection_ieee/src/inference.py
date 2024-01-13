@@ -18,7 +18,7 @@ np.random.seed(42)
 parser = argparse.ArgumentParser()
 parser.add_argument(
     '-i', '--input', 
-    default='./data/Microcontroller_Detection/test',
+    default='./data/in/IEEE/test',
     help='path to input image directory',
 )
 parser.add_argument(
