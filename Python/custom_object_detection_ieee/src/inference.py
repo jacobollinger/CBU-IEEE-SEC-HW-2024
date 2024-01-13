@@ -37,7 +37,7 @@ args = vars(parser.parse_args())
 
 os.makedirs(f'{OUT_DIR}/inference_outputs/images', exist_ok=True)
 
-COLORS = [[0, 0, 0], [255, 0, 0], [255, 0, 0], [255, 0, 0], [255, 0, 0]]
+COLORS = [[0, 0, 0], [255, 0, 0], [255, 0, 0], [255, 0, 0], [255, 0, 0], [255, 0, 0], [255, 0, 0], [255, 0, 0], [255, 0, 0]]
 
 # Load the best model and trained weights.
 model = create_model(num_classes=NUM_CLASSES, size=640)
@@ -117,9 +117,8 @@ for i in range(len(test_images)):
                         color[::-1], 
                         2, 
                         lineType=cv2.LINE_AA)
-
-        cv2.imshow('Prediction', orig_image)
-        cv2.waitKey(1)
+        # cv2.imshow('Prediction', orig_image)
+        # cv2.waitKey(1)
         cv2.imwrite(f"{OUT_DIR}/inference_outputs/images/{image_name}.jpg", orig_image)
     print(f"Image {i+1} done...")
     print('-'*50)
