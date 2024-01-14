@@ -25,6 +25,7 @@ class Camera:
         _, frame = self.cap.read()
         return frame
 
+# TODO: Move this to a class that makes more sense
 class Phototransistor:
     PIN = 0 # TODO: change this to the correct pin
     

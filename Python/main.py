@@ -10,13 +10,20 @@ def main():
     fixedCamera = Camera(1)
     
     
-    while not Phototransistor.detect_start_signal():
+    while not detect_start_signal():
         pass
     
     timer.start()
     
-    prediction = model.classify_image(Camera.get_image(0))
+    prediction = model.classify_image(fixedCamera.get_image())
 
+def detect_start_signal():
+    """detects the start signal
+
+    Returns:
+        bool: whether or not the start signal was detected
+    """
+    return Phototransistor.detect_start_signal()
 
 def contains_object(object, image):
     """parent function for all object detection functions
