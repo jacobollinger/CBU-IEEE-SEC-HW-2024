@@ -5,6 +5,7 @@ except ImportError:
         import RPi.GPIO as GPIO
     except ImportError:
         class GPIO:
+            BCM = None
             BOARD = None
             OUT = None
             PWM = None
