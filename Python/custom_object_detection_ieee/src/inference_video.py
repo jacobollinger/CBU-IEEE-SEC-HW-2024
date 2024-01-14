@@ -35,7 +35,7 @@ args = vars(parser.parse_args())
 
 os.makedirs(f'{OUT_DIR}/inference_outputs/videos', exist_ok=True)
 
-COLORS = [[0, 0, 0], [255, 0, 0], [255, 0, 0], [255, 0, 0], [255, 0, 0], [255, 0, 0]]
+COLORS = [[0, 0, 0], [255, 0, 0], [255, 0, 0], [255, 0, 0], [255, 0, 0], [255, 0, 0], [255, 0, 0], [255, 0, 0], [255, 0, 0]]
 
 # Load the best model and trained weights.
 model = create_model(num_classes=NUM_CLASSES, size=640)
@@ -134,7 +134,7 @@ while(cap.isOpened()):
                     cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 
                     2, lineType=cv2.LINE_AA)
 
-        cv2.imshow('image', frame)
+        # cv2.imshow('image', frame)
         out.write(frame)
         # Press `q` to exit.
         if cv2.waitKey(1) & 0xFF == ord('q'):
