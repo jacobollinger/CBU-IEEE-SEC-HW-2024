@@ -6,6 +6,9 @@ model = GameObjectModel(True)
 
 def main():
     timer = Timer()
+    armCamera = Camera(0)
+    fixedCamera = Camera(1)
+    
     
     while not Phototransistor.detect_start_signal():
         pass

@@ -4,10 +4,16 @@ import time
 
 class Camera:
 
-    STATIC_CAM_PIN = 0 # TODO: change this to the correct pin
-    ARM_CAM_PIN = 0 # TODO: change this to the correct pin
+    def __init__(self, camera_id):
+        """Creates a camera object
 
-    def get_image(camera_id):
+        Args:
+            camera_id (int): id of the camera to use
+        """
+        self.camera_id = camera_id
+        self.cap = cv2.VideoCapture(camera_id)
+
+    def get_image(self):
         """returns a single image from the camera
 
         Args:
@@ -16,9 +22,8 @@ class Camera:
         Returns:
             numpy.uint8: image from the camera
         """
-        with cv2.VideoCapture(camera_id) as cap:
-            _, frame = cap.read()
-            return frame
+        _, frame = self.cap.read()
+        return frame
 
 class Phototransistor:
     PIN = 0 # TODO: change this to the correct pin
