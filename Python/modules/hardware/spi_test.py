@@ -13,7 +13,6 @@ try:
         received_bytes = spi.transferASCII(sent_bytes)
 
         print(f"Sent: {sent_bytes} at {spi.spi.max_speed_hz} Hz")
-        #? left uncommented due to issue with MISO line
-        # print(f"Received: {received_bytes}")
+        print(f"Received: {received_bytes}")
 finally:
     spi.close()
