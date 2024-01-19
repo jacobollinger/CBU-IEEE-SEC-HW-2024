@@ -8,7 +8,7 @@ import pathlib
 
 from model import create_model
 from config import (
-    NUM_CLASSES, DEVICE, CLASSES, OUT_DIR
+    GUI, NUM_CLASSES, DEVICE, CLASSES, OUT_DIR
 )
 
 np.random.seed(42)
@@ -134,7 +134,8 @@ while(cap.isOpened()):
                     cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 
                     2, lineType=cv2.LINE_AA)
 
-        # cv2.imshow('image', frame)
+        if GUI:
+            cv2.imshow('image', frame)
         out.write(frame)
         # Press `q` to exit.
         if cv2.waitKey(1) & 0xFF == ord('q'):
