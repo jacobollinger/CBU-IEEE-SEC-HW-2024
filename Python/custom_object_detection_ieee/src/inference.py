@@ -9,7 +9,7 @@ import argparse
 from model import create_model
 
 from config import (
-    NUM_CLASSES, DEVICE, CLASSES, OUT_DIR
+    GUI, NUM_CLASSES, DEVICE, CLASSES, OUT_DIR
 )
 
 np.random.seed(42)
@@ -117,8 +117,9 @@ for i in range(len(test_images)):
                         color[::-1], 
                         2, 
                         lineType=cv2.LINE_AA)
-        # cv2.imshow('Prediction', orig_image)
-        # cv2.waitKey(1)
+        if GUI:
+            cv2.imshow('Prediction', orig_image)
+            cv2.waitKey(1)
         cv2.imwrite(f"{OUT_DIR}/inference_outputs/images/{image_name}.jpg", orig_image)
     print(f"Image {i+1} done...")
     print('-'*50)
