@@ -12,9 +12,9 @@ NUM_WORKERS = 4 # Number of parallel workers for data loading.
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 
 # training images and XML files directory
-TRAIN_DIR = './data/in/IEEE/train'
+TRAIN_DIR = './data/in/ieee/train'
 # validation images and XML files directory
-VALID_DIR = './data/in/IEEE/valid'
+VALID_DIR = './data/in/ieee/valid'
 # classes: 0 index is reserved for background
 CLASSES = [
     'background', 'small_package', 'large_package', 'fuel_tank', 'thruster','small_package_delivery_zone','large_package_delivery_zone','fuel_tank_pickup_zone','crater_line'
