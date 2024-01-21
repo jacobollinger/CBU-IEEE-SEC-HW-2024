@@ -8,58 +8,47 @@ import argparse
 
 from model import create_model
 
-from config import (
-    NUM_CLASSES, DEVICE, CLASSES, OUT_DIR
-)
+from config import GUI, NUM_CLASSES, DEVICE, CLASSES, COLORS, OUT_DIR
 
 np.random.seed(42)
 
 # Construct the argument parser.
 parser = argparse.ArgumentParser()
 parser.add_argument(
-    '-i', '--input', 
-    default='./data/in/IEEE/test',
-    help='path to input image directory',
+    "-i",
+    "--input",
+    default="./data/in/ieee/JPEGImages",
+    help="path to input image directory",
 )
-parser.add_argument(
-    '--imgsz', 
-    default=None,
-    type=int,
-    help='image resize shape'
-)
-parser.add_argument(
-    '--threshold',
-    default=0.30,
-    type=float,
-    help='detection threshold'
-)
+parser.add_argument("--imgsz", default=None, type=int, help="image resize shape")
+parser.add_argument("--threshold", default=0.30, type=float, help="detection threshold")
 args = vars(parser.parse_args())
 
-os.makedirs(f'{OUT_DIR}/inference_outputs/images', exist_ok=True)
+os.makedirs(f"{OUT_DIR}/inference_outputs/images", exist_ok=True)
 
-COLORS = [[0, 0, 0], [255, 0, 0], [255, 0, 0], [255, 0, 0], [255, 0, 0], [255, 0, 0], [255, 0, 0], [255, 0, 0], [255, 0, 0]]
+# COLORS = [[0, 0, 0], [255, 0, 0], [255, 0, 0], [255, 0, 0], [255, 0, 0], [255, 0, 0], [255, 0, 0], [255, 0, 0], [255, 0, 0]]
 
 # Load the best model and trained weights.
 model = create_model(num_classes=NUM_CLASSES, size=640)
-checkpoint = torch.load(f'{OUT_DIR}/best_model.pth', map_location=DEVICE)
-model.load_state_dict(checkpoint['model_state_dict'])
+checkpoint = torch.load(f"{OUT_DIR}/best_model.pth", map_location=DEVICE)
+model.load_state_dict(checkpoint["model_state_dict"])
 model.to(DEVICE).eval()
 
 # Directory where all the images are present.
-DIR_TEST = args['input']
-test_images = glob.glob(f"{DIR_TEST}/*.jpg")
+DIR_TEST = args["input"]
+test_images = glob.glob(f"{DIR_TEST}/*.PNG")
 print(f"Test instances: {len(test_images)}")
 
-frame_count = 0 # To count total frames.
-total_fps = 0 # To get the final frames per second.
+frame_count = 0  # To count total frames.
+total_fps = 0  # To get the final frames per second.
 
 for i in range(len(test_images)):
     # Get the image file name for saving output later on.
-    image_name = test_images[i].split(os.path.sep)[-1].split('.')[0]
+    image_name = test_images[i].split(os.path.sep)[-1].split(".")[0]
     image = cv2.imread(test_images[i])
     orig_image = image.copy()
-    if args['imgsz'] is not None:
-        image = cv2.resize(image, (args['imgsz'], args['imgsz']))
+    if args["imgsz"] is not None:
+        image = cv2.resize(image, (args["imgsz"], args["imgsz"]))
     print(image.shape)
     # BGR to RGB.
     image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB).astype(np.float32)
@@ -84,46 +73,45 @@ for i in range(len(test_images)):
     frame_count += 1
 
     # Load all detection to CPU for further operations.
-    outputs = [{k: v.to('cpu') for k, v in t.items()} for t in outputs]
+    outputs = [{k: v.to("cpu") for k, v in t.items()} for t in outputs]
     # Carry further only if there are detected boxes.
-    if len(outputs[0]['boxes']) != 0:
-        boxes = outputs[0]['boxes'].data.numpy()
-        scores = outputs[0]['scores'].data.numpy()
+    if len(outputs[0]["boxes"]) != 0:
+        boxes = outputs[0]["boxes"].data.numpy()
+        scores = outputs[0]["scores"].data.numpy()
         # Filter out boxes according to `detection_threshold`.
-        boxes = boxes[scores >= args['threshold']].astype(np.int32)
+        boxes = boxes[scores >= args["threshold"]].astype(np.int32)
         draw_boxes = boxes.copy()
-        # Get all the predicited class names.
-        pred_classes = [CLASSES[i] for i in outputs[0]['labels'].cpu().numpy()]
-        
+        # Get all the predicted class names.
+        pred_classes = [CLASSES[i] for i in outputs[0]["labels"].cpu().numpy()]
+
         # Draw the bounding boxes and write the class name on top of it.
         for j, box in enumerate(draw_boxes):
             class_name = pred_classes[j]
             color = COLORS[CLASSES.index(class_name)]
-            # Recale boxes.
+            # Rescale boxes.
             xmin = int((box[0] / image.shape[1]) * orig_image.shape[1])
             ymin = int((box[1] / image.shape[0]) * orig_image.shape[0])
             xmax = int((box[2] / image.shape[1]) * orig_image.shape[1])
             ymax = int((box[3] / image.shape[0]) * orig_image.shape[0])
-            cv2.rectangle(orig_image,
-                        (xmin, ymin),
-                        (xmax, ymax),
-                        color[::-1], 
-                        3)
-            cv2.putText(orig_image, 
-                        class_name, 
-                        (xmin, ymin-5),
-                        cv2.FONT_HERSHEY_SIMPLEX, 
-                        0.8, 
-                        color[::-1], 
-                        2, 
-                        lineType=cv2.LINE_AA)
-        # cv2.imshow('Prediction', orig_image)
-        # cv2.waitKey(1)
+            cv2.rectangle(orig_image, (xmin, ymin), (xmax, ymax), color[::-1], 3)
+            cv2.putText(
+                orig_image,
+                class_name,
+                (xmin, ymin - 5),
+                cv2.FONT_HERSHEY_SIMPLEX,
+                0.8,
+                color[::-1],
+                2,
+                lineType=cv2.LINE_AA,
+            )
+        if GUI:
+            cv2.imshow("Prediction", orig_image)
+            cv2.waitKey(1)
         cv2.imwrite(f"{OUT_DIR}/inference_outputs/images/{image_name}.jpg", orig_image)
     print(f"Image {i+1} done...")
-    print('-'*50)
+    print("-" * 50)
 
-print('TEST PREDICTIONS COMPLETE')
+print("TEST PREDICTIONS COMPLETE")
 cv2.destroyAllWindows()
 # Calculate and print the average FPS.
 avg_fps = total_fps / frame_count

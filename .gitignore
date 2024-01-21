@@ -7,14 +7,12 @@
 # Ignore build directories
 **/build
 
-# data
-data/**/*
-**/*.pth
-**/*.pt
-**/*.jpg
-**/*.mov
-**/*.mp4
-**/*.zip
-**/*.7z
+# ignore everything in data except data_split.json
+data/*
+!data/in
+data/in/*
+!data/in/ieee
+data/in/ieee/*
+!data/in/ieee/data_split.json
 
 **/__pycache__
