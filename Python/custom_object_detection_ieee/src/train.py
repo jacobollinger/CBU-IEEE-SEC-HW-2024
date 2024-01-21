@@ -1,28 +1,22 @@
 from config import (
-    DEVICE, 
-    NUM_CLASSES, 
-    NUM_EPOCHS, 
+    DEVICE,
+    NUM_CLASSES,
+    NUM_EPOCHS,
     OUT_DIR,
-    VISUALIZE_TRANSFORMED_IMAGES, 
+    VISUALIZE_TRANSFORMED_IMAGES,
     NUM_WORKERS,
     RESIZE_TO,
     VALID_DIR,
-    TRAIN_DIR
+    TRAIN_DIR,
 )
 from model import create_model
-from custom_utils import (
-    Averager, 
-    SaveBestModel, 
-    save_model, 
-    save_loss_plot,
-    save_mAP
-)
+from custom_utils import Averager, SaveBestModel, save_model, save_loss_plot, save_mAP
 from tqdm.auto import tqdm
 from datasets import (
-    create_train_dataset, 
-    create_valid_dataset, 
-    create_train_loader, 
-    create_valid_loader
+    create_train_dataset,
+    create_valid_dataset,
+    create_train_loader,
+    create_valid_loader,
 )
 from torchmetrics.detection.mean_ap import MeanAveragePrecision
 from torch.optim.lr_scheduler import MultiStepLR
@@ -34,25 +28,26 @@ import os
 
 # torch.multiprocessing.set_sharing_strategy('file_system')
 
-plt.style.use('ggplot')
+plt.style.use("ggplot")
 
 seed = 42
 torch.manual_seed(seed)
 torch.cuda.manual_seed(seed)
-torch.cuda.manual_seed_all(seed) 
+torch.cuda.manual_seed_all(seed)
+
 
 # Function for running training iterations.
 def train(train_data_loader, model):
-    print('Training')
+    print("Training")
     model.train()
-    
-     # initialize tqdm progress bar
+
+    # initialize tqdm progress bar
     prog_bar = tqdm(train_data_loader, total=len(train_data_loader))
-    
+
     for i, data in enumerate(prog_bar):
         optimizer.zero_grad()
         images, targets = data
-        
+
         images = list(image.to(DEVICE) for image in images)
         targets = [{k: v.to(DEVICE) for k, v in t.items()} for t in targets]
         loss_dict = model(images, targets)
@@ -64,26 +59,27 @@ def train(train_data_loader, model):
 
         losses.backward()
         optimizer.step()
-    
+
         # update the loss value beside the progress bar for each iteration
         prog_bar.set_description(desc=f"Loss: {loss_value:.4f}")
     return loss_value
 
+
 # Function for running validation iterations.
 def validate(valid_data_loader, model):
-    print('Validating')
+    print("Validating")
     model.eval()
-    
+
     # Initialize tqdm progress bar.
     prog_bar = tqdm(valid_data_loader, total=len(valid_data_loader))
     target = []
     preds = []
     for i, data in enumerate(prog_bar):
         images, targets = data
-        
+
         images = list(image.to(DEVICE) for image in images)
         targets = [{k: v.to(DEVICE) for k, v in t.items()} for t in targets]
-        
+
         with torch.no_grad():
             outputs = model(images, targets)
 
@@ -92,11 +88,11 @@ def validate(valid_data_loader, model):
         for i in range(len(images)):
             true_dict = dict()
             preds_dict = dict()
-            true_dict['boxes'] = targets[i]['boxes'].detach().cpu()
-            true_dict['labels'] = targets[i]['labels'].detach().cpu()
-            preds_dict['boxes'] = outputs[i]['boxes'].detach().cpu()
-            preds_dict['scores'] = outputs[i]['scores'].detach().cpu()
-            preds_dict['labels'] = outputs[i]['labels'].detach().cpu()
+            true_dict["boxes"] = targets[i]["boxes"].detach().cpu()
+            true_dict["labels"] = targets[i]["labels"].detach().cpu()
+            preds_dict["boxes"] = outputs[i]["boxes"].detach().cpu()
+            preds_dict["scores"] = outputs[i]["scores"].detach().cpu()
+            preds_dict["labels"] = outputs[i]["labels"].detach().cpu()
             preds.append(preds_dict)
             target.append(true_dict)
         #####################################
@@ -106,8 +102,9 @@ def validate(valid_data_loader, model):
     metric_summary = metric.compute()
     return metric_summary
 
-if __name__ == '__main__':
-    os.makedirs('outputs', exist_ok=True)
+
+if __name__ == "__main__":
+    os.makedirs("outputs", exist_ok=True)
     train_dataset = create_train_dataset(TRAIN_DIR)
     valid_dataset = create_valid_dataset(VALID_DIR)
     train_loader = create_train_loader(train_dataset, NUM_WORKERS)
@@ -123,12 +120,11 @@ if __name__ == '__main__':
     total_params = sum(p.numel() for p in model.parameters())
     print(f"{total_params:,} total parameters.")
     total_trainable_params = sum(
-        p.numel() for p in model.parameters() if p.requires_grad)
+        p.numel() for p in model.parameters() if p.requires_grad
+    )
     print(f"{total_trainable_params:,} training parameters.")
     params = [p for p in model.parameters() if p.requires_grad]
-    optimizer = torch.optim.SGD(
-        params, lr=0.0005, momentum=0.9, nesterov=True
-    )
+    optimizer = torch.optim.SGD(params, lr=0.0005, momentum=0.9, nesterov=True)
     scheduler = MultiStepLR(
         optimizer=optimizer, milestones=[45], gamma=0.1, verbose=True
     )
@@ -141,11 +137,12 @@ if __name__ == '__main__':
     map_list = []
 
     # Mame to save the trained model with.
-    MODEL_NAME = 'model'
+    MODEL_NAME = "model"
 
     # Whether to show transformed images from data loader or not.
     if VISUALIZE_TRANSFORMED_IMAGES:
         from custom_utils import show_tranformed_image
+
         show_tranformed_image(train_loader)
 
     # To save best model.
@@ -162,20 +159,18 @@ if __name__ == '__main__':
         start = time.time()
         train_loss = train(train_loader, model)
         metric_summary = validate(valid_loader, model)
-        print(f"Epoch #{epoch+1} train loss: {train_loss_hist.value:.3f}")   
+        print(f"Epoch #{epoch+1} train loss: {train_loss_hist.value:.3f}")
         print(f"Epoch #{epoch+1} mAP@0.50:0.95: {metric_summary['map']}")
-        print(f"Epoch #{epoch+1} mAP@0.50: {metric_summary['map_50']}")   
+        print(f"Epoch #{epoch+1} mAP@0.50: {metric_summary['map_50']}")
         end = time.time()
         print(f"Took {((end - start) / 60):.3f} minutes for epoch {epoch}")
 
         train_loss_list.append(train_loss)
-        map_50_list.append(metric_summary['map_50'])
-        map_list.append(metric_summary['map'])
+        map_50_list.append(metric_summary["map_50"])
+        map_list.append(metric_summary["map"])
 
         # save the best model till now.
-        save_best_model(
-            model, float(metric_summary['map']), epoch, OUT_DIR
-        )
+        save_best_model(model, float(metric_summary["map"]), epoch, OUT_DIR)
         # Save the current epoch model.
         save_model(OUT_DIR, epoch, model, optimizer)
 
