@@ -9,7 +9,7 @@ import argparse
 from model import create_model
 
 from config import (
-    GUI, NUM_CLASSES, DEVICE, CLASSES, OUT_DIR
+    GUI, NUM_CLASSES, DEVICE, CLASSES, COLORS, OUT_DIR
 )
 
 np.random.seed(42)
@@ -18,7 +18,7 @@ np.random.seed(42)
 parser = argparse.ArgumentParser()
 parser.add_argument(
     '-i', '--input', 
-    default='./data/in/IEEE/test',
+    default='./data/in/ieee/JPEGImages',
     help='path to input image directory',
 )
 parser.add_argument(
@@ -37,7 +37,7 @@ args = vars(parser.parse_args())
 
 os.makedirs(f'{OUT_DIR}/inference_outputs/images', exist_ok=True)
 
-COLORS = [[0, 0, 0], [255, 0, 0], [255, 0, 0], [255, 0, 0], [255, 0, 0], [255, 0, 0], [255, 0, 0], [255, 0, 0], [255, 0, 0]]
+# COLORS = [[0, 0, 0], [255, 0, 0], [255, 0, 0], [255, 0, 0], [255, 0, 0], [255, 0, 0], [255, 0, 0], [255, 0, 0], [255, 0, 0]]
 
 # Load the best model and trained weights.
 model = create_model(num_classes=NUM_CLASSES, size=640)
@@ -47,7 +47,7 @@ model.to(DEVICE).eval()
 
 # Directory where all the images are present.
 DIR_TEST = args['input']
-test_images = glob.glob(f"{DIR_TEST}/*.jpg")
+test_images = glob.glob(f"{DIR_TEST}/*.PNG")
 print(f"Test instances: {len(test_images)}")
 
 frame_count = 0 # To count total frames.
