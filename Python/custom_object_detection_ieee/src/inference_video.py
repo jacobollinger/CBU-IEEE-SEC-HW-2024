@@ -8,7 +8,7 @@ import pathlib
 
 from model import create_model
 from config import (
-    GUI, NUM_CLASSES, DEVICE, CLASSES, OUT_DIR
+    GUI, NUM_CLASSES, DEVICE, CLASSES, COLORS, OUT_DIR
 )
 
 np.random.seed(42)
@@ -35,7 +35,7 @@ args = vars(parser.parse_args())
 
 os.makedirs(f'{OUT_DIR}/inference_outputs/videos', exist_ok=True)
 
-COLORS = [[0, 0, 0], [255, 0, 0], [255, 0, 0], [255, 0, 0], [255, 0, 0], [255, 0, 0], [255, 0, 0], [255, 0, 0], [255, 0, 0]]
+# COLORS = [[0, 0, 0], [255, 0, 0], [255, 0, 0], [255, 0, 0], [255, 0, 0], [255, 0, 0], [255, 0, 0], [255, 0, 0], [255, 0, 0]]
 
 # Load the best model and trained weights.
 model = create_model(num_classes=NUM_CLASSES, size=640)
