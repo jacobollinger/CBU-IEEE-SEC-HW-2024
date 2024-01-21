@@ -2,7 +2,7 @@ import torch
 
 GUI = False
 
-BATCH_SIZE = 30  # Increase / decrease according to GPU memeory.
+BATCH_SIZE = 30  # Increase / decrease according to GPU memory.
 RESIZE_TO = 640  # Resize the image for training and transforms.
 NUM_EPOCHS = 1000  # Number of epochs to train for.
 NUM_WORKERS = 4  # Number of parallel workers for data loading.
@@ -41,7 +41,7 @@ COLORS = [
     (255, 255, 255),    # #ffffff
 ]
 
-# whether to visualize images after crearing the data loaders
+# whether to visualize images after creating the data loaders
 VISUALIZE_TRANSFORMED_IMAGES = False
 
 # location to save model and plots
