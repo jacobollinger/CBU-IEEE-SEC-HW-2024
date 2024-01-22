@@ -2,28 +2,32 @@
 
 void setup()
 {
-    Serial.begin(115200);
-    Serial.println("Starting SPI Slave");
-    SPIReceiver::initSPIReceiver();
-    Serial.println("Initialized\tEOT: " + String(SPI_EOT));
+    Logger::init();
+    Logger::log("Starting SPI Slave");
+    SPIReceiver::init();
+    Logger::log("Initialized.\tEOT: ", false);
+    Logger::log(SPI_EOT);
+    Logger::log("Buffer size: ", false);
+    Logger::log(SPI_BUFFER_SIZE);
 }
 
 void loop()
 {
     if (SPIReceiver::messageEndFlag)
     {
-        Serial.println("Message received");
-        Serial.println("Buffer size: " + String(SPIReceiver::bufferPosi));
-        Serial.print("Buffer: ");
+        Logger::log("Message received");
+        Logger::log("Buffer size: ", false);
+        Logger::log(SPIReceiver::bufferPosition);
+        Logger::log("Buffer: ", false);
         SPIReceiver::printBuffer();
-        Serial.print("Int: ");
+        Logger::log("Int: ", false);
         SPIReceiver::printBufferAsInteger();
-        Serial.print("Hex: ");
+        Logger::log("Hex: ", false);
         SPIReceiver::printBufferAsHexadecimal();
-        Serial.print("UTF-8: ");
+        Logger::log("UTF-8: ", false);
         SPIReceiver::printBufferAsASCII();
 
-        Serial.println();
+        Logger::log();
         SPIReceiver::clearBuffer();
     }
 }
