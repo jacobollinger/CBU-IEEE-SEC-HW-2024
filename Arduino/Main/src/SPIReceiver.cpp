@@ -1,7 +1,7 @@
 #include "../include/SPIReceiver.hpp"
 
 byte SPIReceiver::buffer[SPI_BUFFER_SIZE];
-volatile unsigned int SPIReceiver::bufferPosi = 0;
+volatile unsigned int SPIReceiver::bufferPosition = 0;
 volatile boolean SPIReceiver::messageEndFlag = false;
 
 // SPI interrupt routine
@@ -16,13 +16,13 @@ ISR(SPI_STC_vect)
         return;
     }
 
-    if (SPIReceiver::bufferPosi < sizeof(SPIReceiver::buffer) - 1)
+    if (SPIReceiver::bufferPosition < sizeof(SPIReceiver::buffer) - 1)
     {
-        SPIReceiver::buffer[SPIReceiver::bufferPosi++] = incomingByte;
+        SPIReceiver::buffer[SPIReceiver::bufferPosition++] = incomingByte;
     }
 }
 
-void SPIReceiver::initSPIReceiver()
+void SPIReceiver::init()
 {
     pinMode(MISO, OUTPUT);
 
@@ -43,7 +43,7 @@ byte *SPIReceiver::getBuffer()
 int SPIReceiver::getBufferAsInteger()
 {
     int number = 0;
-    for (size_t i = 0; i < bufferPosi; i++)
+    for (size_t i = 0; i < bufferPosition; i++)
     {
         number += buffer[i] << (8 * i);
     }
@@ -53,9 +53,9 @@ int SPIReceiver::getBufferAsInteger()
 String SPIReceiver::getBufferAsBinary()
 {
     String bufferString = "";
-    for (size_t i = 0; i < bufferPosi; i++)
+    for (size_t i = 0; i < bufferPosition; i++)
     {
-        bufferString += String(buffer[bufferPosi - i - 1], BIN);
+        bufferString += String(buffer[bufferPosition - i - 1], BIN);
     }
     return bufferString;
 }
@@ -63,9 +63,9 @@ String SPIReceiver::getBufferAsBinary()
 String SPIReceiver::getBufferAsHexadecimal()
 {
     String bufferString = "";
-    for (size_t i = 0; i < bufferPosi; i++)
+    for (size_t i = 0; i < bufferPosition; i++)
     {
-        bufferString += String(buffer[bufferPosi - i - 1], HEX);
+        bufferString += String(buffer[bufferPosition - i - 1], HEX);
     }
     return bufferString;
 }
@@ -73,7 +73,7 @@ String SPIReceiver::getBufferAsHexadecimal()
 String SPIReceiver::getBufferAsASCII()
 {
     String bufferString = "";
-    for (size_t i = 0; i < bufferPosi; i++)
+    for (size_t i = 0; i < bufferPosition; i++)
     {
         bufferString += String((char) buffer[i]);
     }
@@ -86,46 +86,40 @@ void SPIReceiver::writeBuffer(unsigned int *data, size_t length)
     {
         buffer[i] = data[i];
     }
-    bufferPosi = length;
+    bufferPosition = length;
 }
 
 void SPIReceiver::clearBuffer()
 {
-    for (size_t i = 0; i < bufferPosi; i++)
+    for (size_t i = 0; i < bufferPosition; i++)
     {
         buffer[i] = 0;
     }
-    bufferPosi = 0;
+    bufferPosition = 0;
     messageEndFlag = false;
 }
 
-#ifdef DEBUG
 void SPIReceiver::printBuffer()
 {
-    for (size_t i = 0; i < bufferPosi; i++)
+    for (size_t i = 0; i < bufferPosition; i++)
     {
-        Serial.print(String(buffer[i]));
-        Serial.print(" ");
+        Logger::log(buffer[i], false);
+        Logger::log(" ", false);
     }
-    Serial.println();
+    Logger::log();
 }
 
 void SPIReceiver::printBufferAsInteger()
 {
-    Serial.println(getBufferAsInteger());
+    Logger::log(getBufferAsInteger());
 }
 
 void SPIReceiver::printBufferAsHexadecimal()
 {
-    Serial.println(getBufferAsHexadecimal());
+    Logger::log(getBufferAsHexadecimal());
 }
 
 void SPIReceiver::printBufferAsASCII()
 {
-    Serial.println(getBufferAsASCII());
+    Logger::log(getBufferAsASCII());
 }
-#else
-void SPIReceiver::printBuffer() {}
-void SPIReceiver::printBufferUTF8() {}
-void SPIReceiver::printBufferHex() {}
-#endif // DEBUG

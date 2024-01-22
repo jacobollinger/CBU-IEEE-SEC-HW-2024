@@ -5,15 +5,16 @@
 #include <SPI.h>
 
 #include "Defines.hpp"
+#include "Logger.hpp"
 
 class SPIReceiver
 {
 public:
     static byte buffer[];
-    static volatile unsigned int bufferPosi;
+    static volatile unsigned int bufferPosition;
     static volatile boolean messageEndFlag;
 
-    static void initSPIReceiver();
+    static void init();
     static byte *getBuffer();
     static int getBufferAsInteger();
     static String getBufferAsBinary();
