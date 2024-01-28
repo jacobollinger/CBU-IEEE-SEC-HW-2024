@@ -1,11 +1,13 @@
 import cvat_sdk
 import multiprocessing
+import shutil
 import threading
 from tqdm import tqdm
 import os
 import xml.etree.ElementTree as ET
 import zipfile
 
+auth = ('', '')
 base_dir = os.path.join(".", "data", "in", "ieee")
 
 os.makedirs(os.path.join(base_dir, "downloads"), exist_ok=True)
@@ -22,19 +24,20 @@ def download_and_extract(task):
                 tqdm.write(f"Downloading annotations for {task.name} (task {task.id})...")
                 client.tasks.retrieve(task.id).export_dataset("PASCAL VOC 1.1", os.path.join(base_dir, "downloads", f"task_{task.id}.zip"))
         else:
-            tqdm.write(f"Skipping {task.name} (task {task.id}) because it has already been downloaded")
-        pbar.update(1)
+            tqdm.write(f"Skipping download for {task.name} (task {task.id}) because it has already been downloaded")
         
         if not os.path.exists(os.path.join(base_dir, f"task_{task.id}")):
             file = f"task_{task.id}.zip"
             tqdm.write(f"Unzipping {file}...")
             with zipfile.ZipFile(os.path.join(base_dir, "downloads", file), "r") as zip_ref:
                 zip_ref.extractall(path=os.path.join(base_dir, f"task_{task.id}"))
+            os.remove(os.path.join(base_dir, "downloads", file))
         else:
-            tqdm.write(f"Skipping {task.name} (task {task.id}) because it has already been unzipped")
-            
+            tqdm.write(f"Skipping unzip for {task.name} (task {task.id}) because it has already been unzipped")
+        
         installed.append(task.id)
     finally:
+        pbar.update(1)
         # Release the semaphore
         semaphore.release()
 
@@ -44,9 +47,9 @@ if os.path.exists(os.path.join(base_dir, "installed.txt")):
 else:
     installed = []
 
-with cvat_sdk.make_client(host="http://localhost:8080", credentials=('jacob', 'bollinger')) as client:
+with cvat_sdk.make_client(host="http://localhost:8080", credentials=auth) as client:
     tasks = client.tasks.list()
-    pbar = tqdm(total=len(tasks), desc="Tasks", dynamic_ncols=True, position=0, leave=True)
+    pbar = tqdm(total=len(tasks), desc="Downloading Tasks", dynamic_ncols=True, position=0, leave=True)
     threads = []
     for task in tasks:
         if task.status != "completed":
@@ -69,7 +72,8 @@ with cvat_sdk.make_client(host="http://localhost:8080", credentials=('jacob', 'b
 pbar.close()
 
 tasks = []
-        
+
+print("Getting tasks...") 
 for folder in os.listdir(base_dir):
     if folder.startswith("task_"):
         task = {folder: {"images": [], "annotations": []}}
@@ -91,9 +95,11 @@ tasks = sorted(tasks, key=lambda x: list(x.keys())[0])
 frame_map = {}
 frame = 0
 
+pbar = tqdm(total=len(tasks), desc="Installing Tasks", dynamic_ncols=True, position=0, leave=True)
+
 for task in tasks:
     for key in task:
-        print(f"Processing {key}...")
+        tqdm.write(f"Processing {key}...")
         for annotation, image in zip(task[key]["annotations"], task[key]["images"]):
             tree = ET.parse(annotation)
             root = tree.getroot()
@@ -113,9 +119,10 @@ for task in tasks:
             os.rename(image, os.path.join(base_dir, "JPEGImages", f"frame_{frame:06d}.PNG"))
             
             frame += 1
-           
-        os.system(f"rm -rf {base_dir}/{key}")
 
+        shutil.rmtree(os.path.join(base_dir, key))
+
+pbar.close()
 print(f"Processed {frame} frames")
 
 with open(os.path.join(base_dir, "installed.txt"), "w") as f:
