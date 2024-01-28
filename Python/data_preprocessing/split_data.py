@@ -2,6 +2,7 @@ import json
 import os
 import random
 import subprocess
+import tqdm
 import xml.etree.ElementTree as ET
 
 
@@ -71,18 +72,21 @@ def split_data(
     if test > 0: os.makedirs(os.path.join(data_path, "test"), exist_ok=True)
         
     df.pop("split")
+    
+    pbar = tqdm.tqdm(total=2*sum([len(files) for files in df.values()]), dynamic_ncols=True, position=0, leave=True)
         
     for data_split, files in df.items():
         for file in files:
             if not os.path.exists(os.path.join(data_path, data_split, file + ".xml")):
                 subprocess.run(["mv", os.path.join(data_path, "Annotations", file + ".xml"), os.path.join(data_path, data_split)])
+            pbar.update(1)
             
             if not os.path.exists(os.path.join(data_path, data_split, file + ".PNG")):
                 subprocess.run(["mv", os.path.join(data_path, "JPEGImages", file + ".PNG"), os.path.join(data_path, data_split)])
-                
+            pbar.update(1)
 
 
 
 
 if __name__ == "__main__":
-    split_data()
+    split_data(train=0.8, valid=0.2)
