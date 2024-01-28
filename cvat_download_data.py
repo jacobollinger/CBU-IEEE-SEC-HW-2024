@@ -6,7 +6,7 @@ import os
 import xml.etree.ElementTree as ET
 import zipfile
 
-base_dir = os.path.join(".", "cvat_downloads")
+base_dir = os.path.join(".", "data", "in", "ieee")
 
 os.makedirs(os.path.join(base_dir, "downloads"), exist_ok=True)
 
@@ -32,19 +32,31 @@ def download_and_extract(task):
                 zip_ref.extractall(path=os.path.join(base_dir, f"task_{task.id}"))
         else:
             tqdm.write(f"Skipping {task.name} (task {task.id}) because it has already been unzipped")
-        pbar.update(1)
+            
+        installed.append(task.id)
     finally:
         # Release the semaphore
         semaphore.release()
 
+if os.path.exists(os.path.join(base_dir, "installed.txt")):
+    with open(os.path.join(base_dir, "installed.txt"), "r") as f:
+        installed = [int(line.strip()) for line in f.readlines()]
+else:
+    installed = []
+
 with cvat_sdk.make_client(host="http://localhost:8080", credentials=('jacob', 'bollinger')) as client:
     tasks = client.tasks.list()
-    pbar = tqdm(total=len(tasks) * 2, desc="Tasks", dynamic_ncols=True, position=0, leave=True)
+    pbar = tqdm(total=len(tasks), desc="Tasks", dynamic_ncols=True, position=0, leave=True)
     threads = []
     for task in tasks:
-        # if task.status != "completed":
-        #     tqdm.write(f"Skipping {task.name} (task {task.id}) because it is not completed")
-        #     continue
+        if task.status != "completed":
+            tqdm.write(f"Skipping {task.name} (task {task.id}) because it is not completed")
+            pbar.update(1)
+            continue
+        if task.id in installed:
+            tqdm.write(f"Skipping {task.name} (task {task.id}) because it has already been installed")
+            pbar.update(1)
+            continue
 
         thread = threading.Thread(target=download_and_extract, args=(task,))
         thread.start()
@@ -85,21 +97,27 @@ for task in tasks:
         for annotation, image in zip(task[key]["annotations"], task[key]["images"]):
             tree = ET.parse(annotation)
             root = tree.getroot()
+            
+            # task_n_frame000000 -> frame000000
+            # {key}_{root.find("filename").text.split(".")[0]} -> frame_{frame:06d}
+            frame_map[f"{key}_{root.find('filename').text.split('.')[0]}"] = f"frame_{frame:06d}"
 
             root.find("filename").text = f"frame_{frame:06d}.PNG"
             tree.write(annotation)
             
-            os.rename(annotation, os.path.join(os.path.dirname(annotation), "../../../data/in/ieee/Annotations", f"frame_{frame:06d}.xml"))
-            os.rename(image, os.path.join(os.path.dirname(image), "../../../data/in/ieee/JPEGImages", f"frame_{frame:06d}.PNG"))
+            # Ensure the destination directories exist
+            os.makedirs(os.path.join(base_dir, "Annotations"), exist_ok=True)
+            os.makedirs(os.path.join(base_dir, "JPEGImages"), exist_ok=True)
             
-            # task_n_frame000000 -> frame000000
-            # frame_ma
+            os.rename(annotation, os.path.join(base_dir, "Annotations", f"frame_{frame:06d}.xml"))
+            os.rename(image, os.path.join(base_dir, "JPEGImages", f"frame_{frame:06d}.PNG"))
             
             frame += 1
            
         os.system(f"rm -rf {base_dir}/{key}")
 
-    
 print(f"Processed {frame} frames")
 
-pbar.close()
+with open(os.path.join(base_dir, "installed.txt"), "w") as f:
+    for task in installed:
+        f.write(f"{task}\n")
