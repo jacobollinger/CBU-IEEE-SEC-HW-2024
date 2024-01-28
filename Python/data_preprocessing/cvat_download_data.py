@@ -15,7 +15,7 @@ os.makedirs(os.path.join(base_dir, "downloads"), exist_ok=True)
 # Create a semaphore for 4 threads
 semaphore = threading.Semaphore(multiprocessing.cpu_count())
 
-def download_and_extract(task):
+def download_and_extract(task, pbar):
     # Acquire a semaphore
     semaphore.acquire()
     
@@ -62,7 +62,7 @@ def cvat_download_data(host="http://localhost:8080", credentials=auth):
                 pbar.update(1)
                 continue
 
-            thread = threading.Thread(target=download_and_extract, args=(task,))
+            thread = threading.Thread(target=download_and_extract, args=(task, pbar))
             thread.start()
             threads.append(thread)
 
