@@ -1,5 +1,6 @@
 # Data Processing
 mega.py@git+https://github.com/pgp/mega.py.git
+cvat-sdk
 pandas
 
 # PyTorch
