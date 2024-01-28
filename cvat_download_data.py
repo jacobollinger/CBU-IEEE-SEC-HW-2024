@@ -19,34 +19,31 @@ def download_and_extract(task):
     
     try:
         if not os.path.exists(os.path.join(base_dir, "downloads", f"task_{task.id}.zip")):
-                # print(f"Downloading annotations for {task.name} (task {task.id})...")
-                pbar_download = tqdm(total=100, desc=f"Downloading {task.name} (task {task.id})", dynamic_ncols=True, position=1, leave=True)
-                client.tasks.retrieve(task.id).export_dataset("PASCAL VOC 1.1", os.path.join(base_dir, "downloads", f"task_{task.id}.zip"), pbar=pbar_download)
-                pbar_download.close()
-                
+                tqdm.write(f"Downloading annotations for {task.name} (task {task.id})...")
+                client.tasks.retrieve(task.id).export_dataset("PASCAL VOC 1.1", os.path.join(base_dir, "downloads", f"task_{task.id}.zip"))
         else:
-            print(f"Skipping {task.name} (task {task.id}) because it has already been downloaded")
+            tqdm.write(f"Skipping {task.name} (task {task.id}) because it has already been downloaded")
         pbar.update(1)
         
         if not os.path.exists(os.path.join(base_dir, f"task_{task.id}")):
             file = f"task_{task.id}.zip"
-            print(f"Unzipping {file}...")
+            tqdm.write(f"Unzipping {file}...")
             with zipfile.ZipFile(os.path.join(base_dir, "downloads", file), "r") as zip_ref:
-                zip_ref.extractall(path=base_dir)
+                zip_ref.extractall(path=os.path.join(base_dir, f"task_{task.id}"))
         else:
-            print(f"Skipping {task.name} (task {task.id}) because it has already been unzipped")
+            tqdm.write(f"Skipping {task.name} (task {task.id}) because it has already been unzipped")
         pbar.update(1)
     finally:
         # Release the semaphore
         semaphore.release()
 
-with cvat_sdk.make_client(host="http://localhost:8080", credentials=('', '')) as client:
+with cvat_sdk.make_client(host="http://localhost:8080", credentials=('jacob', 'bollinger')) as client:
     tasks = client.tasks.list()
     pbar = tqdm(total=len(tasks) * 2, desc="Tasks", dynamic_ncols=True, position=0, leave=True)
     threads = []
     for task in tasks:
         # if task.status != "completed":
-        #     print(f"Skipping {task.name} (task {task.id}) because it is not completed")
+        #     tqdm.write(f"Skipping {task.name} (task {task.id}) because it is not completed")
         #     continue
 
         thread = threading.Thread(target=download_and_extract, args=(task,))
