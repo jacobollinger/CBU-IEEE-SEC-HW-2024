@@ -15,7 +15,7 @@ os.makedirs(os.path.join(base_dir, "downloads"), exist_ok=True)
 # Create a semaphore for 4 threads
 semaphore = threading.Semaphore(multiprocessing.cpu_count())
 
-def download_and_extract(task, pbar):
+def download_and_extract(client, task, pbar):
     # Acquire a semaphore
     semaphore.acquire()
     
@@ -62,7 +62,7 @@ def cvat_download_data(host="http://localhost:8080", credentials=auth):
                 pbar.update(1)
                 continue
 
-            thread = threading.Thread(target=download_and_extract, args=(task, pbar))
+            thread = threading.Thread(target=download_and_extract, args=(client, task, pbar))
             thread.start()
             threads.append(thread)
 
@@ -127,6 +127,10 @@ def cvat_download_data(host="http://localhost:8080", credentials=auth):
     with open(os.path.join(base_dir, "installed.txt"), "w") as f:
         for task in installed:
             f.write(f"{task}\n")
+    
+    with open(os.path.join(base_dir, "frame_map.txt"), "w") as f:
+        for key in frame_map:
+            f.write(f"{key} -> {frame_map[key]}\n")
 
 if __name__ == "__main__":
     cvat_download_data()
