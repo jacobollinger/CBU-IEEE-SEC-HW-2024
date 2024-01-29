@@ -20,22 +20,21 @@ def download_and_extract(client, task, pbar):
     semaphore.acquire()
     
     try:
-        if not os.path.exists(os.path.join(base_dir, "downloads", f"task_{task.id}.zip")):
-                tqdm.write(f"Downloading annotations for {task.name} (task {task.id})...")
-                client.tasks.retrieve(task.id).export_dataset("PASCAL VOC 1.1", os.path.join(base_dir, "downloads", f"task_{task.id}.zip"))
-        else:
-            tqdm.write(f"Skipping download for {task.name} (task {task.id}) because it has already been downloaded")
-        
         if not os.path.exists(os.path.join(base_dir, f"task_{task.id}")):
-            file = f"task_{task.id}.zip"
-            tqdm.write(f"Unzipping {file}...")
+            if os.path.exists(os.path.join(base_dir, "downloads", f"task_{task.id}.zip")):
+                tqdm.write(f"Downloading task_{task.id:03d}: ...")
+                client.tasks.retrieve(task.id).export_dataset("PASCAL VOC 1.1", os.path.join(base_dir, "downloads", f"task_{task.id}.zip"))
+            else:
+                tqdm.write(f"Downloading task_{task.id:03d}: : Skipping because it has already been downloaded")
+        
+            tqdm.write(f"Extracting task_{task.id:03d}: ...")
             with zipfile.ZipFile(os.path.join(base_dir, "downloads", file), "r") as zip_ref:
                 zip_ref.extractall(path=os.path.join(base_dir, f"task_{task.id}"))
-            os.remove(os.path.join(base_dir, "downloads", file))
+            os.remove(os.path.join(base_dir, "downloads", file))            
+            if not os.path.exists(os.path.join(base_dir, "labelmap.txt")):
+                os.rename(os.path.join(base_dir, f"task_{task.id}", "labelmap.txt"), os.path.join(base_dir, "labelmap.txt"))
         else:
-            tqdm.write(f"Skipping unzip for {task.name} (task {task.id}) because it has already been unzipped")
-        
-        installed.append(task.id)
+            tqdm.write(f"Extracting task_{task.id:03d}: : Skipping because it has already been extracted")
     finally:
         pbar.update(1)
         # Release the semaphore
@@ -50,16 +49,15 @@ else:
 def cvat_download_data(host="http://localhost:8080", credentials=auth):
     with cvat_sdk.make_client(host=host, credentials=credentials) as client:
         tasks = client.tasks.list()
-        pbar = tqdm(total=len(tasks), desc="Downloading Tasks", dynamic_ncols=True, position=0, leave=True)
+        pbar = tqdm(total=len(tasks)-len(installed), desc="Downloading Tasks", dynamic_ncols=True, position=0, leave=True)
         threads = []
         for task in tasks:
             if task.status != "completed":
-                tqdm.write(f"Skipping {task.name} (task {task.id}) because it is not completed")
+                tqdm.write(f"Skipping task_{task.id:03d}: : it is not completed (status: {task.status})")
                 pbar.update(1)
                 continue
             if task.id in installed:
-                tqdm.write(f"Skipping {task.name} (task {task.id}) because it has already been installed")
-                pbar.update(1)
+                tqdm.write(f"Skipping task_{task.id:03d}: : it has already been installed")
                 continue
 
             thread = threading.Thread(target=download_and_extract, args=(client, task, pbar))
@@ -72,54 +70,59 @@ def cvat_download_data(host="http://localhost:8080", credentials=auth):
             
     pbar.close()
 
-    tasks = []
+    tasks = {}
 
     print("Getting tasks...") 
     for folder in os.listdir(base_dir):
         if folder.startswith("task_"):
-            task = {folder: {"images": [], "annotations": []}}
+            task = {"images": [], "annotations": []}
             for dirpath, _, filenames in os.walk(os.path.join(base_dir, folder)):
                 for file in filenames:
                     if file.endswith(".xml"):
-                        task[folder]["annotations"].append(os.path.join(dirpath, file))
+                        task["annotations"].append(os.path.join(dirpath, file))
                     elif file.endswith(".PNG"):
-                        task[folder]["images"].append(os.path.join(dirpath, file))
+                        task["images"].append(os.path.join(dirpath, file))
             
             # sort the images and annotations
-            task[folder]["images"] = sorted(task[folder]["images"])
-            task[folder]["annotations"] = sorted(task[folder]["annotations"])
-            tasks.append(task)
+            task["images"] = sorted(task["images"])
+            task["annotations"] = sorted(task["annotations"])
+            tasks[folder] = task.copy()
 
-    tasks = sorted(tasks, key=lambda x: list(x.keys())[0])
+    tasks = {key: tasks[key] for key in sorted(tasks.keys())}
 
     # map task frames to frame numbers
-    frame_map = {}
-    frame = 0
+    if os.path.exists(os.path.join(base_dir, "frame_map.txt")):
+        with open(os.path.join(base_dir, "frame_map.txt"), "r") as f:
+            frame_map = {line.split(" -> ")[0]: line.split(" -> ")[1].strip() for line in f.readlines()}
+    else:
+        frame_map = {}
+    
+    frame = len(frame_map)
 
-    for task in tasks:
-        for key in task:
-            tqdm.write(f"Processing {key}...")
-            for annotation, image in zip(task[key]["annotations"], task[key]["images"]):
-                tree = ET.parse(annotation)
-                root = tree.getroot()
-                
-                # task_n_frame000000 -> frame000000
-                # {key}_{root.find("filename").text.split(".")[0]} -> frame_{frame:06d}
-                frame_map[f"{key}_{root.find('filename').text.split('.')[0]}"] = f"frame_{frame:06d}"
+    for task, task_values in tasks.items():
+        tqdm.write(f"Installing: {task}...", end='')
+        for annotation, image in zip(task[key]["annotations"], task[key]["images"]):
+            tree = ET.parse(annotation)
+            root = tree.getroot()
+            
+            # task_n_frame000000 -> frame000000
+            frame_map[f"{key}_{root.find('filename').text.split('.')[0]}"] = f"frame_{frame:06d}"
 
-                root.find("filename").text = f"frame_{frame:06d}.PNG"
-                tree.write(annotation)
-                
-                # Ensure the destination directories exist
-                os.makedirs(os.path.join(base_dir, "Annotations"), exist_ok=True)
-                os.makedirs(os.path.join(base_dir, "JPEGImages"), exist_ok=True)
-                
-                os.rename(annotation, os.path.join(base_dir, "Annotations", f"frame_{frame:06d}.xml"))
-                os.rename(image, os.path.join(base_dir, "JPEGImages", f"frame_{frame:06d}.PNG"))
-                
-                frame += 1
+            root.find("filename").text = f"frame_{frame:06d}.PNG"
+            tree.write(annotation)
+            
+            # Ensure the destination directories exist
+            os.makedirs(os.path.join(base_dir, "Annotations"), exist_ok=True)
+            os.makedirs(os.path.join(base_dir, "JPEGImages"), exist_ok=True)
+            
+            os.rename(annotation, os.path.join(base_dir, "Annotations", f"frame_{frame:06d}.xml"))
+            os.rename(image, os.path.join(base_dir, "JPEGImages", f"frame_{frame:06d}.PNG"))
 
-            shutil.rmtree(os.path.join(base_dir, key))
+            tqdm.write("done")
+            installed.append(task.id)
+            frame += 1
+
+        shutil.rmtree(os.path.join(base_dir, task))
 
     pbar.close()
     print(f"Processed {frame} frames")
