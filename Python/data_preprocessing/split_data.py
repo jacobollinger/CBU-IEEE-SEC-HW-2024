@@ -73,16 +73,15 @@ def split_data(
         
     df.pop("split")
     
-    pbar = tqdm.tqdm(total=2*sum([len(files) for files in df.values()]), dynamic_ncols=True, position=0, leave=True)
+    pbar = tqdm.tqdm(total=sum([len(files) for files in df.values()]), dynamic_ncols=True, position=0, leave=True)
         
     for data_split, files in df.items():
         for file in files:
             if not os.path.exists(os.path.join(data_path, data_split, file + ".xml")):
-                subprocess.run(["mv", os.path.join(data_path, "Annotations", file + ".xml"), os.path.join(data_path, data_split)])
-            pbar.update(1)
+                os.rename(os.path.join(data_path, "Annotations", file + ".xml"), os.path.join(data_path, data_split, file + ".xml"))
             
             if not os.path.exists(os.path.join(data_path, data_split, file + ".PNG")):
-                subprocess.run(["mv", os.path.join(data_path, "JPEGImages", file + ".PNG"), os.path.join(data_path, data_split)])
+                os.rename(os.path.join(data_path, "JPEGImages", file + ".PNG"), os.path.join(data_path, data_split, file + ".PNG"))
             pbar.update(1)
 
 
