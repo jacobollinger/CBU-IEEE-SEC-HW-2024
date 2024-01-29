@@ -15,64 +15,91 @@ os.makedirs(os.path.join(base_dir, "downloads"), exist_ok=True)
 # Create a semaphore for 4 threads
 semaphore = threading.Semaphore(multiprocessing.cpu_count())
 
+
 def download_and_extract(client, task, pbar):
     # Acquire a semaphore
     semaphore.acquire()
-    
+
     try:
-        if not os.path.exists(os.path.join(base_dir, f"task_{task.id}")):
-            if os.path.exists(os.path.join(base_dir, "downloads", f"task_{task.id}.zip")):
-                tqdm.write(f"Downloading task_{task.id:03d}: ...")
-                client.tasks.retrieve(task.id).export_dataset("PASCAL VOC 1.1", os.path.join(base_dir, "downloads", f"task_{task.id}.zip"))
+        task_dir = os.path.join(base_dir, f"task_{task.id}")
+        task_zip = os.path.join(base_dir, "downloads", f"task_{task.id}.zip")
+
+        if not os.path.exists(task_dir):
+            if not os.path.exists(task_zip):
+                tqdm.write(f"Downloading task_{f'{task.id}:':<4}...")
+                client.tasks.retrieve(task.id).export_dataset(
+                    "PASCAL VOC 1.1", task_zip
+                )
             else:
-                tqdm.write(f"Downloading task_{task.id:03d}: : Skipping because it has already been downloaded")
-        
-            tqdm.write(f"Extracting task_{task.id:03d}: ...")
-            with zipfile.ZipFile(os.path.join(base_dir, "downloads", file), "r") as zip_ref:
-                zip_ref.extractall(path=os.path.join(base_dir, f"task_{task.id}"))
-            os.remove(os.path.join(base_dir, "downloads", file))            
+                tqdm.write(
+                    f"Downloading task_{f'{task.id}:':<4} Skipping because it has already been downloaded"
+                )
+
+            tqdm.write(f"Extracting task_{f'{task.id}:':<4} ...")
+            with zipfile.ZipFile(task_zip, "r") as zip_ref:
+                zip_ref.extractall(path=task_dir)
+            # os.remove(task_zip)
             if not os.path.exists(os.path.join(base_dir, "labelmap.txt")):
-                os.rename(os.path.join(base_dir, f"task_{task.id}", "labelmap.txt"), os.path.join(base_dir, "labelmap.txt"))
+                os.rename(
+                    os.path.join(base_dir, f"task_{task.id}", "labelmap.txt"),
+                    os.path.join(base_dir, "labelmap.txt"),
+                )
         else:
-            tqdm.write(f"Extracting task_{task.id:03d}: : Skipping because it has already been extracted")
+            tqdm.write(
+                f"Extracting task_{f'{task.id}:':<4} Skipping because it has already been extracted"
+            )
     finally:
         pbar.update(1)
         # Release the semaphore
         semaphore.release()
 
-if os.path.exists(os.path.join(base_dir, "installed.txt")):
-    with open(os.path.join(base_dir, "installed.txt"), "r") as f:
-        installed = [int(line.strip()) for line in f.readlines()]
-else:
-    installed = []
 
 def cvat_download_data(host="http://localhost:8080", credentials=auth):
+    if os.path.exists(os.path.join(base_dir, "installed_tasks.txt")):
+        with open(os.path.join(base_dir, "installed_tasks.txt"), "r") as f:
+            installed_tasks = [int(line.strip()) for line in f.readlines()]
+    else:
+        installed_tasks = []
+
     with cvat_sdk.make_client(host=host, credentials=credentials) as client:
         tasks = client.tasks.list()
-        pbar = tqdm(total=len(tasks)-len(installed), desc="Downloading Tasks", dynamic_ncols=True, position=0, leave=True)
+        tasks = sorted(tasks, key=lambda task: task.id)
+        pbar = tqdm(
+            total=len(tasks) - len(installed_tasks),
+            desc="Downloading Tasks",
+            dynamic_ncols=True,
+            position=0,
+            leave=True
+        )
         threads = []
         for task in tasks:
             if task.status != "completed":
-                tqdm.write(f"Skipping task_{task.id:03d}: : it is not completed (status: {task.status})")
+                tqdm.write(
+                    f"Skipping task_{f'{task.id}:':<4} it is not completed (status: {task.status})"
+                )
                 pbar.update(1)
                 continue
-            if task.id in installed:
-                tqdm.write(f"Skipping task_{task.id:03d}: : it has already been installed")
+            if task.id in installed_tasks:
+                tqdm.write(
+                    f"Skipping task_{f'{task.id}:':<4} it has already been installed"
+                )
                 continue
 
-            thread = threading.Thread(target=download_and_extract, args=(client, task, pbar))
+            thread = threading.Thread(
+                target=download_and_extract, args=(client, task, pbar)
+            )
             thread.start()
             threads.append(thread)
 
         # Wait for all threads to complete
         for thread in threads:
             thread.join()
-            
+
     pbar.close()
 
     tasks = {}
 
-    print("Getting tasks...") 
+    print("Getting tasks...")
     for folder in os.listdir(base_dir):
         if folder.startswith("task_"):
             task = {"images": [], "annotations": []}
@@ -82,7 +109,7 @@ def cvat_download_data(host="http://localhost:8080", credentials=auth):
                         task["annotations"].append(os.path.join(dirpath, file))
                     elif file.endswith(".PNG"):
                         task["images"].append(os.path.join(dirpath, file))
-            
+
             # sort the images and annotations
             task["images"] = sorted(task["images"])
             task["annotations"] = sorted(task["annotations"])
@@ -90,50 +117,38 @@ def cvat_download_data(host="http://localhost:8080", credentials=auth):
 
     tasks = {key: tasks[key] for key in sorted(tasks.keys())}
 
-    # map task frames to frame numbers
-    if os.path.exists(os.path.join(base_dir, "frame_map.txt")):
-        with open(os.path.join(base_dir, "frame_map.txt"), "r") as f:
-            frame_map = {line.split(" -> ")[0]: line.split(" -> ")[1].strip() for line in f.readlines()}
-    else:
-        frame_map = {}
-    
-    frame = len(frame_map)
-
     for task, task_values in tasks.items():
-        tqdm.write(f"Installing: {task}...", end='')
-        for annotation, image in zip(task[key]["annotations"], task[key]["images"]):
+        tqdm.write(f"Installing: {task}...", end="")
+        for annotation, image in zip(task_values["annotations"], task_values["images"]):
             tree = ET.parse(annotation)
             root = tree.getroot()
-            
-            # task_n_frame000000 -> frame000000
-            frame_map[f"{key}_{root.find('filename').text.split('.')[0]}"] = f"frame_{frame:06d}"
 
-            root.find("filename").text = f"frame_{frame:06d}.PNG"
+            # frame000000 -> task_n_frame000000
+            # frame = f"{task}_frame{root.find('filename').text[5:-4]}"
+            frame = f"{task}_{root.find('filename').text[:-4]}"
+
+            root.find("filename").text = f"{frame}.PNG"
             tree.write(annotation)
-            
+
             # Ensure the destination directories exist
             os.makedirs(os.path.join(base_dir, "Annotations"), exist_ok=True)
             os.makedirs(os.path.join(base_dir, "JPEGImages"), exist_ok=True)
-            
-            os.rename(annotation, os.path.join(base_dir, "Annotations", f"frame_{frame:06d}.xml"))
-            os.rename(image, os.path.join(base_dir, "JPEGImages", f"frame_{frame:06d}.PNG"))
 
-            tqdm.write("done")
-            installed.append(task.id)
-            frame += 1
+            os.rename(annotation, os.path.join(base_dir, "Annotations", f"{frame}.xml"))
+            os.rename(image, os.path.join(base_dir, "JPEGImages", f"{frame}.PNG"))
 
+
+        installed_tasks.append(task.split("_")[1])
         shutil.rmtree(os.path.join(base_dir, task))
+        tqdm.write("done")
 
     pbar.close()
     print(f"Processed {frame} frames")
 
-    with open(os.path.join(base_dir, "installed.txt"), "w") as f:
-        for task in installed:
+    with open(os.path.join(base_dir, "installed_tasks.txt"), "w") as f:
+        for task in installed_tasks:
             f.write(f"{task}\n")
-    
-    with open(os.path.join(base_dir, "frame_map.txt"), "w") as f:
-        for key in frame_map:
-            f.write(f"{key} -> {frame_map[key]}\n")
+
 
 if __name__ == "__main__":
     cvat_download_data()
