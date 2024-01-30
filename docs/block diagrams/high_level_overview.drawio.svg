@@ -1,123 +1,162 @@
-<mxfile host="65bd71144e">
-    <diagram id="yba9DU9IvSz2d7m307n7" name="Page-1">
-        <mxGraphModel dx="576" dy="329" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
-            <root>
-                <mxCell id="0"/>
-                <mxCell id="1" parent="0"/>
-                <mxCell id="19" value="" style="rounded=1;whiteSpace=wrap;html=1;fontFamily=Helvetica;fillColor=#e51400;fontColor=#ffffff;strokeColor=#B20000;" vertex="1" parent="1">
-                    <mxGeometry x="95" y="60" width="510" height="330" as="geometry"/>
-                </mxCell>
-                <mxCell id="18" value="" style="rounded=1;whiteSpace=wrap;html=1;fontFamily=Helvetica;fillColor=#76608a;fontColor=#ffffff;strokeColor=#432D57;" vertex="1" parent="1">
-                    <mxGeometry x="380" y="170" width="180" height="180" as="geometry"/>
-                </mxCell>
-                <mxCell id="17" value="" style="rounded=1;whiteSpace=wrap;html=1;fontFamily=Helvetica;fillColor=#fa6800;fontColor=#000000;strokeColor=#C73500;" vertex="1" parent="1">
-                    <mxGeometry x="140" y="170" width="180" height="180" as="geometry"/>
-                </mxCell>
-                <mxCell id="13" style="edgeStyle=none;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontFamily=Helvetica;" edge="1" parent="1" source="4" target="8">
-                    <mxGeometry relative="1" as="geometry"/>
-                </mxCell>
-                <mxCell id="14" style="edgeStyle=none;html=1;fontFamily=Helvetica;" edge="1" parent="1" source="4">
-                    <mxGeometry relative="1" as="geometry">
-                        <mxPoint x="270" y="250" as="targetPoint"/>
-                    </mxGeometry>
-                </mxCell>
-                <mxCell id="4" value="actuators.py" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-                    <mxGeometry x="170" y="200" width="120" height="50" as="geometry"/>
-                </mxCell>
-                <mxCell id="15" style="edgeStyle=none;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;fontFamily=Helvetica;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="6" target="9">
-                    <mxGeometry relative="1" as="geometry">
-                        <mxPoint x="424.79999999999995" y="270" as="targetPoint"/>
-                    </mxGeometry>
-                </mxCell>
-                <mxCell id="6" value="train.py" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-                    <mxGeometry x="410" y="200" width="120" height="50" as="geometry"/>
-                </mxCell>
-                <mxCell id="11" style="edgeStyle=none;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontFamily=Helvetica;exitX=0.25;exitY=1;exitDx=0;exitDy=0;" edge="1" parent="1" source="7" target="4">
-                    <mxGeometry relative="1" as="geometry">
-                        <mxPoint x="350" y="180" as="sourcePoint"/>
-                        <Array as="points">
-                            <mxPoint x="320" y="180"/>
-                            <mxPoint x="230" y="180"/>
-                        </Array>
-                    </mxGeometry>
-                </mxCell>
-                <mxCell id="12" style="edgeStyle=none;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontFamily=Helvetica;exitX=0.75;exitY=1;exitDx=0;exitDy=0;" edge="1" parent="1" source="7" target="6">
-                    <mxGeometry relative="1" as="geometry">
-                        <Array as="points">
-                            <mxPoint x="380" y="180"/>
-                            <mxPoint x="470" y="180"/>
-                        </Array>
-                    </mxGeometry>
-                </mxCell>
-                <mxCell id="7" value="main.py" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-                    <mxGeometry x="290" y="110" width="120" height="50" as="geometry"/>
-                </mxCell>
-                <mxCell id="8" value="sensors.py" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-                    <mxGeometry x="170" y="280" width="120" height="50" as="geometry"/>
-                </mxCell>
-                <mxCell id="9" value="ml.py" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-                    <mxGeometry x="410" y="280" width="120" height="50" as="geometry"/>
-                </mxCell>
-                <mxCell id="20" value="Artifical Intellegence" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontFamily=Helvetica;fontSize=14;" vertex="1" parent="1">
-                    <mxGeometry x="440" y="130" width="60" height="30" as="geometry"/>
-                </mxCell>
-                <mxCell id="21" value="Hardware Interaction" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontFamily=Helvetica;fontSize=14;" vertex="1" parent="1">
-                    <mxGeometry x="200" y="130" width="60" height="30" as="geometry"/>
-                </mxCell>
-                <mxCell id="22" value="IEEE Robot" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontFamily=Helvetica;fontSize=20;" vertex="1" parent="1">
-                    <mxGeometry x="290" y="70" width="120" height="30" as="geometry"/>
-                </mxCell>
-            </root>
-        </mxGraphModel>
-    </diagram>
-    <diagram id="gPIYVHlD-2qUs39aNfa7" name="Page-2">
-        <mxGraphModel dx="980" dy="560" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
-            <root>
-                <mxCell id="0"/>
-                <mxCell id="1" parent="0"/>
-                <mxCell id="eKI4cqfa9-Rharql0XHc-14" value="" style="rounded=1;whiteSpace=wrap;html=1;fontFamily=Helvetica;fontSize=14;fillColor=#a0522d;fontColor=#ffffff;strokeColor=#6D1F00;" vertex="1" parent="1">
-                    <mxGeometry x="50" y="50" width="720" height="300" as="geometry"/>
-                </mxCell>
-                <mxCell id="eKI4cqfa9-Rharql0XHc-13" value="" style="rounded=1;whiteSpace=wrap;html=1;fontFamily=Helvetica;fontSize=14;fillColor=#6d8764;fontColor=#ffffff;strokeColor=#3A5431;" vertex="1" parent="1">
-                    <mxGeometry x="410" y="100" width="310" height="220" as="geometry"/>
-                </mxCell>
-                <mxCell id="eKI4cqfa9-Rharql0XHc-12" value="" style="rounded=1;whiteSpace=wrap;html=1;fontFamily=Helvetica;fontSize=14;fillColor=#647687;fontColor=#ffffff;strokeColor=#314354;" vertex="1" parent="1">
-                    <mxGeometry x="90" y="100" width="310" height="100" as="geometry"/>
-                </mxCell>
-                <mxCell id="eKI4cqfa9-Rharql0XHc-1" value="Right Motor" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-                    <mxGeometry x="250" y="130" width="120" height="50" as="geometry"/>
-                </mxCell>
-                <mxCell id="eKI4cqfa9-Rharql0XHc-2" value="Left Motor" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-                    <mxGeometry x="110" y="130" width="120" height="50" as="geometry"/>
-                </mxCell>
-                <mxCell id="eKI4cqfa9-Rharql0XHc-3" value="Shoulder Servo" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-                    <mxGeometry x="440" y="130" width="120" height="50" as="geometry"/>
-                </mxCell>
-                <mxCell id="eKI4cqfa9-Rharql0XHc-4" value="Elbow Servo" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-                    <mxGeometry x="440" y="190" width="120" height="50" as="geometry"/>
-                </mxCell>
-                <mxCell id="eKI4cqfa9-Rharql0XHc-5" value="Wrist Rotate Servo" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-                    <mxGeometry x="570" y="130" width="120" height="50" as="geometry"/>
-                </mxCell>
-                <mxCell id="eKI4cqfa9-Rharql0XHc-6" value="Wrist Flex Servo" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-                    <mxGeometry x="570" y="190" width="120" height="50" as="geometry"/>
-                </mxCell>
-                <mxCell id="eKI4cqfa9-Rharql0XHc-7" value="Grabber Servo" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-                    <mxGeometry x="440" y="250" width="120" height="50" as="geometry"/>
-                </mxCell>
-                <mxCell id="eKI4cqfa9-Rharql0XHc-10" value="Base Motor" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-                    <mxGeometry x="570" y="250" width="120" height="50" as="geometry"/>
-                </mxCell>
-                <mxCell id="jGfPJIpKgg9jU8iKTUKb-1" value="actuators.py" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontFamily=Helvetica;fontSize=20;" vertex="1" parent="1">
-                    <mxGeometry x="340" y="60" width="120" height="30" as="geometry"/>
-                </mxCell>
-                <mxCell id="Qk5B2i8teWZLi-dVHSIC-1" value="Wheels" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontFamily=Helvetica;fontSize=14;" vertex="1" parent="1">
-                    <mxGeometry x="210" y="100" width="60" height="30" as="geometry"/>
-                </mxCell>
-                <mxCell id="Qk5B2i8teWZLi-dVHSIC-2" value="Arm" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontFamily=Helvetica;fontSize=14;" vertex="1" parent="1">
-                    <mxGeometry x="530" y="100" width="60" height="30" as="geometry"/>
-                </mxCell>
-            </root>
-        </mxGraphModel>
-    </diagram>
-</mxfile>
+<svg host="65bd71144e" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="511px" height="331px" viewBox="-0.5 -0.5 511 331" content="&lt;mxfile&gt;&lt;diagram id=&quot;yba9DU9IvSz2d7m307n7&quot; name=&quot;Page-1&quot;&gt;7VnJbtswEP0aHxtIojYfY8dxcihaNECXU8FKtESUEg2KXtSvL2lRK2XHceSlQH0wxEeOyHnzhptGYJps5wwu4480RGRkGeF2BB5GluUBQ/xLIC8A2xwXQMRwWEBmDbzgP0iByi5a4RBlrYacUsLxsg0GNE1RwFsYZIxu2s0WlLR7XcIIacBLAImOfsMhjwvUd4waf0I4isueTUPVJLBsrIAshiHdNCAwG4Epo5QXT8l2iojkruSlsHvcU1sNjKGUH2WgiF9DslLOqYHxvPSW0VUaImlgjsBkE2OOXpYwkLUbEV6BxTwhqnpBU/4IE0xkaJ8QWSOOAygrMCFTSijbvRQgx7QFK4VBA1/sfgLPOKO/UaNmYhnGzkL3Ubm9RoyjbQNSPs8RTRBnuWiiasdOYaH056pobOpgOqXW4kYgQSlcqAQUVW+uORYPiuY9lPtXotxzXcOHb6HcBtaD4w1DOfCNFuemp5Nu+j2kV+C7SPeuRPoCun6fzg1DqVkjfeoBZyidixy7JulA4xiFYiJVxZSmqE0q2mL+XTwbd44q/WjUPEinjLKQl4VUjKphJIs/mnW12a5U2u0N4F7aM7pigfLDVqsOZBFSrVRaSw8PhoYhAjlet5eSd9Fsv5HmQVwfzk9l+pli0WslXctrS9dyOoosuFdWHbaqYRxFoK3NDTDgK8gpy+6W+fvmiSGSuMuE0ZPEVk8Sdxk7SVzOBXJ4ryBPTe6jhOzqOTy+jLZty77zxo1feztSSX94qbua1DmDOL0FmdvmNWVuav6/IvOhl506b6zjE+conXu6zi80hwOns/3o7iqKYWrCvmcM5o1mS9kgO9CP1d/P4761BRxsLx6KEZyaZaa+ubyamrzzq8k9i5reLILuAeMVEdjeeUWwMD9F4CcMn30zn0/sr/M85h96jh1n3BKbLS3V0jq4anbCeIog/KvEvzPZAMMZNJ76CTK5kZXTGneUbF5w5dRvMzKUZre6dfYvyIx+tZaQWyBF22hdkpTyvQ1W7hnHC7FsyWbPKRftUYRS4X+XKOEfb7PRvjxRs2fzBkZBkOAoFcVAsIYEPpFsyS7vVUWCw1B200t/HaCDa66sUHfV4kg+TKi69zdAD5XbE6kh7imr0daReoIs3Ah/VKCYOCZjmv6PU31WuUacLC1Oz7PZTCBf6C/K/+HoWAPdgnbXx75L0L757oToiGL98abYZNRfwMDsLw==&lt;/diagram&gt;&lt;diagram id=&quot;gPIYVHlD-2qUs39aNfa7&quot; name=&quot;Page-2&quot;&gt;7Zhdb9owFIZ/DZed4jgJcFloKR2ttJW1TLsz8SFx68TUMV/79XPAgXwwiW4pzaT1oiLvMTF5Hjuc0ML9aH0jyTy8FxR4y7bouoWvWrbdQUj/T4PNLnA8bxcEktFdhA7BmP0EE1omXTAKSWGgEoIrNi+Gvohj8FUhI1KKVXHYTPDirHMSQCUY+4RX0wmjKjSX5VqHfAgsCLOZkWUqEckGmyAJCRWrXISvW7gvhVC7V9G6Dzxll3HZvW/wm+r+g0mI1SlvgNGt47/OSPfiISTylVvfh/4FcnanWRK+MFdsPq3aZAikWMQU0rOgFu6tQqZgPCd+Wl1p5zoLVcRNeSZiNSAR46nvIfAlKOYTUzB69aT6mHHeF1zI7SSYWK5tUzMul8+2fzpPlBQvkKt4V2igYeNeFYRhswSpYJ2LDJgbEBEoudFDTDXTuSkerg7G25nGMGcbZ7KJWWXB/swHEfqFcfEWL7ghXjzaaXvOW7zgS9fBqB4vDiqK2e+unBmMjpjZ77r6zdhNMeO0vU77TWaQg12nHjPdPxSD3m/LVLw8bKe1rXuhNIK/klQDsfJNBuEqMnTsLuO+F7HqSr6DWXOAofLm/3Bg1ZvyOBQLTkHDssYgl+LDoblW06BVO4xrPtWNUFOIOU6JWPejiXkVYhPJknRjDri+pqaAc9tNA9eugNMPJdNpg7ZnebEdazXPyyy7yeag9UgCjfkWKK+ysxJ7vpl9+Xw7HwVB9/mxw0bfHkfTI40G8dWCaFjJp/mmAkxfpypSKTZmsYih1N2ZiHAWxPrQ1/T0Gsa9lJruDfmlKUSM0nSaoxoOoqwTu0y7pqcpXFrk3onGcA3Gvr64PZt1FEx+3LEL+jQc3/aPGJuEADz5h12hmvp4+4QnLO+crqpN6aWM/ouyXXw2Ufrw8LPUtpb7bQ9f/wI=&lt;/diagram&gt;&lt;/mxfile&gt;">
+    <defs/>
+    <g>
+        <rect x="0" y="0" width="510" height="330" rx="49.5" ry="49.5" fill="#e51400" stroke="#b20000" pointer-events="all"/>
+        <rect x="285" y="110" width="180" height="180" rx="27" ry="27" fill="#76608a" stroke="#432d57" pointer-events="all"/>
+        <rect x="45" y="110" width="180" height="180" rx="27" ry="27" fill="#fa6800" stroke="#c73500" pointer-events="all"/>
+        <path d="M 135 190 L 135 213.63" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="stroke"/>
+        <path d="M 135 218.88 L 131.5 211.88 L 135 213.63 L 138.5 211.88 Z" fill="rgb(0, 0, 0)" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="all"/>
+        <rect x="75" y="140" width="120" height="50" rx="7.5" ry="7.5" fill="rgb(255, 255, 255)" stroke="rgb(0, 0, 0)" pointer-events="all"/>
+        <g transform="translate(-0.5 -0.5)">
+            <switch>
+                <foreignObject pointer-events="none" width="100%" height="100%" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility" style="overflow: visible; text-align: left;">
+                    <div xmlns="http://www.w3.org/1999/xhtml" style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 118px; height: 1px; padding-top: 165px; margin-left: 76px;">
+                        <div data-drawio-colors="color: rgb(0, 0, 0); " style="box-sizing: border-box; font-size: 0px; text-align: center;">
+                            <div style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; white-space: normal; overflow-wrap: normal;">
+                                actuators.py
+                            </div>
+                        </div>
+                    </div>
+                </foreignObject>
+                <text x="135" y="169" fill="rgb(0, 0, 0)" font-family="Helvetica" font-size="12px" text-anchor="middle">
+                    actuators.py
+                </text>
+            </switch>
+        </g>
+        <path d="M 375 190 L 375 213.63" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="stroke"/>
+        <path d="M 375 218.88 L 371.5 211.88 L 375 213.63 L 378.5 211.88 Z" fill="rgb(0, 0, 0)" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="all"/>
+        <rect x="315" y="140" width="120" height="50" rx="7.5" ry="7.5" fill="rgb(255, 255, 255)" stroke="rgb(0, 0, 0)" pointer-events="all"/>
+        <g transform="translate(-0.5 -0.5)">
+            <switch>
+                <foreignObject pointer-events="none" width="100%" height="100%" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility" style="overflow: visible; text-align: left;">
+                    <div xmlns="http://www.w3.org/1999/xhtml" style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 118px; height: 1px; padding-top: 165px; margin-left: 316px;">
+                        <div data-drawio-colors="color: rgb(0, 0, 0); " style="box-sizing: border-box; font-size: 0px; text-align: center;">
+                            <div style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; white-space: normal; overflow-wrap: normal;">
+                                train.py
+                            </div>
+                        </div>
+                    </div>
+                </foreignObject>
+                <text x="375" y="169" fill="rgb(0, 0, 0)" font-family="Helvetica" font-size="12px" text-anchor="middle">
+                    train.py
+                </text>
+            </switch>
+        </g>
+        <path d="M 225 100 L 225 110 Q 225 120 215 120 L 145 120 Q 135 120 135 126.82 L 135 133.63" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="stroke"/>
+        <path d="M 135 138.88 L 131.5 131.88 L 135 133.63 L 138.5 131.88 Z" fill="rgb(0, 0, 0)" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="all"/>
+        <path d="M 285 100 L 285 110 Q 285 120 295 120 L 365 120 Q 375 120 375 126.82 L 375 133.63" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="stroke"/>
+        <path d="M 375 138.88 L 371.5 131.88 L 375 133.63 L 378.5 131.88 Z" fill="rgb(0, 0, 0)" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="all"/>
+        <path d="M 255 100 L 255 235 Q 255 245 245 245 L 201.37 245" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="stroke"/>
+        <path d="M 196.12 245 L 203.12 241.5 L 201.37 245 L 203.12 248.5 Z" fill="rgb(0, 0, 0)" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="all"/>
+        <rect x="195" y="50" width="120" height="50" rx="7.5" ry="7.5" fill="rgb(255, 255, 255)" stroke="rgb(0, 0, 0)" pointer-events="all"/>
+        <g transform="translate(-0.5 -0.5)">
+            <switch>
+                <foreignObject pointer-events="none" width="100%" height="100%" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility" style="overflow: visible; text-align: left;">
+                    <div xmlns="http://www.w3.org/1999/xhtml" style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 118px; height: 1px; padding-top: 75px; margin-left: 196px;">
+                        <div data-drawio-colors="color: rgb(0, 0, 0); " style="box-sizing: border-box; font-size: 0px; text-align: center;">
+                            <div style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; white-space: normal; overflow-wrap: normal;">
+                                main.py
+                            </div>
+                        </div>
+                    </div>
+                </foreignObject>
+                <text x="255" y="79" fill="rgb(0, 0, 0)" font-family="Helvetica" font-size="12px" text-anchor="middle">
+                    main.py
+                </text>
+            </switch>
+        </g>
+        <rect x="75" y="220" width="120" height="50" rx="7.5" ry="7.5" fill="rgb(255, 255, 255)" stroke="rgb(0, 0, 0)" pointer-events="all"/>
+        <g transform="translate(-0.5 -0.5)">
+            <switch>
+                <foreignObject pointer-events="none" width="100%" height="100%" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility" style="overflow: visible; text-align: left;">
+                    <div xmlns="http://www.w3.org/1999/xhtml" style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 118px; height: 1px; padding-top: 245px; margin-left: 76px;">
+                        <div data-drawio-colors="color: rgb(0, 0, 0); " style="box-sizing: border-box; font-size: 0px; text-align: center;">
+                            <div style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; white-space: normal; overflow-wrap: normal;">
+                                sensors.py
+                            </div>
+                        </div>
+                    </div>
+                </foreignObject>
+                <text x="135" y="249" fill="rgb(0, 0, 0)" font-family="Helvetica" font-size="12px" text-anchor="middle">
+                    sensors.py
+                </text>
+            </switch>
+        </g>
+        <rect x="315" y="220" width="120" height="50" rx="7.5" ry="7.5" fill="rgb(255, 255, 255)" stroke="rgb(0, 0, 0)" pointer-events="all"/>
+        <g transform="translate(-0.5 -0.5)">
+            <switch>
+                <foreignObject pointer-events="none" width="100%" height="100%" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility" style="overflow: visible; text-align: left;">
+                    <div xmlns="http://www.w3.org/1999/xhtml" style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 118px; height: 1px; padding-top: 245px; margin-left: 316px;">
+                        <div data-drawio-colors="color: rgb(0, 0, 0); " style="box-sizing: border-box; font-size: 0px; text-align: center;">
+                            <div style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; white-space: normal; overflow-wrap: normal;">
+                                ml.py
+                            </div>
+                        </div>
+                    </div>
+                </foreignObject>
+                <text x="375" y="249" fill="rgb(0, 0, 0)" font-family="Helvetica" font-size="12px" text-anchor="middle">
+                    ml.py
+                </text>
+            </switch>
+        </g>
+        <rect x="345" y="70" width="60" height="30" fill="none" stroke="none" pointer-events="all"/>
+        <g transform="translate(-0.5 -0.5)">
+            <switch>
+                <foreignObject pointer-events="none" width="100%" height="100%" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility" style="overflow: visible; text-align: left;">
+                    <div xmlns="http://www.w3.org/1999/xhtml" style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 58px; height: 1px; padding-top: 85px; margin-left: 346px;">
+                        <div data-drawio-colors="color: rgb(0, 0, 0); " style="box-sizing: border-box; font-size: 0px; text-align: center;">
+                            <div style="display: inline-block; font-size: 14px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; white-space: normal; overflow-wrap: normal;">
+                                Artifical Intellegence
+                            </div>
+                        </div>
+                    </div>
+                </foreignObject>
+                <text x="375" y="89" fill="rgb(0, 0, 0)" font-family="Helvetica" font-size="14px" text-anchor="middle">
+                    Artifica...
+                </text>
+            </switch>
+        </g>
+        <rect x="105" y="70" width="60" height="30" fill="none" stroke="none" pointer-events="all"/>
+        <g transform="translate(-0.5 -0.5)">
+            <switch>
+                <foreignObject pointer-events="none" width="100%" height="100%" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility" style="overflow: visible; text-align: left;">
+                    <div xmlns="http://www.w3.org/1999/xhtml" style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 58px; height: 1px; padding-top: 85px; margin-left: 106px;">
+                        <div data-drawio-colors="color: rgb(0, 0, 0); " style="box-sizing: border-box; font-size: 0px; text-align: center;">
+                            <div style="display: inline-block; font-size: 14px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; white-space: normal; overflow-wrap: normal;">
+                                Hardware Interaction
+                            </div>
+                        </div>
+                    </div>
+                </foreignObject>
+                <text x="135" y="89" fill="rgb(0, 0, 0)" font-family="Helvetica" font-size="14px" text-anchor="middle">
+                    Hardware...
+                </text>
+            </switch>
+        </g>
+        <rect x="195" y="10" width="120" height="30" fill="none" stroke="none" pointer-events="all"/>
+        <g transform="translate(-0.5 -0.5)">
+            <switch>
+                <foreignObject pointer-events="none" width="100%" height="100%" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility" style="overflow: visible; text-align: left;">
+                    <div xmlns="http://www.w3.org/1999/xhtml" style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 118px; height: 1px; padding-top: 25px; margin-left: 196px;">
+                        <div data-drawio-colors="color: rgb(0, 0, 0); " style="box-sizing: border-box; font-size: 0px; text-align: center;">
+                            <div style="display: inline-block; font-size: 20px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; white-space: normal; overflow-wrap: normal;">
+                                IEEE Robot
+                            </div>
+                        </div>
+                    </div>
+                </foreignObject>
+                <text x="255" y="31" fill="rgb(0, 0, 0)" font-family="Helvetica" font-size="20px" text-anchor="middle">
+                    IEEE Robot
+                </text>
+            </switch>
+        </g>
+    </g>
+    <switch>
+        <g requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"/>
+        <a transform="translate(0,-5)" xlink:href="https://www.diagrams.net/doc/faq/svg-export-text-problems" target="_blank">
+            <text text-anchor="middle" font-size="10px" x="50%" y="100%">
+                Text is not SVG - cannot display
+            </text>
+        </a>
+    </switch>
+</svg>
