@@ -66,7 +66,7 @@ def cvat_download_data(host="http://localhost:8080", credentials=auth):
         tasks = sorted(tasks, key=lambda task: task.id)
         pbar = tqdm(
             total=len(tasks) - len(installed_tasks),
-            desc="Downloading Tasks",
+            desc="Getting Tasks",
             dynamic_ncols=True,
             position=0,
             leave=True
@@ -99,7 +99,6 @@ def cvat_download_data(host="http://localhost:8080", credentials=auth):
 
     tasks = {}
 
-    print("Getting tasks...")
     for folder in os.listdir(base_dir):
         if folder.startswith("task_"):
             task = {"images": [], "annotations": []}
@@ -143,7 +142,7 @@ def cvat_download_data(host="http://localhost:8080", credentials=auth):
         tqdm.write("done")
 
     pbar.close()
-    print(f"Processed {frame} frames")
+    print(f"Processed {len(tasks)} new tasks ({sum([len(task['images']) for task in tasks.values()])} new images)")
 
     with open(os.path.join(base_dir, "installed_tasks.txt"), "w") as f:
         for task in installed_tasks:
