@@ -21,12 +21,17 @@ public:
     Servo baseServo;
     Servo shoulderServo;
     Servo elbowServo;
-    Servo grippedServo; 
-    const int wristPin = 8;
-    const int basePin = 9;
-    const int shoulderPin = 10;
-    const int elbowPin = 11;
-    const int gripperPin = 12; 
+    Servo gripperServo; 
+    const int wristPin = 8; // Pin for wrist servo
+    const int basePin = 9; // Pin for base servo
+    const int shoulderPin = 10; // Pin for shoulder servo
+    const int elbowPin = 11; // Pin for elbow servo
+    const int gripperPin = 12; // Pin for gripper servo
+    const int analogPinWrist = A0; //Analog pin for calibration
+    const int analogPinBase = A1; //Analog pin for calibration
+    const int analogPinShoulder = A2; //Analog pin for calibration
+    const int analogPinElbow = A3; //Analog pin for calibration
+    const int analogPinGripper = A4; //Analog pin for calibration
     const float j1 = 5; // Length of the first link update
     const float j2 = 5; // Length of the second link update
     float wristAngle = 180; // Desired orientation in degrees for wrist/ Will be constant
@@ -48,7 +53,7 @@ public:
         baseServo.attach(basePin);
         shoulderServo.attach(shoulderPin);
         elbowServo.attach(elbowPin);
-        j3Servo.attach(gripperPin);
+        gripperServo.attach(gripperPin);
         updatePosition(initializeAngles);
         currentAngles = initializeAngles;
     }
@@ -76,13 +81,22 @@ public:
         }
     }
     JointAngles solveIK(float x, float y, float z) {
-        JointAngles angles;
+        JointAngles angles; //needs tuning for gripper coordinates
         elbowAngle = -acos((sq(x) + sq(y) -sq(j1) - sq(j2)) / (2 * j1 * j2));
         shoulderAngle = atan(y / x) + atan((j2 * sin(elbow)) / (j1 + j2 * cos(elbowAngle))); 
         return angles;
     }
     void calibrate() {
-    // Steps to calibrate check each servo position need analog ouputs
+        int shoulderFeedback = analogRead(analogPinShoulder);
+        int elbowFeedback = analogRead(analogPinElbow);
+        int wristFeedback = analogRead(analogPinWrist);
+        int gripperFeedback = analogRead(analogPinGripper);
+        // Convert feedback to angles - this requires mapping sensor values to degrees
+        // Placeholder for conversion logic: map(value, fromLow, fromHigh, toLow, toHigh)
+        shoulderServo.write(map(shoulderFeedback, 0, 1023, 0, 180));
+        elbowServo.write(map(elbowFeedback, 0, 1023, 0, 180));
+        wristServo.write(map(wristFeedback, 0, 1023, 0, 180));
+        gripperServo.write(map(gripperFeedback, 0, 1023, 0, 180));
     }
 }
 
