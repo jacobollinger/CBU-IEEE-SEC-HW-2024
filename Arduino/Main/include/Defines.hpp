@@ -2,6 +2,7 @@
 #define DEFINES_HPP
 
 #define DEBUG true
+#define BAUDRATE 115200
 
 #define SPI_EOT 0x04
 #define SPI_BUFFER_SIZE 1UL << 8
