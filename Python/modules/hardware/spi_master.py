@@ -1,5 +1,7 @@
 import spidev
 
+EOT = 0x04
+
 class SPIMaster:
     def __init__(self, bus=0, device=0, max_speed_hz=1000000):
         self.spi = spidev.SpiDev()
@@ -27,7 +29,7 @@ class SPIMaster:
         pass
 
     def writeASCII(self, data):
-        self.write([ord(char) for char in list(data)] + [0x04])
+        self.write([ord(char) for char in list(data)] + [EOT])
 
     def transfer_data(self, data):
         received = []

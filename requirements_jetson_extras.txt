@@ -1,0 +1,5 @@
+# Jetson GPIO
+Jetson.GPIO
+
+# Orin-Mega Communication
+spidev

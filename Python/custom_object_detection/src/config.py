@@ -10,9 +10,9 @@ NUM_WORKERS = 4 # Number of parallel workers for data loading.
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 
 # training images and XML files directory
-TRAIN_DIR = './data/Microcontroller_Detection/train'
+TRAIN_DIR = './data/in/Microcontroller_Detection/train'
 # validation images and XML files directory
-VALID_DIR = './data/Microcontroller_Detection/test'
+VALID_DIR = './data/in/Microcontroller_Detection/test'
 # classes: 0 index is reserved for background
 CLASSES = [
     'background', 'Arduino_Nano', 'ESP8266', 'Raspberry_Pi_3', 'Heltec_ESP32_Lora'

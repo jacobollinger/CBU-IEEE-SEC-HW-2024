@@ -10,7 +10,7 @@ import glob
 import os
 
 
-ANNOTATIONS_FILE = "./data/in/annotations.csv"
+ANNOTATIONS_FILE = "./data/in/classification_annotations.csv"
 IMAGES_PATH = "./data/in/images/raw"
 
 transform = transforms.Compose([
