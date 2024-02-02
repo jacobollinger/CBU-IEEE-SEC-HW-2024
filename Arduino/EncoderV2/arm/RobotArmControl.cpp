@@ -4,6 +4,7 @@
 #include <Servo.h> // Include the Servo library
 
 struct JointAngles {
+    float base;
     float shoulder;
     float elbow;
     float wrist;
@@ -28,16 +29,18 @@ public:
     const int gripperPin = 12; 
     const float j1 = 5; // Length of the first link update
     const float j2 = 5; // Length of the second link update
-    float psi = 180; // Desired orientation in degrees for wrist
+    float wristAngle = 180; // Desired orientation in degrees for wrist/ Will be constant
     //Analog pins go here
-    float theta1; //Angle between the base and the shoulder
-    float theta2; //Angle between the shoulder and the elbow
+    float shoulderAngle; //Angle between the base and the shoulder
+    float elbowAngle; //Angle between the shoulder and the elbow
     const int gripString = 13; //Gripper string update
     const int gripLargePackage = 14; //Gripper string update
     const int gripSmallPackage = 15; //Gripper string update
     const int gripBooster = 16; //Gripper string update
     const int gripRelease = 16; //Gripper string update
-    currentAngles = JointAngles(90, 90, 90); // Initialize angles to 90 degrees
+    dropOffAngles = JointAngles(90, 90, 90); // Initialize angles to 90 degrees
+    dropBridgeAngles = JointAngles(90, 90, 90); // Initialize angles to 90 degrees
+    initializeAngles = JointAngles(90, 90, 90); // Initialize angles to 90 degrees
     RobotArmControl() {}
 
     void initialize() {
@@ -46,7 +49,8 @@ public:
         shoulderServo.attach(shoulderPin);
         elbowServo.attach(elbowPin);
         j3Servo.attach(gripperPin);
-        updatePosition(currentAngles);
+        updatePosition(initializeAngles);
+        currentAngles = initializeAngles;
     }
 
     // Other class methods
@@ -59,8 +63,8 @@ public:
     }
     JointAngles solveIK(float x, float y, float z) {
         JointAngles angles;
-        theta2 = -acos((sq(x) + sq(y) -sq(j1) - sq(j2)) / (2 * j1 * j2));
-        theta1 = atan(y / x) + atan((j2 * sin(theta2)) / (j1 + j2 * cos(theta2))); 
+        elbowAngle = -acos((sq(x) + sq(y) -sq(j1) - sq(j2)) / (2 * j1 * j2));
+        shoulderAngle = atan(y / x) + atan((j2 * sin(elbow)) / (j1 + j2 * cos(elbowAngle))); 
         return angles;
     }
     void calibrate() {
