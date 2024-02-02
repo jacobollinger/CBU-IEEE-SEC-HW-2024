@@ -25,7 +25,7 @@ public:
         baseServo.attach(basePin);
         shoulderServo.attach(shoulderPin);
         elbowServo.attach(elbowPin);
-        j3Servo.attach(j3Pin);
+        j3Servo.attach(gripperPin);
         // Additional setup code can go here (e.g., setting initial servo positions)
     }
 
