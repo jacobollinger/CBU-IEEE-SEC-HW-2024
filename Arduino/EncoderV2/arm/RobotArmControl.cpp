@@ -54,12 +54,26 @@ public:
     }
 
     // Other class methods
-    void updatePosition(const JointAngles& angles) {
+    void updatePosition(const JointAngles& angles, const String& objective) {
         shoulderServo.write(angles.shoulder);
         elbowServo.write(angles.elbow);
         wristServo.write(angles.wrist);
-        gripperServo.write(angles.gripper);
         calibrate();
+        if (objective == "smallPackage") {
+            gripperServo.write(gripSmallPackage);
+            updatePosition(dropOffAngles, "release");
+        } else if (objective == "largePackage") {
+            gripperServo.write(gripLargePackage);
+            updatePosition(dropOffAngles, "release");
+        } else if (objective == "string") {
+            gripperServo.write(gripString);
+            updatePosition(dropBridgeAngles, "release")
+        } else if (objective == "booster") {
+            gripperServo.write(gripBooster);
+            updatePosition(dropBridgeAngles, "release");
+        } else if (objective == "release") {
+            gripperServo.write(gripRelease);
+        }
     }
     JointAngles solveIK(float x, float y, float z) {
         JointAngles angles;
@@ -68,7 +82,8 @@ public:
         return angles;
     }
     void calibrate() {
-    // Steps to calibrate check each servo position
+    // Steps to calibrate check each servo position need analog ouputs
+    }
 }
 
 
@@ -83,10 +98,10 @@ void loop() {
         float x = SPIReceiver::getNextFloat(); // Implement this method to read floats from SPI
         float y = SPIReceiver::getNextFloat();
         float z = SPIReceiver::getNextFloat();
-
+        string objective = SPIReceiver::getNextString();
         // Solve inverse kinematics to get joint angles
         JointAngles angles = robotArm.solveIK(x, y, z);
-        robotArm.updatePosition();
+        robotArm.updatePosition(angles, objective);
         SPIReceiver::clearBuffer(); // Clear the SPI buffer after processing
     }
 }
