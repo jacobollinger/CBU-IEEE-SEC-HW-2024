@@ -6,70 +6,71 @@
 struct JointAngles {
     float base;
     float shoulder;
-    float elbow;
+    //float elbow;
     float wrist;
     float gripper;
 
     // Constructor to initialize the angles
-    JointAngles(float initShoulder = 90.0, float initElbow = 90.0, float initWrist = 90.0, float initGripper = 90.0)
-        : shoulder(initShoulder), elbow(initElbow), wrist(initWrist), gripper(initGripper) {}
+    JointAngles(float base =90.0, float initShoulder = 90.0, float initWrist = 90.0, float initGripper = 90.0)
+        : base(initbase), shoulder(initShoulder), wrist(initWrist), gripper(initGripper) {}
 }
 
 class RobotArmControl {
 public:
-    Servo wristServo;
-    Servo baseServo;
-    Servo shoulderServo;
-    Servo elbowServo;
-    Servo gripperServo; 
+    //set Servos
+    Servo wristServo; //DMS-MG90-A-360
+    Servo baseServo; //FT6325M-360 Servo
+    Servo shoulderServo; //FT6325-360 Servo
+    Servo gripperServo; //DMS-MG90-A-360 Servo
+    //set Pins
     const int wristPin = 8; // Pin for wrist servo
     const int basePin = 9; // Pin for base servo
     const int shoulderPin = 10; // Pin for shoulder servo
-    const int elbowPin = 11; // Pin for elbow servo
-    const int gripperPin = 12; // Pin for gripper servo
+    const int gripperPin = 11; // Pin for gripper servo
+    //set Analog Pins
     const int analogPinWrist = A0; //Analog pin for calibration
     const int analogPinBase = A1; //Analog pin for calibration
     const int analogPinShoulder = A2; //Analog pin for calibration
-    const int analogPinElbow = A3; //Analog pin for calibration
-    const int analogPinGripper = A4; //Analog pin for calibration
-    const float j1 = 5; // Length of the first link update
-    const float j2 = 5; // Length of the second link update
-    float wristAngle = 180; // Desired orientation in degrees for wrist/ Will be constant
-    //Analog pins go here
+    const int analogPinGripper = A3; //Analog pin for calibration
+    //set constants that will be used
+    const float j1 = 13.34; // Length of the shoulder to wrist link in cm, 5.25 in
+    const float j2 = 10.80; // Length to ideal grip in cm, 4.25
     float shoulderAngle; //Angle between the base and the shoulder
-    float elbowAngle; //Angle between the shoulder and the elbow
-    const int gripString = 13; //Gripper string update
-    const int gripLargePackage = 14; //Gripper string update
-    const int gripSmallPackage = 15; //Gripper string update
-    const int gripBooster = 16; //Gripper string update
-    const int gripRelease = 16; //Gripper string update
-    dropOffAngles = JointAngles(90, 90, 90); // Initialize angles to 90 degrees
-    dropBridgeAngles = JointAngles(90, 90, 90); // Initialize angles to 90 degrees
-    initializeAngles = JointAngles(90, 90, 90); // Initialize angles to 90 degrees
+    const int gripString = 13; //Gripper string *update
+    const int gripLargePackage = 14; //Gripper string *update
+    const int gripSmallPackage = 15; //Gripper string *update
+    const int gripBooster = 16; //Gripper string *update
+    const int gripRelease = 16; //Gripper string *update
+    dropOffAnglesLargePkg = JointAngles(90, 90, 90, 90); // set angles for dropping off large packages *update
+    dropOffAnglesSmallPkg = JointAngles(90, 90, 90, 90); // set angles for dropping off small packages * update
+    dropOffAnglesBoosters = JointAngles(90, 90, 90, 90); // set angles for dropping off boosters *update
+    dropBridgeAngles = JointAngles(90, 90, 90, 90); // set angles for droppping off bridge *update
+    initializedAngles = JointAngles(90, 90, 90, 90); //set angles for statup *update
+    currentAngles = JointAngles(90, 90, 90,90); // placeholder to know where arm is set
     RobotArmControl() {}
 
     void initialize() {
         wristServo.attach(wristPin);
         baseServo.attach(basePin);
         shoulderServo.attach(shoulderPin);
-        elbowServo.attach(elbowPin);
+        //elbowServo.attach(elbowPin);
         gripperServo.attach(gripperPin);
-        updatePosition(initializeAngles);
-        currentAngles = initializeAngles;
+        updatePosition(initializedAngles);
     }
 
     // Other class methods
     void updatePosition(const JointAngles& angles, const String& objective) {
+        currentAngles = angles
         shoulderServo.write(angles.shoulder);
-        elbowServo.write(angles.elbow);
+        //elbowServo.write(angles.elbow);
         wristServo.write(angles.wrist);
         calibrate();
         if (objective == "smallPackage") {
             gripperServo.write(gripSmallPackage);
-            updatePosition(dropOffAngles, "release");
+            updatePosition(dropOffAnglesSmallPkg, "release");
         } else if (objective == "largePackage") {
             gripperServo.write(gripLargePackage);
-            updatePosition(dropOffAngles, "release");
+            updatePosition(dropOffAnglesLargePkg, "release");
         } else if (objective == "string") {
             gripperServo.write(gripString);
             updatePosition(dropBridgeAngles, "release")
@@ -79,22 +80,23 @@ public:
         } else if (objective == "release") {
             gripperServo.write(gripRelease);
         }
+        currentAngles = angles
     }
     JointAngles solveIK(float x, float y, float z) {
         JointAngles angles; //needs tuning for gripper coordinates
-        elbowAngle = -acos((sq(x) + sq(y) -sq(j1) - sq(j2)) / (2 * j1 * j2));
+        wristAngle = -acos((sq(x) + sq(y) -sq(j1) - sq(j2)) / (2 * j1 * j2));
         shoulderAngle = atan(y / x) + atan((j2 * sin(elbow)) / (j1 + j2 * cos(elbowAngle))); 
         return angles;
     }
     void calibrate() {
         int shoulderFeedback = analogRead(analogPinShoulder);
-        int elbowFeedback = analogRead(analogPinElbow);
+        //int elbowFeedback = analogRead(analogPinElbow);
         int wristFeedback = analogRead(analogPinWrist);
         int gripperFeedback = analogRead(analogPinGripper);
         // Convert feedback to angles - this requires mapping sensor values to degrees
         // Placeholder for conversion logic: map(value, fromLow, fromHigh, toLow, toHigh)
         shoulderServo.write(map(shoulderFeedback, 0, 1023, 0, 180));
-        elbowServo.write(map(elbowFeedback, 0, 1023, 0, 180));
+        //elbowServo.write(map(elbowFeedback, 0, 1023, 0, 180));
         wristServo.write(map(wristFeedback, 0, 1023, 0, 180));
         gripperServo.write(map(gripperFeedback, 0, 1023, 0, 180));
     }
