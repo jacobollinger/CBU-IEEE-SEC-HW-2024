@@ -1,21 +1,108 @@
+import torch
+
 from Python.modules.hardware.actuators import Wheels, Arm
 from Python.modules.hardware.sensors import Camera, Phototransistor, Ultrasonic
-from Python.modules.model.ml import GameObjectModel, GameObjectDataset
+from Python.modules import Timer
+from Python.custom_object_detection_ieee.src.model import create_model
+from Python.custom_object_detection_ieee.src.config import NUM_CLASSES, DEVICE, CLASSES
 
-model = GameObjectModel(True)
+armCamera = Camera(0)
+fixedCamera = Camera(1)
+model = create_model(num_classes=NUM_CLASSES, size=640)
+timer = Timer()
+
 
 def main():
-    timer = Timer()
-    armCamera = Camera(0)
-    fixedCamera = Camera(1)
-    
-    
+    model.load_state_dict(
+        torch.load("./data/out/ieee/best_model.pth", map_location=DEVICE)[
+            "model_state_dict"
+        ]
+    )
+    model.to(DEVICE).eval()
+
     while not detect_start_signal():
         pass
-    
+
     timer.start()
-    
-    prediction = model.classify_image(fixedCamera.get_image())
+
+    # Collect the large package
+    Wheels.rotate(-90)
+    object_positions = scan_for_objects()
+    for object, position in object_positions[0].items():
+        if object == "large_package":
+            # TODO: implement large package pickup
+            pass
+
+    # Collect the small package
+    Wheels.rotate(-90)
+    for object, position in object_positions[0].items():
+        if object == "small_package":
+            # TODO: implement small package pickup
+            pass
+
+    # Traverse ramps
+    Wheels.rotate(180)
+    # TODO: implement orienting the robot to the ramp using IMU, line following, or ultrasonics
+    # TODO: implement climbing the 1st ramp
+    Wheels.rotate(180)
+    # TODO: implement descending the 2nd ramp
+
+    # Deposit packages
+    while Ultrasonic.get_distance(FRONT) > 10:
+        Wheels.move_forward(10)
+    Wheels.rotate(90)
+    while Ultrasonic.get_distance(FRONT) > 10:
+        Wheels.move_forward(10)
+    Wheels.rotate(90)
+    # TODO: implement depositing the packages
+
+    # Collect Fuel Tanks
+    Wheels.move_backwards(100)
+    Wheels.rotate(-90)
+    while Ultrasonic.get_distance(FRONT) > 10:
+        Wheels.move_forward(10)
+    Wheels.rotate(90)
+    object_positions = scan_for_objects()
+    for object, position in object_positions[0].items():
+        if object == "fuel_tank":
+            # TODO: implement fuel tank pickup
+            pass
+
+    # Cross the crater
+    Wheels.rotate(180)
+    # TODO: implement orienting the robot to the crater using IMU, line following, or ultrasonics
+    # TODO: implement climbing the 1st ramp
+    Wheels.rotate(180)
+    # TODO: implement detaching the bridge
+    # TODO: push the bridge into place and cross the crater
+    Wheels.rotate(180)
+    # TODO: implement descending the 2nd ramp
+
+    # Assemble the thruster
+    # TODO: implement team promotion display
+    while Ultrasonic.get_distance(FRONT) > 10:
+        Wheels.move_forward(10)
+    Wheels.rotate(90)
+    object_positions = scan_for_objects()
+    for object, position in object_positions[0].items():
+        if object == "thruster":
+            # TODO: implement thruster assembly
+            pass
+
+    # Press the launch button
+    while Ultrasonic.get_distance(FRONT) > 10:
+        Wheels.move_forward(10)
+    Wheels.move_forward()
+    time.sleep(5)
+    Wheels.stop()
+
+    Timer.stop()
+    print(f"Time taken: {timer.get_time()} seconds")
+
+    # Save the time take to file named the current date and time
+    with open(f"./data/out/{time.strftime('%Y-%m-%d_%H-%M-%S')}.txt", "w") as file:
+        file.write(str(timer.get_time()))
+
 
 def detect_start_signal():
     """detects the start signal
@@ -25,91 +112,29 @@ def detect_start_signal():
     """
     return Phototransistor.detect_start_signal()
 
-def contains_object(object, image):
-    """parent function for all object detection functions
 
-    Args:
-        object (String): name of the object to detect
-        image (numpy.uint8): image to detect the object in
+def scan_for_objects():
+    """scans for objects in the environment
 
     Returns:
-        bool: whether or not the object was detected
-        int: number of times the object was detected
+        dict: dictionary of objects detected and their positions from the fixed camera
+        dict: dictionary of objects detected and their positions from the arm camera
     """
-    predictions = model.classify_image_h(image)
-    return object in predictions, predictions.count(object)
+    images = fixedCamera.get_image(), armCamera.get_image()
+    with torch.no_grad():
+        outputs = model(images.to(DEVICE))
+    if len(outputs[0]["boxes"]) == 0:
+        fixed_ret = {}
+    else:
+        # TODO: implement
+        pass
+    if len(outputs[1]["boxes"]) == 0:
+        arm_ret = {}
+    else:
+        # TODO: implement
+        pass
 
-
-def contains_large_package(image):
-    """detects if a large package is in the image
-
-    Args:
-        image (numpy.uint8): image to detect the object in
-
-    Returns:
-        bool: whether or not the object was detected
-        int: number of times the object was detected
-    """
-    return contains_object("large_package", image)
-
-
-def contains_small_package(image):
-    """detects if a small package is in the image
-    
-    Args:
-        image (numpy.uint8): image to detect the object in
-        
-    Returns:
-        bool: whether or not the object was detected
-        int: number of times the object was detected
-    """
-    return contains_object("small_package", image)
-
-
-def contains_fuel_tank(image):
-    """detects if a fuel tank is in the image
-
-    Args:
-        image (numpy.uint8): image to detect the object in
-
-    Returns:
-        bool: whether or not the object was detected
-        int: number of times the object was detected
-    """
-    return contains_object("fuel_tank", image)
-
-
-def contains_thruster(image):
-    """detects if a thruster is in the image
-
-    Args:
-        image (numpy.uint8): image to detect the object in
-
-    Returns:
-        bool: whether or not the object was detected
-        int: number of times the object was detected
-    """
-    return contains_object("thruster", image)
-
-
-def contains_package_delivery_zone(image):
-    # TODO: implement
-    pass
-
-
-def contains_fuel_tank_pickup(image):
-    # TODO: implement
-    pass
-
-
-def contains_crater_marking(image):
-    # TODO: implement
-    pass
-
-
-def contains_fuel_tank_delivery_zone(image):
-    # TODO: implement
-    pass
+    return fixed_ret, arm_ret
 
 
 if __name__ == "__main__":
