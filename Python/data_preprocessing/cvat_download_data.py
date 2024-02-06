@@ -30,11 +30,6 @@ def download_and_extract(client, task, pbar):
                 client.tasks.retrieve(task.id).export_dataset(
                     "PASCAL VOC 1.1", task_zip
                 )
-            else:
-                tqdm.write(
-                    f"Downloading task_{f'{task.id}:':<4} Skipping because it has already been downloaded"
-                )
-
             tqdm.write(f"Extracting task_{f'{task.id}:':<4} ...")
             with zipfile.ZipFile(task_zip, "r") as zip_ref:
                 zip_ref.extractall(path=task_dir)
@@ -44,10 +39,6 @@ def download_and_extract(client, task, pbar):
                     os.path.join(base_dir, f"task_{task.id}", "labelmap.txt"),
                     os.path.join(base_dir, "labelmap.txt"),
                 )
-        else:
-            tqdm.write(
-                f"Extracting task_{f'{task.id}:':<4} Skipping because it has already been extracted"
-            )
     finally:
         pbar.update(1)
         # Release the semaphore
@@ -69,20 +60,14 @@ def cvat_download_data(host="http://localhost:8080", credentials=auth):
             desc="Getting Tasks",
             dynamic_ncols=True,
             position=0,
-            leave=True
+            leave=True,
         )
         threads = []
         for task in tasks:
             if task.status != "completed":
-                tqdm.write(
-                    f"Skipping task_{f'{task.id}:':<4} it is not completed (status: {task.status})"
-                )
                 pbar.update(1)
                 continue
             if task.id in installed_tasks:
-                tqdm.write(
-                    f"Skipping task_{f'{task.id}:':<4} it has already been installed"
-                )
                 continue
 
             thread = threading.Thread(
@@ -135,7 +120,6 @@ def cvat_download_data(host="http://localhost:8080", credentials=auth):
 
             os.rename(annotation, os.path.join(base_dir, "Annotations", f"{frame}.xml"))
             os.rename(image, os.path.join(base_dir, "JPEGImages", f"{frame}.PNG"))
-
 
         installed_tasks.append(task.split("_")[1])
         shutil.rmtree(os.path.join(base_dir, task))
