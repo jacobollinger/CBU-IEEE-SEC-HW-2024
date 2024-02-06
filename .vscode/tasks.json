@@ -1,0 +1,15 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "update and train",
+            "type": "shell",
+            "command": "./.venv/bin/python3 setup_train.py && tmux new -s train './.venv/bin/python3 Python/custom_object_detection_ieee/src/train.py'",
+        },
+        {
+            "label": "update and train detached",
+            "type": "shell",
+            "command": "./.venv/bin/python3 setup_train.py && tmux new -d -s train './.venv/bin/python3 Python/custom_object_detection_ieee/src/train.py'",
+        }
+    ]
+}

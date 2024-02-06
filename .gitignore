@@ -1,5 +1,6 @@
 # Ignore .vscode folder
-**/.vscode
+.vscode/**
+!.vscode/tasks.json
 
 # Ignore .DS_Store files from macOS
 **/.DS_Store
