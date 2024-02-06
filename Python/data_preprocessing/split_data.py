@@ -19,17 +19,17 @@ def xml_contains_object(xml_file):
 def generate_split_data_json(data_path, train, valid, test):
     df = {"split": [train, valid, test], "train": [], "valid": [], "test": []}
     for file in os.listdir(os.path.join(data_path, "Annotations")):
-        if file.endswith(".xml") and xml_contains_object(
-            os.path.join(data_path, "Annotations", file)
-        ):
-            rand = random.random()
-            basename = os.path.splitext(file)[0]
-            if rand < train:
-                df["train"].append(basename)
-            elif rand < train + valid:
-                df["valid"].append(basename)
-            else:
-                df["test"].append(basename)
+        # if file.endswith(".xml") and xml_contains_object(
+        #     os.path.join(data_path, "Annotations", file)
+        # ):
+        rand = random.random()
+        basename = os.path.splitext(file)[0]
+        if rand < train:
+            df["train"].append(basename)
+        elif rand < train + valid:
+            df["valid"].append(basename)
+        else:
+            df["test"].append(basename)
 
     with open(os.path.join(data_path, "data_split.json"), "w") as f:
         json.dump(df, f)
