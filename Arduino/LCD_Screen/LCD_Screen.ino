@@ -12,6 +12,6 @@ void setup() {
 void loop() {
   delay(2000);
   lcd.setCursor(0, 0);
-  lcd.print("GO BUCS");
+  lcd.print("GO BUC");
   delay(2000);
 }
