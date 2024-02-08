@@ -25,4 +25,4 @@ public:
     static void logLog(String message, bool newLine);
 };
 
-#endif
+#endif // LOGGER_HPP
