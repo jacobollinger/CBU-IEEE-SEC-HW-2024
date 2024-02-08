@@ -1,10 +1,16 @@
 #include "./include/Defines.hpp"
+#include "./include/FunctionMap.hpp"
 #include "./include/Logger.hpp"
 #include "./include/SPIReceiver.hpp"
 
 void setup()
 {
     Logger::init();
+
+    Logger::log("Setting up FunctionMap");
+    FunctionMap::init();
+    // TODO: Add functions from other modules
+    
     Logger::log("Starting SPI Slave");
     SPIReceiver::init();
     Logger::log("Initialized.\tEOT: ", false);
