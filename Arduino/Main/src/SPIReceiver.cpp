@@ -75,7 +75,7 @@ String SPIReceiver::getBufferAsASCII()
     String bufferString = "";
     for (size_t i = 0; i < bufferPosition; i++)
     {
-        bufferString += String((char) buffer[i]);
+        bufferString += String((char)buffer[i]);
     }
     return bufferString;
 }
