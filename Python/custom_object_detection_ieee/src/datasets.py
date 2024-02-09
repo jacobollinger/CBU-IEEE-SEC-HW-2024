@@ -66,7 +66,7 @@ class CustomDataset(Dataset):
             # Right corner x-coordinates.
             xmax = int(float(member.find("bndbox").find("xmax").text))
             # Left corner y-coordinates.
-            ymin = int(float(member.find("bndbox").find("ymin").text)))
+            ymin = int(float(member.find("bndbox").find("ymin").text))
             # Right corner y-coordinates.
             ymax = int(float(member.find("bndbox").find("ymax").text))
 
