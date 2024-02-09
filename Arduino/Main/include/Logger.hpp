@@ -21,7 +21,7 @@ public:
     static void log(char *message, bool newLine = true);
     static void log(bool message, bool newLine = true);
 
-    private:
+private:
     static void logLog(String message, bool newLine);
 };
 
