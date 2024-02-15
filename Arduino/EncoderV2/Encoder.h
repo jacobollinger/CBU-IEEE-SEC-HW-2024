@@ -8,11 +8,13 @@ class Encoder{
     Encoder(int encA, int encB);
     void readEncoder(); 
     float speedInRPM(int pos); 
-    int getPosition();
+    volatile long int getPosition();
+    volatile long int getOldPosition();
     int old_time; 
     float actual_speed; 
+    int pin1, pin2;
+    
   private:
-  int pin1, pin2;
-  volatile int pos, old_pos; 
+  volatile long int pos, old_pos; 
 }; 
 #endif
