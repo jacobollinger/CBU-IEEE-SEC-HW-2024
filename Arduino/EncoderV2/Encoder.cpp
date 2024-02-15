@@ -14,8 +14,8 @@ Encoder:: Encoder(int encA, int encB ){
 // To record number pulses
 // May need to readjust due to opposite spinning motors
 void Encoder::readEncoder(){
-  int encB_data = digitalRead(pin2);
-  if (encB_data > 0){
+  volatile long int encB_data = digitalRead(pin2);
+  if (encB_data == HIGH){
     pos++;
   }
   else {
@@ -33,6 +33,10 @@ float Encoder::speedInRPM(int pos){
   return actual_speed;
    
 } 
-int Encoder:: getPosition(){
+volatile long int Encoder:: getPosition(){
       return pos;
+    }; 
+
+volatile long int Encoder:: getOldPosition(){
+      return old_pos;
     }; 
