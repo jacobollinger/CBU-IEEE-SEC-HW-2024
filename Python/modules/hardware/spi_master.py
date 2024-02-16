@@ -1,3 +1,4 @@
+from time import sleep
 import spidev
 
 EOT = 0x04
@@ -33,12 +34,14 @@ class SPIMaster:
 
     def transfer_data(self, data):
         received = []
-        for word in [data[i:i+2] for i in range(0, len(data), 2)]:
-            received += self.spi.xfer2(word)
+        # for word in [data[i:i+2] for i in range(0, len(data), 2)]:
+        for byte in data:
+            received += self.spi.xfer2([byte])
+            sleep(0.1)
         return received
     
     def transferASCII(self, data):
-        return ''.join([chr(byte) for byte in self.transfer_data([ord(char) for char in list(data)] + [0x04])])
+        return ''.join([chr(byte) for byte in self.transfer_data([ord(char) for char in list(data)] + [EOT])])
 
     def __enter__(self):
         return self.open()
