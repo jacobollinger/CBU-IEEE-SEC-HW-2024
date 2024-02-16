@@ -73,7 +73,8 @@ while cap.isOpened():
         # Bring color channels to front (H, W, C) => (C, H, W).
         image_input = np.transpose(image, (2, 0, 1)).astype(np.float32)
         # Convert to tensor.
-        image_input = torch.tensor(image_input, dtype=torch.float).cuda()
+        # image_input = torch.tensor(image_input, dtype=torch.float).cuda()
+        image_input = torch.tensor(image_input, dtype=torch.float).to(DEVICE)
         # Add batch dimension.
         image_input = torch.unsqueeze(image_input, 0)
         # Get the start time.
