@@ -21,6 +21,7 @@ parser.add_argument(
 )
 parser.add_argument("--imgsz", default=640, type=int, help="image resize shape")
 parser.add_argument("--threshold", default=0.25, type=float, help="detection threshold")
+parser.add_argument("--model", default="best_model.pth", type=str, help="model path")
 args = vars(parser.parse_args())
 
 os.makedirs(f"{OUT_DIR}/inference_outputs/videos", exist_ok=True)
@@ -29,7 +30,7 @@ os.makedirs(f"{OUT_DIR}/inference_outputs/videos", exist_ok=True)
 
 # Load the best model and trained weights.
 model = create_model(num_classes=NUM_CLASSES, size=640)
-checkpoint = torch.load(f"{OUT_DIR}/best_model.pth", map_location=DEVICE)
+checkpoint = torch.load(os.path.join(OUT_DIR, args['model']), map_location=DEVICE)
 model.load_state_dict(checkpoint["model_state_dict"])
 model.to(DEVICE).eval()
 
@@ -45,11 +46,11 @@ if cap.isOpened() == False:
 frame_width = int(cap.get(3))
 frame_height = int(cap.get(4))
 
-save_name = str(pathlib.Path(args["input"])).split(os.path.sep)[-1].split(".")[0]
+save_name = str(pathlib.Path(args["input"])).split(os.path.sep)[-1].split(".")[0] + f"_model_{args['model'].split('.')[0]}"
 print(save_name)
 # Define codec and create VideoWriter object .
 out = cv2.VideoWriter(
-    f"{OUT_DIR}/inference_outputs/videos/{save_name}.mp4",
+    os.path.join(OUT_DIR, "inference_outputs", "videos", f"{save_name}.mp4"),
     cv2.VideoWriter_fourcc(*"mp4v"),
     30,
     (frame_width, frame_height),
