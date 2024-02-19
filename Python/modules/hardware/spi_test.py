@@ -9,7 +9,7 @@ spi.open()
 try:
     while True:
         sent_bytes = input("Press enter data to send... ")
-        
+
         received_bytes = spi.transferASCII(sent_bytes)
 
         print(f"Sent: {sent_bytes} at {spi.spi.max_speed_hz} Hz")

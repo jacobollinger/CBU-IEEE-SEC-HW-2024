@@ -4,6 +4,7 @@ except ImportError:
     try:
         import RPi.GPIO as GPIO
     except ImportError:
+
         class GPIO:
             BCM = None
             BOARD = None
@@ -25,4 +26,5 @@ except ImportError:
                 # This method is intentionally left empty.
                 pass
 
-GPIO.setmode(GPIO.BCM) # Use BCM GPIO numbers
+
+GPIO.setmode(GPIO.BCM)  # Use BCM GPIO numbers
