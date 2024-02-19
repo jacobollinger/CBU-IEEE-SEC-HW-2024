@@ -20,37 +20,44 @@ class RobotArmControl
 public:
     RobotArmControl();
     void initialize();
-    void updatePosition(const JointAngles &angles, const String &objective);
-    JointAngles solveIK(float x, float y, float z);
+    void moveToAngle(double x, double y, double z, double g);
+    void updatePosition(double x, double y, double z, double g);
+    void solveIK(float x, float y, float z);
     void calibrate();    
 
 
 
 private:
 	
-    Servo baseServo; // this servo cannot be accurately moved by the servo library 
-    Servo shoulderServo;
-	Servo wristServo;
-	Servo gripperServo;
-    JointAngles dropOffAnglesLargePkg;
-	JointAngles dropOffAnglesSmallPkg;
-	JointAngles dropOffAnglesBoosters;
-    JointAngles dropBridgeAngles;
-    JointAngles initializedAngles;
-    JointAngles currentAngles;
+Servo baseServo;
+Servo shoulderServo;
+Servo wristServo;
+Servo gripperServo;
+
+JointAngles dropOffAnglesLargePkg;
+JointAngles dropOffAnglesSmallPkg;
+JointAngles dropOffAnglesBoosters;
+JointAngles dropBridgeAngles;
+JointAngles initializedAngles;
+JointAngles currentAngles;
 	
-	const float j1; 
-	const float j2; 
-	const int gripString;
-	const int gripLargePackage;
-	const int gripSmallPackage;
-	const int gripBooster;
-	const int gripRelease;
+const float L0 = 19.2875; // length from ground to second joint (elbow)
+const float L1 = 12.85875; // length from 2nd joint to 3rd joint (elbow to wrist)
+const float L2 = 10.16; // length from 3rd joint to gripper tip
+const float pi = 3.141592653589793;
 	
-	// Analog inputs
-    int ARM_GRIPPER_FEEDBACK_PIN;
-	int ARM_WRIST_FEEDBACK_PIN; 
-	int ARM_SHOULDER_FEEDBACK_PIN;
+	//const int gripString;
+	//const int gripLargePackage;
+	//const int gripSmallPackage;
+	//const int gripBooster;
+	//const int gripRelease;
+	//const float pi; 
+	//int g;
+	
+// Analog inputs
+int ARM_GRIPPER_FEEDBACK_PIN;
+int ARM_WRIST_FEEDBACK_PIN; 
+int ARM_SHOULDER_FEEDBACK_PIN;
 
 };
 
