@@ -30,7 +30,7 @@ os.makedirs(f"{OUT_DIR}/inference_outputs/videos", exist_ok=True)
 
 # Load the best model and trained weights.
 model = create_model(num_classes=NUM_CLASSES, size=640)
-checkpoint = torch.load(os.path.join(OUT_DIR, args['model']), map_location=DEVICE)
+checkpoint = torch.load(os.path.join(OUT_DIR, args["model"]), map_location=DEVICE)
 model.load_state_dict(checkpoint["model_state_dict"])
 model.to(DEVICE).eval()
 
@@ -46,7 +46,10 @@ if cap.isOpened() == False:
 frame_width = int(cap.get(3))
 frame_height = int(cap.get(4))
 
-save_name = str(pathlib.Path(args["input"])).split(os.path.sep)[-1].split(".")[0] + f"_model_{args['model'].split('.')[0]}"
+save_name = (
+    str(pathlib.Path(args["input"])).split(os.path.sep)[-1].split(".")[0]
+    + f"_model_{args['model'].split('.')[0]}"
+)
 print(save_name)
 # Define codec and create VideoWriter object .
 out = cv2.VideoWriter(
