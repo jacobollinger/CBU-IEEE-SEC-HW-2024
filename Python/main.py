@@ -174,7 +174,7 @@ def old_main():
 
 
 def detect_start_signal():
-    """detects the start signal
+    """Detects the start signal
 
     Returns:
         bool: whether or not the start signal was detected
@@ -183,7 +183,7 @@ def detect_start_signal():
 
 
 def scan_for_objects():
-    """scans for objects in the environment
+    """Scans for objects in the environment
 
     Returns:
         dict: dictionary of objects detected and their positions from the fixed camera
@@ -207,6 +207,8 @@ def scan_for_objects():
 
 
 def collect_large_packages():
+    """Collects the large packages from the environment
+    """
     object_positions = scan_for_objects()
     for object, position in object_positions[0].items():
         if object == "large_package":
@@ -220,6 +222,8 @@ def collect_large_packages():
 
 
 def collect_small_packages():
+    """Collects the small packages from the environment
+    """
     object_positions = scan_for_objects()
     for object, position in object_positions[0].items():
         if object == "small_package":
@@ -244,6 +248,8 @@ def deposit_packages():
 
 
 def collect_fuel_tanks():
+    """Collects the fuel tanks from the environment
+    """
     object_positions = scan_for_objects()
     for object, position in object_positions[0].items():
         if object == "fuel_tank":
@@ -269,6 +275,8 @@ def display_team_promotion():
 
 
 def assemble_thrusters():
+    """Assembles the thrusters
+    """
     object_positions = scan_for_objects()
     for object, position in object_positions[0].items():
         if object == "thruster":
