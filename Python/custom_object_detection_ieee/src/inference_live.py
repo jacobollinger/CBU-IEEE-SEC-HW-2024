@@ -40,7 +40,7 @@ model.to(DEVICE).eval()
 detection_threshold = 0.2
 
 server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-server_socket.bind(('localhost', 8485))
+server_socket.bind(("localhost", 8485))
 server_socket.listen()
 
 client_socket, addr = server_socket.accept()
@@ -139,7 +139,7 @@ while cap.isOpened():
             2,
             lineType=cv2.LINE_AA,
         )
-        
+
         data = pickle.dumps(frame)
         message_size = struct.pack("L", len(data))
         client_socket.sendall(message_size + data)

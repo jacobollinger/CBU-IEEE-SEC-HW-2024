@@ -20,6 +20,75 @@ def main():
     )
     model.to(DEVICE).eval()
 
+    # Wait for the start signal
+    while not detect_start_signal():
+        pass
+
+    timer.start()
+
+    # Collect the large package
+    Wheels.rotate(-90)
+    collect_large_packages()
+
+    # Collect the small package
+    Wheels.rotate(-90)
+    collect_small_packages()
+
+    # Traverse ramps
+    Wheels.rotate(180)
+    traverse_ramps()
+
+    # Deposit packages
+    while Ultrasonic.get_distance(FRONT) > 10:
+        Wheels.move_forward(10)
+    Wheels.rotate(90)
+    while Ultrasonic.get_distance(FRONT) > 10:
+        Wheels.move_forward(10)
+    Wheels.rotate(90)
+    deposit_packages()
+
+    # Collect Fuel Tanks
+    Wheels.move_backwards(100)
+    Wheels.rotate(-90)
+    while Ultrasonic.get_distance(FRONT) > 10:
+        Wheels.move_forward(10)
+    Wheels.rotate(90)
+    collect_fuel_tanks()
+
+    # Cross the crater
+    Wheels.rotate(180)
+    cross_crater()
+
+    # Assemble the thrusters
+    display_team_promotion()
+    while Ultrasonic.get_distance(FRONT) > 10:
+        Wheels.move_forward(10)
+    Wheels.rotate(90)
+    assemble_thrusters()
+
+    # Press the launch button
+    while Ultrasonic.get_distance(FRONT) > 10:
+        Wheels.move_forward(10)
+    Wheels.move_forward()
+    time.sleep(5)
+    Wheels.stop()
+
+    Timer.stop()
+    print(f"Time taken: {timer.get_time()} seconds")
+
+    # Save the time take to file named the current date and time
+    with open(f"./data/out/{time.strftime('%Y-%m-%d_%H-%M-%S')}.txt", "w") as file:
+        file.write(str(timer.get_time()))
+
+
+def old_main():
+    model.load_state_dict(
+        torch.load("./data/out/ieee/best_model.pth", map_location=DEVICE)[
+            "model_state_dict"
+        ]
+    )
+    model.to(DEVICE).eval()
+
     while not detect_start_signal():
         pass
 
@@ -105,7 +174,7 @@ def main():
 
 
 def detect_start_signal():
-    """detects the start signal
+    """Detects the start signal
 
     Returns:
         bool: whether or not the start signal was detected
@@ -114,7 +183,7 @@ def detect_start_signal():
 
 
 def scan_for_objects():
-    """scans for objects in the environment
+    """Scans for objects in the environment
 
     Returns:
         dict: dictionary of objects detected and their positions from the fixed camera
@@ -135,6 +204,89 @@ def scan_for_objects():
         pass
 
     return fixed_ret, arm_ret
+
+
+def collect_large_packages():
+    """Collects the large packages from the environment
+    """
+    object_positions = scan_for_objects()
+    for object, position in object_positions[0].items():
+        if object == "large_package":
+            # TODO: implement large package pickup
+            Arm.move_to(position)
+            Arm.pickup("large_package")
+            Arm.move_to("large_package_container")
+            Arm.release()
+
+    Arm.move_to("home")
+
+
+def collect_small_packages():
+    """Collects the small packages from the environment
+    """
+    object_positions = scan_for_objects()
+    for object, position in object_positions[0].items():
+        if object == "small_package":
+            # TODO: implement large package pickup
+            Arm.move_to(position)
+            Arm.pickup("small_package")
+            Arm.move_to("small_package_container")
+            Arm.release()
+            Arm.move_to("home")
+
+
+def traverse_ramps():
+    # TODO: implement orienting the robot to the ramp using IMU, line following, or ultrasonics
+    # TODO: implement climbing the 1st ramp
+    Wheels.rotate(180)
+    # TODO: implement descending the 2nd ramp
+
+
+def deposit_packages():
+    # TODO: implement depositing the packages
+    pass
+
+
+def collect_fuel_tanks():
+    """Collects the fuel tanks from the environment
+    """
+    object_positions = scan_for_objects()
+    for object, position in object_positions[0].items():
+        if object == "fuel_tank":
+            # TODO: implement fuel tank pickup
+            Arm.move_to(position)
+            Arm.pickup("fuel_tank")
+            Arm.move_to("home")
+
+
+def cross_crater():
+    # TODO: implement orienting the robot to the crater using line following
+    # TODO: implement climbing the 1st ramp
+    Wheels.rotate(180)
+    # TODO: implement detaching the bridge
+    # TODO: push the bridge into place and cross the crater
+    Wheels.rotate(180)
+    # TODO: implement descending the 2nd ramp
+
+
+def display_team_promotion():
+    # TODO: implement team promotion display
+    pass
+
+
+def assemble_thrusters():
+    """Assembles the thrusters
+    """
+    object_positions = scan_for_objects()
+    for object, position in object_positions[0].items():
+        if object == "thruster":
+            # TODO: implement thruster assembly
+            Arm.move_to("fuel_tank")
+            Arm.pickup("fuel_tank")
+            Arm.move_to(position)
+            Arm.release()
+
+    Arm.move_to("home")
 
 
 if __name__ == "__main__":

@@ -1,9 +1,61 @@
-import threading
-import time
+# import threading
+# import time
 
-from gpio import GPIO
+# from gpio import GPIO
+from spi_master import SPI
+
+def __send_command(command, *args):
+    """Sends a command to the Arduino via SPI
+
+    Args:
+        command (str): the command to send
+        *args: Variable length argument list to pass to the function
+    """
+
+    if args:
+        command = f"{command} {" ".join([str(i) for i in args])}"
+    with SPI() as spi:
+        spi.writeASCII(command)
+
 
 class Wheels:
+    @staticmethod
+    def move_forward(speed, distance):
+        """Moves the robot forward
+
+        Args:
+            speed (int): the speed at which to move
+            distance (double): the distance to move
+        """
+        __send_command("move_forward", speed, distance)
+
+    @staticmethod
+    def move_backwards(speed, distance):
+        """Moves the robot backwards
+
+        Args:
+            speed (int): the speed at which to move
+            distance (double): the distance to move
+        """
+        __send_command("move_backwards", speed, distance)
+
+    @staticmethod
+    def rotate(speed, angle):
+        """Rotates the robot
+
+        Args:
+            speed (int): the speed at which to rotate
+            angle (double): the angle to rotate by in degrees
+        """
+        __send_command("rotate", speed, angle)
+
+    @staticmethod
+    def stop():
+        """Stops the robot wheels
+        """
+        __send_command("stop")
+
+    """
     # Define constants or configuration settings
     # Set the pin numbering scheme to the numbering shown on the robot itself
     # The pins for the motors will be defined here
@@ -156,9 +208,42 @@ class Wheels:
         # Wait for threads to finish
         thread1.join()
         thread2.join()
+    """
 
 
 class Arm:
+    @staticmethod
+    def move_to(position):
+        """Sends the command to move the arm to the Arduino
+
+        Args:
+            position (str or list): the position to move to as a string or a list of coordinates
+        """
+        if isinstance(position, list):
+            command = "move_to_coords"
+            args = " ".join([str(i) for i in position])
+        elif isinstance(position, str):
+            command = "move_to_position"
+            args = position
+
+        __send_command(command, args)
+
+    @staticmethod
+    def pick_up(object):
+        """Sends the command to pick up an object to the Arduino
+
+        Args:
+            object (str): the object type to pick up
+        """
+        __send_command("pick_up", object)
+
+    @staticmethod
+    def release():
+        """Sends the command to release the gripper to the Arduino
+        """
+        __send_command("release")
+
+    """
     # Define constants or configuration settings
     # Set the pin numbering scheme to the numbering shown on the robot itself
     GPIO.setmode(GPIO.BOARD)
@@ -215,3 +300,4 @@ class Arm:
     def actuate_gripper(self, open_close):
         # Code to open or close the gripper servo
         pass
+    """
