@@ -1,13 +1,9 @@
 #include "RobotArmControl.h"
+#include "Servo.h"
 #include "Math.h"
 
 RobotArmControl::RobotArmControl(){
 
-	// Predefined constants 
-	//const float L0 = 19.2875; // length from ground to second joint (elbow)
-    //const float L1 = 12.85875; // length from 2nd joint to 3rd joint (elbow to wrist)
-	//const float L2 = 10.16; // length from 3rd joint to gripper tip
-	//const float pi = 3.141592653589793;
 	
 	// **No idea** 
     //const int gripString = 13;
@@ -31,17 +27,17 @@ RobotArmControl::RobotArmControl(){
     Servo gripperServo; // DMA-MG90-A 270
     Servo shoulderServo; // FS5106B-FB 180 W/FEEDBACK
 	Servo baseServo; //FT6325M-360 
-	// Define Pins
 	
+	// Define Pins
 	gripperServo.attach(8,440, 1408);
     wristServo.attach(9,440, 1968);
     shoulderServo.attach(10, 945, 2400);
-    baseServo.attach(11, 440, 2238);
+	baseServo.attach(11, 440, 2238);
 	
 	// set Analog Pins
     int ARM_WRIST_FEEDBACK_PIN = analogRead(A0);    // Analog pin for calibration
     int ARM_GRIPPER_FEEDBACK_PIN = analogRead(A1);  // Analog pin for calibration
-    int ARM_SHOULDER_FEEDBACK_PIN = analogRead(A2); // Analog pin for calibration {}
+	int ARM_SHOULDER_FEEDBACK_PIN = analogRead(A2); // Analog pin for calibration {}
 }
 void RobotArmControl::initialize()
 {	
@@ -103,40 +99,81 @@ void RobotArmControl::moveToAngle( double b, double a1, double a2, double g){
 	Serial.println(a2);
 	gripperServo.write(g); 
 	Serial.println(g);
-
-	
 }
 
-void RobotArmControl::solveIK(float x, float y, float z)
+	
+
+void RobotArmControl::solveIK(float x_coordinate, float y_coordinate, float z_coordinate)
 {
-	double g = 88;
-	double b = atan(y/x) * (180 / pi ); // base angle 
-	double l = sqrt(x*x + y*y); // polar coordinates: "r"
-	double h = sqrt(z*z + l*l); // "r" with height 
+	double gripAngle = 88; // for testing purposes only 
+	double zOffset = z_coordinate - L0;
 	
-	// 
-	double C = acos( - (h*h - (L1*L1 + L2*L2))/(2*L1*L2)) * (180/pi);
+
 	
-	// theta and phi
-	double theta = asin( (sin(C)/ h) * L2);
-	double phi = atan(z/l) * (180/pi);
-	double a1 = phi + theta; //angle for first part of the arm 
-	double a2 = phi - theta; //angle for second part of the arm 
-	moveToAngle(b,a1,a2,g); 
+	// xy plane as the surface
+	double baseAngle = atan(y_coordinate/x_coordinate) * (180 / pi ); // base angle 
+	
+	// "Creating triangle"
+	double distanceToEndEffector = sqrt(sq(x_coordinate) + sq(y_coordinate)); // polar coordinates: "r"
+	double R = sqrt(sq(zOffset) + sq(distanceToEndEffector)); // "r" with height 
+	
+	if ( z_coordinate >= L1 ){
+	// Prelimnary Angles
+	double phi = atan(zOffset / distanceToEndEffector) * (180/pi); // Angle between height and distancetoEndEffector
+	double theta = acos((sq(L1) + (sq(R)) - sq(L2))/(2*R*L1)) * (180/pi); // law of cosine to find angle between length to End Effector and ARM link 1
+	double beta =  acos((sq(L2) + (sq(L1)) - sq(R))/(2*L1*L2)); 
+	
+	// Angles for servo motors 
+	double shoulderAngle = phi + theta; //angle for first part of the arm 
+	double wristAngle = (pi - beta)* (180/pi); //angle for second part of the arm
+	
+	
+	moveToAngle(baseAngle,shoulderAngle,wristAngle,gripAngle); 
+	
+	}
+	/*else if { //when wrist is flexed out
+	
+	double phi = atan(zOffset / distanceToEndEffector) * (180/pi); // Angle between height and distancetoEndEffector
+	double theta = acos((sq(L1) + (sq(R)) - sq(L2))/(2*R*L1)) * (180/pi); // law of cosine to find angle between length to End Effector and ARM link 1
+	double beta =  acos((sq(L2) + (sq(L1)) - sq(R))/(2*L1*L2)); 
+	
+	// Angles for servo motors 
+	double shoulderAngle = phi + theta; //angle for first part of the arm 
+
+	double wristAngle = (pi/2 - beta)* (180/pi); //angle for second part of the arm
+
+		
+		
+	}*/
+	else {
+		// Prelimnary Angles
+	double phi = atan(zOffset / distanceToEndEffector) * (180/pi); // Angle between height and distancetoEndEffector
+	double theta = acos((sq(L1) + (sq(R)) - sq(L2))/(2*R*L1)) * (180/pi); // law of cosine to find angle between length to End Effector and ARM link 1
+	double beta =  acos((sq(L2) + (sq(L1)) - sq(R))/(2*L1*L2)); 
+	
+	// Angles for servo motors 
+	double shoulderAngle = phi - theta; //angle for first part of the arm 
+	double wristAngle = (pi - beta)* (180/pi); //angle for second part of the arm 
+	moveToAngle(baseAngle,shoulderAngle,wristAngle,gripAngle); 
+	delay(1000);
+	} 
+	//double wristAngle = beta * 180/pi; 
+	
+	
 }
 
 void RobotArmControl::calibrate()
 {	int shoulderFeedback = analogRead(ARM_SHOULDER_FEEDBACK_PIN);
 	// int elbowFeedback = analogRead(ARM_ELBOW_FEEDBACK_PIN);
-        int wristFeedback = analogRead(ARM_WRIST_FEEDBACK_PIN);
+    int wristFeedback = analogRead(ARM_WRIST_FEEDBACK_PIN);
 	int gripperFeedback = analogRead(ARM_GRIPPER_FEEDBACK_PIN);
 	// Convert feedback to angles - this requires mapping sensor values to degrees
 	
 	/* Do not understand this portion 
 	// Placeholder for conversion logic: map(value, fromLow, fromHigh, toLow, toHigh)
-       shoulderServo.write(map(shoulderFeedback, 0, 1023, 0, 180));
+	shoulderServo.write(map(shoulderFeedback, 0, 1023, 0, 180));
 	// elbowServo.write(map(elbowFeedback, 0, 1023, 0, 180));
-       wristServo.write(map(wristFeedback, 0, 1023, 0, 180));
-       gripperServo.write(map(gripperFeedback, 0, 1023, 0, 180));*/
+    wristServo.write(map(wristFeedback, 0, 1023, 0, 180));
+	gripperServo.write(map(gripperFeedback, 0, 1023, 0, 180));*/
 	
 }
