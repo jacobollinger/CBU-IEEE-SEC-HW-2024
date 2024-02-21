@@ -1,2 +1,2 @@
-Cytron Motor Drivers Library
+DualG2HighPowerMotorShield
 Servo
