@@ -1,0 +1,245 @@
+#include <Arduino.h>
+#include <Encoder_Motor.h>
+#include <PID.h>
+#include <util/atomic.h>
+#include "DualG2HighPowerMotorShield.h"
+
+DualG2HighPowerMotorShield24v14 md;
+
+// These are digital inputs for motor encoders
+#define ENCA_M1 2
+#define ENCB_M1 14
+#define ENCA_M2 3
+#define ENCB_M2 15
+
+// intiallize the two encoders and PID controllers store in array 
+Encoder encoder1(ENCA_M1, ENCB_M1);
+Encoder encoder2(ENCA_M2, ENCB_M2);
+//Encoder enc_array [2] = {encoder1, encoder2}; 
+PID PIDcontroller1;
+PID PIDcontroller2;
+
+// Intialize variables
+int prev_time = 0; 
+float actual_speed1 = 0;
+float actual_speed2 = 0;
+
+
+
+
+// const int M1DIR=25;
+// //const int IN2=24;
+// const int M1PWM=8;
+
+// const int M2DIR=23;
+// //const int IN4=22;
+// const int M2PWM=7;
+
+void stopIfFault()
+{
+  if (md.getM1Fault())
+  {
+    md.disableDrivers();
+	delay(1);
+    Serial.println("M1 fault");
+    while (1);
+  }
+  if (md.getM2Fault())
+  {
+    md.disableDrivers();
+	delay(1);
+    Serial.println("M2 fault");
+    while (1);
+  }
+}
+
+
+void setup() {
+ 
+  // put your setup code here, to run once:
+ Serial.begin(9600);
+
+ // Setup PID Controller parameters
+ PIDcontroller1.setParameters(0.1, 0.01, 0.01);  // Adjust the gains as needed
+ PIDcontroller2.setParameters(0.1, 0.01, 0.01);  // Adjust the gains as needed
+
+ // Attach interrupts == Once a high ENCA is read pulse counting begins
+ attachInterrupt(digitalPinToInterrupt(ENCA_M1), readEncoder1, RISING);
+ attachInterrupt(digitalPinToInterrupt(ENCA_M2), readEncoder2, RISING);
+
+  Serial.begin(115200);
+  Serial.println("Dual G2 High Power Motor Shield");
+  md.init();
+  md.calibrateCurrentOffsets();
+
+  delay(10);
+
+  // Uncomment to flip a motor's direction:
+  //md.flipM1(true);
+  //md.flipM2(true);
+
+}
+
+void loop() {
+ // put your main code here, to run repeatedly:
+ // intialize variables
+ float current_time = millis();
+ float dt = current_time - prev_time;
+
+ // Define target speed(should be part of the movement/sensor code)
+ // Reverse sign PWM to get them to move in same direction (make sure correct pos are read)
+ // may need to change signs of motor 
+ int target_speed1 = 255; 
+ int target_speed2 = - target_speed1; 
+ int pos[2];
+ ATOMIC_BLOCK(ATOMIC_RESTORESTATE){
+  pos[0] = encoder1.getPosition();
+  pos[1] = encoder1.getPosition();
+ }  
+ // Serial.print("Motor 1 Position: ");
+ // Serial.println(pos[0]);
+
+ // Serial.print("Motor 2 Position: ");
+ // Serial.println(pos[1]);
+ //  pos[1] = encoder2.getPosition();
+ // Get actual speed (need to fix)
+ // actual_speed1 = encoder1.speedInRPM(pos[0]);
+ // actual_speed2 = encoder2.speedInRPM(pos[1]);
+ md.enableDrivers();
+  delay(1);  // The drivers require a maximum of 1ms to elapse when brought out of sleep mode.
+ int i = 25;
+
+ while (pos[0] < 7100&& pos[1] < 7100){
+  
+    //motor1.setSpeed(i);   // Motor 1 runs forward at 50% speed.
+    md.setM1Speed(i);
+    //motor2.setSpeed(-i);  // Motor 2 runs backward at 50% speed.
+    md.setM2Speed(i);
+  
+
+    i < 400 ? i += 25: i = 400;
+    
+    delay(100);
+    
+
+    pos[0] = encoder1.getPosition();
+    pos[1] = -encoder2.getPosition(); 
+
+    Serial.print("Motor 2 Position: ");
+    Serial.print(pos[1]);
+    
+    Serial.print("\t");
+
+    Serial.print("Motor 1 Position: ");
+    Serial.println(pos[0]);
+
+   
+
+    
+
+  }  
+  //motor1.setSpeed(i);   // Motor 1 runs forward at 50% speed.
+  md.setM1Speed(0);
+  //motor2.setSpeed(-i);  // Motor 2 runs backward at 50% speed.
+  md.setM2Speed(0);
+  delay (3000);
+
+
+ while (pos[1] > 2200 && pos[0] < 10800 ){
+  
+     
+    //motor1.setSpeed(i);   // Motor 1 runs forward at 50% speed.
+     //motor1.setSpeed(i);   // Motor 1 runs forward at 50% speed.
+    md.setM1Speed(-140);
+    //motor2.setSpeed(-i);  // Motor 2 runs backward at 50% speed.
+    md.setM2Speed(140);
+    
+
+    pos[0] = encoder1.getPosition();
+    pos[1] = -encoder2.getPosition(); 
+
+    Serial.print("Motor 2 Position: ");
+    Serial.print(pos[1]);
+    
+    Serial.print("\t");
+
+    Serial.print("Motor 1 Position: ");
+    Serial.println(pos[0]);
+
+  }  
+ //motor1.setSpeed(i);   
+  md.setM1Speed(0);
+  //motor2.setSpeed(-i);  
+  md.setM2Speed(0);
+  delay (3000);
+
+  while (pos[1] > -3000 ){
+  
+     
+   //motor1.setSpeed(i);   // Motor 1 runs forward at 50% speed.
+    md.setM1Speed(-300);
+    //motor2.setSpeed(-i);  // Motor 2 runs backward at 50% speed.
+    md.setM2Speed(-300);
+    
+    
+    delay(100);
+    
+
+    pos[0] = encoder1.getPosition();
+    pos[1] = -encoder2.getPosition(); 
+
+    Serial.print("Motor 2 Position: ");
+    Serial.print(pos[1]);
+    
+    Serial.print("\t");
+
+    Serial.print("Motor 1 Position: ");
+    Serial.println(pos[0]);
+
+   
+  }  
+  //motor1.setSpeed(i);   
+  md.setM1Speed(0);
+  //motor2.setSpeed(-i);  
+  md.setM2Speed(0);
+  delay (3000);
+
+while (pos[1] > -6700 ){
+
+    //motor1.setSpeed(i);   // Motor 1 runs forward at 50% speed.
+    md.setM1Speed(-200);
+    //motor2.setSpeed(-i);  // Motor 2 runs backward at 50% speed.
+    md.setM2Speed(200);
+    
+    
+    delay(100);
+    
+
+    pos[0] = encoder1.getPosition();
+    pos[1] = -encoder2.getPosition(); 
+
+    Serial.print("Motor 2 Position: ");
+    Serial.print(pos[1]);
+    
+    Serial.print("\t");
+
+    Serial.print("Motor 1 Position: ");
+    Serial.println(pos[0]);
+
+  }
+  //motor1.setSpeed(i);   // Motor 1 runs forward at 50% speed.
+  md.setM1Speed(0);
+  //motor2.setSpeed(-i);  // Motor 2 runs backward at 50% speed.
+  md.setM2Speed(0);
+  delay (10000);
+}
+
+
+void readEncoder1() {
+  encoder1.readEncoder();
+}
+
+void readEncoder2() {
+ encoder2.readEncoder();
+}
+
