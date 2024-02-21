@@ -1,15 +1,14 @@
 #include <RobotArmControl.h>
 #include <Servo.h>
 Servo testServo;
+RobotArmControl Arm;
 
-void setup()
+void setup(){
 
-{   RobotArmControl test;
     Serial.begin(115200); // Initialize serial communication
-   // test.initialize(); // Initialize the robot arm
+    //Arm.initialize(); // Initialize the robot arm
    
-    // Attach the servo to pin x
-    testServo.attach(10);
+
 }
 
 void loop()
@@ -45,23 +44,19 @@ void loop()
     
     if (spaceIndex != -1 && spaceIndex2 != -1) {
     // Get the substring before the space as x
-    int x = input.substring(0, spaceIndex).toInt();
+    double x = input.substring(0, spaceIndex).toDouble();
     Serial.println(x); 
     
     // Get the substring after the space as y
-    int y = input.substring(spaceIndex + 1).toInt();
+    double y = input.substring(spaceIndex + 1).toDouble();
     Serial.println(y); 
 // Read Anloag output at this location   
 // get the substring after the space as z 
-//    int z = input.substring(spaceIndex2 + 1).toInt(); 
-    
-    
-    // Set the servo position to y degrees
-    testServo.write(y);
+  double z = input.substring(spaceIndex2 + 1).toDouble(); 
+  Serial.println(z); 
+  
+// Set the servo position to y degrees
+     Arm.solveIK(x,y,z);
 
-//    if( z != 0); {
-//    int output = analogRead(z); 
-//    Serial.println(output); 
-//    }
-  }
+   }
 }

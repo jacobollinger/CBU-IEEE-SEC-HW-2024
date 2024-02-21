@@ -3,28 +3,29 @@ import spidev
 
 EOT = 0x04
 
+
 class SPIMaster:
     def __init__(self, bus=0, device=0, max_speed_hz=1000000):
         self.spi = spidev.SpiDev()
         self.bus = bus
         self.device = device
         self.max_speed_hz = max_speed_hz
-        
+
     def open(self):
         self.spi.open(self.bus, self.device)
         self.spi.max_speed_hz = self.max_speed_hz
-        
+
     def close(self):
         self.spi.close()
 
     def read(self, length):
         # TODO: Implement
         pass
-    
+
     def write(self, data):
-        for word in [data[i:i+2] for i in range(0, len(data), 2)]:
+        for word in [data[i : i + 2] for i in range(0, len(data), 2)]:
             self.spi.write(word)
-    
+
     def readASCII(self, length):
         # TODO: Implement
         pass
@@ -39,12 +40,19 @@ class SPIMaster:
             received += self.spi.xfer2([byte])
             sleep(0.1)
         return received
-    
+
     def transferASCII(self, data):
-        return ''.join([chr(byte) for byte in self.transfer_data([ord(char) for char in list(data)] + [EOT])])
+        return "".join(
+            [
+                chr(byte)
+                for byte in self.transfer_data(
+                    [ord(char) for char in list(data)] + [EOT]
+                )
+            ]
+        )
 
     def __enter__(self):
         return self.open()
-    
+
     def __exit__(self, type, value, traceback):
         self.close()

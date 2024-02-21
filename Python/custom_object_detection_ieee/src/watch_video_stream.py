@@ -32,7 +32,7 @@ import struct
 
 # Start a socket
 client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-client_socket.connect(('localhost', 8485))
+client_socket.connect(("localhost", 8485))
 
 data = b""
 payload_size = struct.calcsize("L")
@@ -55,8 +55,8 @@ while True:
     frame = pickle.loads(frame_data)
 
     # Display the resulting frame
-    cv2.imshow('Frame', frame)
-    if cv2.waitKey(1) & 0xFF == ord('q'):
+    cv2.imshow("Frame", frame)
+    if cv2.waitKey(1) & 0xFF == ord("q"):
         break
 
 cv2.destroyAllWindows()
