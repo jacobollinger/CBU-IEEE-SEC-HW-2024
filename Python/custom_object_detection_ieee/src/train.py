@@ -100,6 +100,7 @@ def validate(valid_data_loader, model):
     metric = MeanAveragePrecision()
     metric.update(preds, target)
     metric_summary = metric.compute()
+
     return metric_summary
 
 
@@ -135,6 +136,7 @@ if __name__ == "__main__":
     train_loss_list = []
     map_50_list = []
     map_list = []
+    map_per_class_list = []
 
     # Mame to save the trained model with.
     MODEL_NAME = "model"
@@ -162,12 +164,16 @@ if __name__ == "__main__":
         print(f"Epoch #{epoch+1} train loss: {train_loss_hist.value:.3f}")
         print(f"Epoch #{epoch+1} mAP@0.50:0.95: {metric_summary['map']}")
         print(f"Epoch #{epoch+1} mAP@0.50: {metric_summary['map_50']}")
+        for i in range(NUM_CLASSES):
+            print(f"Epoch #{epoch+1} mAP@0.50 for class {metric_summary["classes"][i]}: {metric_summary["map_per_class"][i]}")
         end = time.time()
         print(f"Took {((end - start) / 60):.3f} minutes for epoch {epoch}")
 
         train_loss_list.append(train_loss)
         map_50_list.append(metric_summary["map_50"])
         map_list.append(metric_summary["map"])
+        for i in range(NUM_CLASSES):
+            map_per_class_list.append(metric_summary["map_per_class"][i])
 
         # save the best model till now.
         save_best_model(model, float(metric_summary["map"]), epoch, OUT_DIR)
@@ -179,4 +185,8 @@ if __name__ == "__main__":
 
         # Save mAP plot.
         save_mAP(OUT_DIR, map_50_list, map_list)
+        
+        # Save mAP per class plot.
+        save_mAP_per_class(OUT_DIR, map_per_class_list)
+
         scheduler.step()
