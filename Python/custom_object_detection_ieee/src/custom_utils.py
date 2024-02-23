@@ -194,4 +194,8 @@ def save_mAP_per_class(OUT_DIR, map_per_class_list):
     figure = plt.figure(figsize=(10, 7), num=1, clear=True)
     ax = figure.add_subplot()
     for i in range(len(CLASSES)):
-        ax.plot(map_per_class_list[i::len(CLASSES)], color=COLORS[i], linestyle="-", label=CLASSES[i])
+        ax.plot(map_per_class_list[i::len(CLASSES)], color=tuple(c/255 for c in COLORS[i]), linestyle="-", label=CLASSES[i])
+    ax.set_xlabel("Epochs")
+    ax.set_ylabel("mAP")
+    ax.legend()
+    figure.savefig(f"{OUT_DIR}/map_per_class.png")
