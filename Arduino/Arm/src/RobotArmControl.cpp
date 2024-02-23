@@ -28,7 +28,13 @@ RobotArmControl::RobotArmControl(){
     Servo shoulderServo; // FS5106B-FB 180 W/FEEDBACK
 	Servo baseServo; //FT6325M-360 
 	
-	// Define Pins
+	
+	
+}
+void RobotArmControl::initialize()
+	
+	
+{	// Define Pins
 	gripperServo.attach(8,440, 1408);
     wristServo.attach(9,440, 1968);
     shoulderServo.attach(10, 945, 2400);
@@ -37,13 +43,22 @@ RobotArmControl::RobotArmControl(){
 	// set Analog Pins
     int ARM_WRIST_FEEDBACK_PIN = analogRead(A0);    // Analog pin for calibration
     int ARM_GRIPPER_FEEDBACK_PIN = analogRead(A1);  // Analog pin for calibration
-	int ARM_SHOULDER_FEEDBACK_PIN = analogRead(A2); // Analog pin for calibration {}
-}
-void RobotArmControl::initialize()
-{	
+	int ARM_SHOULDER_FEEDBACK_PIN = analogRead(A2); // Analog pin for calibration
 
     //updatePosition(initializedAngles, "");
 }
+// Servo.h write degrees is arbitary to the 360 and 270 servos
+// Takes kinematics angles and matches it respective to these servos 
+int RobotArmControl::angleToMicroseconds360(double angle){
+	double microAngle = 460.0+(((2400.0-460.0)/360) * (angle+15)) ; // off by 15, thus +15
+	return (int) microAngle; 
+	}
+/* delete
+int RobotArmControl::angleToMicroseconds270(double angle){
+	double microAngle = 460.0+(((2400.0-460.0)/270) * angle); 
+	return (int) microAngle;
+}*/
+	
 void RobotArmControl::updatePosition(double x, double y, double z, double g){
 	
 	return;
@@ -91,11 +106,11 @@ void RobotArmControl::updatePosition(const JointAngles &angles, const String &ob
 } */
 
 void RobotArmControl::moveToAngle( double b, double a1, double a2, double g){
-	baseServo.write(b); 
-	Serial.println(b);
+	baseServo.writeMicroseconds(b); 
+	//Serial.println(b);
 	shoulderServo.write(a1);
 	Serial.println(a1);
-	wristServo.write(a2);
+	wristServo.write(a2); // Warning: .writeMicroseconds converts the motor into continuous
 	Serial.println(a2);
 	gripperServo.write(g); 
 	Serial.println(g);
@@ -103,7 +118,7 @@ void RobotArmControl::moveToAngle( double b, double a1, double a2, double g){
 
 	
 
-void RobotArmControl::solveIK(float x_coordinate, float y_coordinate, float z_coordinate)
+void RobotArmControl::solveIK(double x_coordinate, double y_coordinate, double z_coordinate)
 {
 	double gripAngle = 88; // for testing purposes only 
 	double zOffset = z_coordinate - L0;
@@ -112,12 +127,14 @@ void RobotArmControl::solveIK(float x_coordinate, float y_coordinate, float z_co
 	
 	// xy plane as the surface
 	double baseAngle = atan(y_coordinate/x_coordinate) * (180 / pi ); // base angle 
+	Serial.println(baseAngle);
+	baseAngle = angleToMicroseconds360(baseAngle);
 	
 	// "Creating triangle"
 	double distanceToEndEffector = sqrt(sq(x_coordinate) + sq(y_coordinate)); // polar coordinates: "r"
 	double R = sqrt(sq(zOffset) + sq(distanceToEndEffector)); // "r" with height 
 	
-	if ( z_coordinate >= L1 ){
+	if ( z_coordinate > L0 ){
 	// Prelimnary Angles
 	double phi = atan(zOffset / distanceToEndEffector) * (180/pi); // Angle between height and distancetoEndEffector
 	double theta = acos((sq(L1) + (sq(R)) - sq(L2))/(2*R*L1)) * (180/pi); // law of cosine to find angle between length to End Effector and ARM link 1
@@ -125,8 +142,8 @@ void RobotArmControl::solveIK(float x_coordinate, float y_coordinate, float z_co
 	
 	// Angles for servo motors 
 	double shoulderAngle = phi + theta; //angle for first part of the arm 
-	double wristAngle = (pi - beta)* (180/pi); //angle for second part of the arm
-	
+	//double wristAngle = (pi - beta)* (180/pi); //angle for second part of the arm
+	double wristAngle = beta * 180/pi;
 	
 	moveToAngle(baseAngle,shoulderAngle,wristAngle,gripAngle); 
 	
@@ -152,10 +169,10 @@ void RobotArmControl::solveIK(float x_coordinate, float y_coordinate, float z_co
 	double beta =  acos((sq(L2) + (sq(L1)) - sq(R))/(2*L1*L2)); 
 	
 	// Angles for servo motors 
-	double shoulderAngle = phi - theta; //angle for first part of the arm 
-	double wristAngle = (pi - beta)* (180/pi); //angle for second part of the arm 
-	moveToAngle(baseAngle,shoulderAngle,wristAngle,gripAngle); 
-	delay(1000);
+	double shoulderAngle = theta - phi; //angle for first part of the arm 
+	//double wristAngle = (pi - beta)* (180/pi); //angle for second part of the arm 
+	double wristAngle = beta * 180/pi;
+		moveToAngle(baseAngle,shoulderAngle,wristAngle,gripAngle); 
 	} 
 	//double wristAngle = beta * 180/pi; 
 	
