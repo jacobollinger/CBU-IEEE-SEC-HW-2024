@@ -25,6 +25,12 @@ with open("./data/in/ieee/labelmap.txt", "r") as f:
 
 # classes: 0 index is reserved for background
 CLASSES = [sublist[0] for sublist in label_map]
+IGNORED_CLASSES = [
+    "small_package_delivery_zone",
+    "large_package_delivery_zone",
+    "fuel_tank_pickup_zone",
+    "crater_line"
+]
 
 NUM_CLASSES = len(CLASSES)
 
