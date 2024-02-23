@@ -1,4 +1,5 @@
 from config import (
+    CLASSES,
     DEVICE,
     NUM_CLASSES,
     NUM_EPOCHS,
@@ -10,7 +11,7 @@ from config import (
     TRAIN_DIR,
 )
 from model import create_model
-from custom_utils import Averager, SaveBestModel, save_model, save_loss_plot, save_mAP
+from custom_utils import Averager, SaveBestModel, save_model, save_loss_plot, save_mAP, save_mAP_per_class
 from tqdm.auto import tqdm
 from datasets import (
     create_train_dataset,
@@ -97,7 +98,7 @@ def validate(valid_data_loader, model):
             target.append(true_dict)
         #####################################
 
-    metric = MeanAveragePrecision()
+    metric = MeanAveragePrecision(class_metrics=True)
     metric.update(preds, target)
     metric_summary = metric.compute()
 
@@ -164,15 +165,15 @@ if __name__ == "__main__":
         print(f"Epoch #{epoch+1} train loss: {train_loss_hist.value:.3f}")
         print(f"Epoch #{epoch+1} mAP@0.50:0.95: {metric_summary['map']}")
         print(f"Epoch #{epoch+1} mAP@0.50: {metric_summary['map_50']}")
-        for i in range(NUM_CLASSES):
-            print(f"Epoch #{epoch+1} mAP@0.50 for class {metric_summary["classes"][i]}: {metric_summary["map_per_class"][i]}")
+        for i in range(NUM_CLASSES - 1):
+            print(f"Epoch #{epoch+1} mAP@0.50:0.95 for class {CLASSES[metric_summary['classes'][i]]}: {metric_summary['map_per_class'][i].item()}")
         end = time.time()
         print(f"Took {((end - start) / 60):.3f} minutes for epoch {epoch}")
 
         train_loss_list.append(train_loss)
         map_50_list.append(metric_summary["map_50"])
         map_list.append(metric_summary["map"])
-        for i in range(NUM_CLASSES):
+        for i in range(NUM_CLASSES - 1):
             map_per_class_list.append(metric_summary["map_per_class"][i])
 
         # save the best model till now.
