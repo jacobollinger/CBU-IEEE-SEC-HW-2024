@@ -5,7 +5,7 @@ import torch
 import matplotlib.pyplot as plt
 
 from albumentations.pytorch import ToTensorV2
-from config import DEVICE, CLASSES
+from config import DEVICE, CLASSES, COLORS
 
 plt.style.use("ggplot")
 
@@ -184,3 +184,14 @@ def save_mAP(OUT_DIR, map_05, map):
     ax.set_ylabel("mAP")
     ax.legend()
     figure.savefig(f"{OUT_DIR}/map.png")
+    
+def save_mAP_per_class(OUT_DIR, map_per_class_list):
+    """
+    Saves the mAP@0.5:0.95 per class per epoch.
+    :param OUT_DIR: Path to save the graphs.
+    :param map_per_class_list: List containing mAP values at 0.5 IoU per class.
+    """
+    figure = plt.figure(figsize=(10, 7), num=1, clear=True)
+    ax = figure.add_subplot()
+    for i in range(len(CLASSES)):
+        ax.plot(map_per_class_list[i::len(CLASSES)], color=COLORS[i], linestyle="-", label=CLASSES[i])
