@@ -165,16 +165,15 @@ if __name__ == "__main__":
         print(f"Epoch #{epoch+1} train loss: {train_loss_hist.value:.3f}")
         print(f"Epoch #{epoch+1} mAP@0.50:0.95: {metric_summary['map']}")
         print(f"Epoch #{epoch+1} mAP@0.50: {metric_summary['map_50']}")
-        for i in range(NUM_CLASSES - 1):
+        for i in range(len(metric_summary["classes"])):
             print(f"Epoch #{epoch+1} mAP@0.50:0.95 for class {CLASSES[metric_summary['classes'][i]]:<30}: {metric_summary['map_per_class'][i].item():.6f}")
+            map_per_class_dict[CLASSES[metric_summary['classes'][i]]].append(metric_summary["map_per_class"][i].item())
         end = time.time()
         print(f"Took {((end - start) / 60):.3f} minutes for epoch {epoch}")
 
         train_loss_list.append(train_loss)
         map_50_list.append(metric_summary["map_50"])
         map_list.append(metric_summary["map"])
-        for i in range(NUM_CLASSES - 1):
-            map_per_class_dict[CLASSES[metric_summary['classes'][i]]].append(metric_summary["map_per_class"][i].item())
 
         # save the best model till now.
         save_best_model(model, float(metric_summary["map"]), epoch, OUT_DIR)
