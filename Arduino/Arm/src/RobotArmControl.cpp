@@ -47,17 +47,12 @@ void RobotArmControl::initialize()
 
     //updatePosition(initializedAngles, "");
 }
-// Servo.h write degrees is arbitary to the 360 and 270 servos
+// Servo.h write degrees is arbitary to the 360; warning: writeMicroseconds to DMA-MG90-A 270 = continuous motor = irreversible
 // Takes kinematics angles and matches it respective to these servos 
 int RobotArmControl::angleToMicroseconds360(double angle){
-	double microAngle = 460.0+(((2400.0-460.0)/360) * (angle+15)) ; // off by 15, thus +15
+	double microAngle = 500.0+(((2500.0-500)/360) * (angle) ; 
 	return (int) microAngle; 
 	}
-/* delete
-int RobotArmControl::angleToMicroseconds270(double angle){
-	double microAngle = 460.0+(((2400.0-460.0)/270) * angle); 
-	return (int) microAngle;
-}*/
 	
 void RobotArmControl::updatePosition(double x, double y, double z, double g){
 	
@@ -116,7 +111,11 @@ void RobotArmControl::moveToAngle( double b, double a1, double a2, double g){
 	Serial.println(g);
 }
 
-	
+int RobotArmControl::calcVectorAngle( double x_coordinate, double y_coordinate){
+	int degrees = (int) ( atan2(y_coordinate, x_coordinate) * (180/pi));
+	degrees = ( degrees + 360 ) % 360; 
+	return degrees;
+}
 
 void RobotArmControl::solveIK(double x_coordinate, double y_coordinate, double z_coordinate)
 {
@@ -126,9 +125,10 @@ void RobotArmControl::solveIK(double x_coordinate, double y_coordinate, double z
 
 	
 	// xy plane as the surface
-	double baseAngle = atan(y_coordinate/x_coordinate) * (180 / pi ); // base angle 
+	int baseAngle = calcVectorAngle(x_coordinate, y_coordinate);
 	Serial.println(baseAngle);
 	baseAngle = angleToMicroseconds360(baseAngle);
+	Serial.println(baseAngle);
 	
 	// "Creating triangle"
 	double distanceToEndEffector = sqrt(sq(x_coordinate) + sq(y_coordinate)); // polar coordinates: "r"
@@ -136,7 +136,7 @@ void RobotArmControl::solveIK(double x_coordinate, double y_coordinate, double z
 	
 	if ( z_coordinate > L0 ){
 	// Prelimnary Angles
-	double phi = atan(zOffset / distanceToEndEffector) * (180/pi); // Angle between height and distancetoEndEffector
+	double phi = calcVectorAngle(distanceToEndEffector, zOffset); // Angle between height and distancetoEndEffector
 	double theta = acos((sq(L1) + (sq(R)) - sq(L2))/(2*R*L1)) * (180/pi); // law of cosine to find angle between length to End Effector and ARM link 1
 	double beta =  acos((sq(L2) + (sq(L1)) - sq(R))/(2*L1*L2)); 
 	
@@ -148,6 +148,7 @@ void RobotArmControl::solveIK(double x_coordinate, double y_coordinate, double z
 	moveToAngle(baseAngle,shoulderAngle,wristAngle,gripAngle); 
 	
 	}
+	// condition where different triangle is considered
 	/*else if { //when wrist is flexed out
 	
 	double phi = atan(zOffset / distanceToEndEffector) * (180/pi); // Angle between height and distancetoEndEffector
@@ -163,18 +164,16 @@ void RobotArmControl::solveIK(double x_coordinate, double y_coordinate, double z
 		
 	}*/
 	else {
-		// Prelimnary Angles
+	// Prelimnary Angles
 	double phi = atan(zOffset / distanceToEndEffector) * (180/pi); // Angle between height and distancetoEndEffector
 	double theta = acos((sq(L1) + (sq(R)) - sq(L2))/(2*R*L1)) * (180/pi); // law of cosine to find angle between length to End Effector and ARM link 1
 	double beta =  acos((sq(L2) + (sq(L1)) - sq(R))/(2*L1*L2)); 
 	
 	// Angles for servo motors 
 	double shoulderAngle = theta - phi; //angle for first part of the arm 
-	//double wristAngle = (pi - beta)* (180/pi); //angle for second part of the arm 
 	double wristAngle = beta * 180/pi;
 		moveToAngle(baseAngle,shoulderAngle,wristAngle,gripAngle); 
 	} 
-	//double wristAngle = beta * 180/pi; 
 	
 	
 }
@@ -192,5 +191,4 @@ void RobotArmControl::calibrate()
 	// elbowServo.write(map(elbowFeedback, 0, 1023, 0, 180));
     wristServo.write(map(wristFeedback, 0, 1023, 0, 180));
 	gripperServo.write(map(gripperFeedback, 0, 1023, 0, 180));*/
-	
 }
