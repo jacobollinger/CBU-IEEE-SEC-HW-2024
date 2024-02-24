@@ -185,16 +185,16 @@ def save_mAP(OUT_DIR, map_05, map):
     ax.legend()
     figure.savefig(f"{OUT_DIR}/map.png")
     
-def save_mAP_per_class(OUT_DIR, map_per_class_list):
+def save_mAP_per_class(OUT_DIR, map_per_class_dict):
     """
     Saves the mAP@0.5:0.95 per class per epoch.
     :param OUT_DIR: Path to save the graphs.
-    :param map_per_class_list: List containing mAP values at 0.5 IoU per class.
+    :param map_per_class_dict: Dictionary containing mAP values at 0.5:0.95 IoU per class.
     """
     figure = plt.figure(figsize=(10, 7), num=1, clear=True)
     ax = figure.add_subplot()
     for i in range(len(CLASSES)):
-        ax.plot(map_per_class_list[i::len(CLASSES)], color=tuple(c/255 for c in COLORS[i]), linestyle="-", label=CLASSES[i])
+        ax.plot(map_per_class_dict[CLASSES[i]], color=tuple(c/255 for c in COLORS[i]), linestyle="-", label=CLASSES[i])
     ax.set_xlabel("Epochs")
     ax.set_ylabel("mAP")
     ax.legend()
