@@ -137,7 +137,7 @@ if __name__ == "__main__":
     train_loss_list = []
     map_50_list = []
     map_list = []
-    map_per_class_list = []
+    map_per_class_dict = {cls: [] for cls in CLASSES}
 
     # Mame to save the trained model with.
     MODEL_NAME = "model"
@@ -166,7 +166,7 @@ if __name__ == "__main__":
         print(f"Epoch #{epoch+1} mAP@0.50:0.95: {metric_summary['map']}")
         print(f"Epoch #{epoch+1} mAP@0.50: {metric_summary['map_50']}")
         for i in range(NUM_CLASSES - 1):
-            print(f"Epoch #{epoch+1} mAP@0.50:0.95 for class {CLASSES[metric_summary['classes'][i]]}: {metric_summary['map_per_class'][i].item()}")
+            print(f"Epoch #{epoch+1} mAP@0.50:0.95 for class {CLASSES[metric_summary['classes'][i]]:<30}: {metric_summary['map_per_class'][i].item():.6f}")
         end = time.time()
         print(f"Took {((end - start) / 60):.3f} minutes for epoch {epoch}")
 
@@ -174,7 +174,7 @@ if __name__ == "__main__":
         map_50_list.append(metric_summary["map_50"])
         map_list.append(metric_summary["map"])
         for i in range(NUM_CLASSES - 1):
-            map_per_class_list.append(metric_summary["map_per_class"][i])
+            map_per_class_dict[CLASSES[metric_summary['classes'][i]]].append(metric_summary["map_per_class"][i].item())
 
         # save the best model till now.
         save_best_model(model, float(metric_summary["map"]), epoch, OUT_DIR)
@@ -188,6 +188,6 @@ if __name__ == "__main__":
         save_mAP(OUT_DIR, map_50_list, map_list)
         
         # Save mAP per class plot.
-        save_mAP_per_class(OUT_DIR, map_per_class_list)
+        save_mAP_per_class(OUT_DIR, map_per_class_dict)
 
         scheduler.step()
