@@ -21,9 +21,9 @@ class RobotArmControl
 public:
     RobotArmControl();
     void initialize();
-    int angleToMicroseconds360(double angle);
-    int calcVectorAngle(double x, double y); // Calculate angle of vector
-    void moveToAngle(double x, double y, double z, double g);
+	int angleToMicroseconds360(double angle);
+	int calcVectorAngle(double x, double y); // Calculate angle of vector
+	void moveToAngle(double x, double y, double z, double g);
     void updatePosition(double x, double y, double z, double g);
     void solveIK(double x, double y, double z);
     void calibrate();    
@@ -34,17 +34,17 @@ private:
 	
     Servo baseServo;
     Servo shoulderServo;
-    Servo wristServo;
-    Servo gripperServo;
+	Servo wristServo;
+	Servo gripperServo;
     JointAngles dropOffAnglesLargePkg;
-    JointAngles dropOffAnglesSmallPkg;
-    JointAngles dropOffAnglesBoosters;
+	JointAngles dropOffAnglesSmallPkg;
+	JointAngles dropOffAnglesBoosters;
     JointAngles dropBridgeAngles;
     JointAngles initializedAngles;
     JointAngles currentAngles;
 	
-	const float L0 = 16.66875; // length from ground to second joint (shoulder)
-        const float L1 = 13.0175; // length from 2nd joint to 3rd joint (shoulder to wrist)
+	const float L0 = 10.125; // length from ground to second joint (shoulder)
+    const float L1 = 18.25625; // length from 2nd joint to 3rd joint (shoulder to wrist)
 	const float L2 = 12.7; // length from 3rd joint to gripper tip
 	const float pi = 3.141592653589793;
 	
