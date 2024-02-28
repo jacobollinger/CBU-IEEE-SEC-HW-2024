@@ -126,7 +126,7 @@ void RobotArmControl::solveIK(double x_coordinate, double y_coordinate, double z
 
 	
 	// xy plane as the surface
-	int baseAngle = calcVectorAngle(x_coordinate, y_coordinate);
+	int baseAngle = calcVectorAngle(x_coordinate, y_coordinate) - 20; // -20 to adjsut for servo offset
 	baseAngle = angleToMicroseconds360(baseAngle);
 	
 	// "Creating triangle"
@@ -136,7 +136,11 @@ void RobotArmControl::solveIK(double x_coordinate, double y_coordinate, double z
 	if ( z_coordinate > L0 ){
 	// Prelimnary Angles
 	double phi = calcVectorAngle(distanceToEndEffector, zOffset); // Angle between height and distancetoEndEffector
+	Serial.println(phi); 
+	Serial.println("phi");
 	double theta = acos((sq(L1) + (sq(R)) - sq(L2))/(2*R*L1)) * (180/pi); // law of cosine to find angle between length to End Effector and ARM link 1
+	Serial.println(theta); 
+	Serial.println("theta");
 	double beta =  acos((sq(L2) + (sq(L1)) - sq(R))/(2*L1*L2)); 
 	
 	// Angles for servo motors 
@@ -144,10 +148,10 @@ void RobotArmControl::solveIK(double x_coordinate, double y_coordinate, double z
 	shoulderAngle = 90 + phi + theta; //angle for first part of the arm 
 	}
 	else {
-	shoulderAngle = phi + theta; 
+	shoulderAngle = phi + theta + 90; 
 	}
 	//double wristAngle = (pi - beta)* (180/pi); //angle for second part of the arm
-	double wristAngle = beta * 180/pi;
+	double wristAngle = beta * 180/pi - 65; // 65 to adjust for servo offset and be in line with the grippers
 	
 	moveToAngle(baseAngle,shoulderAngle,wristAngle,gripAngle); 
 	
