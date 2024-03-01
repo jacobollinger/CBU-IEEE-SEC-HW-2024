@@ -3,6 +3,9 @@ mega.py@git+https://github.com/pgp/mega.py.git
 cvat-sdk
 pandas
 
+# Communication
+pyserial
+
 # PyTorch
 torch
 torchvision
