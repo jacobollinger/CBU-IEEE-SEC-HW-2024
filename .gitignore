@@ -5,6 +5,9 @@
 # Ignore .DS_Store files from macOS
 **/.DS_Store
 
+# Ignore .venv folder
+.venv/**
+
 # Ignore build directories
 **/build
 
