@@ -2,7 +2,7 @@
 # import time
 
 # from gpio import GPIO
-from spi_master import SPI
+import serial
 
 def __send_command(command, *args):
     """Sends a command to the Arduino via SPI
@@ -14,9 +14,9 @@ def __send_command(command, *args):
 
     if args:
         command = f"{command} {" ".join([str(i) for i in args])}"
-    with SPI() as spi:
-        spi.writeASCII(command)
-
+    # with SPI() as spi:
+        # spi.writeASCII(command)
+    serial.send_data(command)
 
 class Wheels:
     @staticmethod

@@ -1,7 +1,10 @@
 #include "./include/Defines.hpp"
 #include "./include/FunctionMap.hpp"
 #include "./include/Logger.hpp"
-#include "./include/SPIReceiver.hpp"
+#include "./include/RobotArmControl.hpp"
+#include "./include/Wheels.hpp"
+
+RobotArmControl robotArmControl = RobotArmControl();
 
 void setup()
 {
@@ -9,42 +12,23 @@ void setup()
 
     Logger::log("Setting up FunctionMap");
     FunctionMap::init();
+    FunctionMap::addFunctions(Wheels::getFunctions(), Wheels::getFunctionCount());
     // TODO: Add functions from other modules
-    
-    Logger::log("Starting SPI Slave");
-    SPIReceiver::init();
-    Logger::log("Initialized.\tEOT: ", false);
-    Logger::log(SPI_EOT);
-    Logger::log("Buffer size: ", false);
-    Logger::log(SPI_BUFFER_SIZE);
+
+    Logger::log("Initializing robot arm control");
+    robotArmControl.initialize();
+
 }
 
 void loop()
 {
-    if (SPIReceiver::messageEndFlag)
+    if(Serial.available())
     {
-        logBuffer();
+        String buffer = Serial.readString();
+        String command = buffer.substring(0, buffer.indexOf(' '));
+        String args = buffer.substring(buffer.indexOf(' ') + 1);
 
-        String buffer = SPIReceiver::getBufferAsASCII();
-        
         // TODO: Execute command from buffer
-
-        SPIReceiver::clearBuffer();
+        FunctionMap::callFunction(command.c_str(), args.c_str();
     }
-}
-
-void logBuffer()
-{
-    Logger::log("Message received");
-    Logger::log("Buffer size: ", false);
-    Logger::log(SPIReceiver::bufferPosition);
-    Logger::log("Buffer: ", false);
-    SPIReceiver::printBuffer();
-    Logger::log("Int: ", false);
-    SPIReceiver::printBufferAsInteger();
-    Logger::log("Hex: ", false);
-    SPIReceiver::printBufferAsHexadecimal();
-    Logger::log("UTF-8: ", false);
-    SPIReceiver::printBufferAsASCII();
-    Logger::log();
 }
