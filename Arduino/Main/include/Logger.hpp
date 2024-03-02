@@ -22,6 +22,8 @@ public:
     static void log(bool message, bool newLine = true);
 
 private:
+    static char lastChar;
+
     static void logLog(String message, bool newLine);
 };
 

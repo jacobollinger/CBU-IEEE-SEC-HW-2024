@@ -1,10 +1,12 @@
 #include "../include/Logger.hpp"
 
+char Logger::lastChar = '\0';
+
 void Logger::init()
 {
 #if DEBUG
     Serial.begin(BAUDRATE);
-    Serial.println("Starting SPI Slave");
+    lastChar = '\n';
 #endif
 }
 
@@ -68,11 +70,16 @@ void Logger::logLog(String message, bool newLine)
 #if DEBUG
     if (newLine)
     {
+        Serial.print("LOG: ");
         Serial.println(message);
     }
     else
     {
+        if (lastChar == '\n')
+            Serial.print("LOG: ");
         Serial.print(message);
     }
+
+    lastChar = message[message.length() - 1];
 #endif
 }
