@@ -40,10 +40,10 @@ private:
     Servo baseServo;     // FT6325M-360
 
     // Predefined Angles *Determine these
-    double gripLargePackage = 46;
-    double gripSmallPackage = 35;
-    double gripBooster = 18;
-    double gripRelease = 88;
+    const double gripLargePackage = 46;
+    const double gripSmallPackage = 35;
+    const double gripBooster = 18;
+    const double gripRelease = 88;
 
     // Store specific angles in arrays
     // double dropBridgeAngles[4] = {90, 90, 90, 90};			  // set angles for droppping off bridge *update

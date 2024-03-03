@@ -1,5 +1,5 @@
 #include <Arduino.h>
-#include "../include/WheelEncoder.h"
+#include "../include/WheelEncoder.hpp"
 
 WheelEncoder::WheelEncoder(int encoderA, int encoderB, bool flip=false)
 {
@@ -15,7 +15,7 @@ WheelEncoder::WheelEncoder(int encoderA, int encoderB, bool flip=false)
 }
 // To record number pulses
 // May need to readjust due to opposite spinning motors
-void WheelEncoder::read()
+void WheelEncoder::update()
 {
     volatile long int encB_data = digitalRead(encB);
     if (encB_data != flip)
@@ -26,9 +26,8 @@ void WheelEncoder::read()
     {
         pos--;
     }
-}
-
-float WheelEncoder::speedInRPM()
+};
+float WheelEncoder::speedInRPM(int pos)
 {
     int t_1 = millis();
     int time_elapsed = t_1 - prevTime;
@@ -39,17 +38,15 @@ float WheelEncoder::speedInRPM()
     prevPos = pos;
     return actualSpeed;
 }
-
 volatile long int WheelEncoder::getPosition()
 {
     return pos;
-}
+};
 
 volatile long int WheelEncoder::getPrevPosition()
 {
     return prevPos;
-}
-
+};
 void WheelEncoder::clear()
 {
     pos = 0;
