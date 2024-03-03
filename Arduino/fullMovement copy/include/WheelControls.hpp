@@ -13,8 +13,8 @@ public:
     static void init();
     static int *getEncoderValues();
     static void clearEncoders();
-    static void moveForward(float distance, int targetSpeed);
-    static void moveBackward(float distance, int targetSpeed);
+    static void moveForwardEncoders(float distance, int targetSpeed);
+    static void moveBackwardEncoders(float distance, int targetSpeed);
     static void rotateClockwise(int degrees, int targetSpeed);
     static void rotateCounterClockwise(int degrees, int targetSpeed);
 

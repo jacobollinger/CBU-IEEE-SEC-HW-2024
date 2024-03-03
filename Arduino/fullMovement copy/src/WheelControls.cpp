@@ -7,8 +7,8 @@ void WheelControls::init()
     motorDriver.calibrateCurrentOffsets();
     motorDriver.enableDrivers();
 
-    leftEncoder = WheelEncoder(WHEELS_M1_ENCA, WHEELS_M1_ENCB);
-    rightEncoder = WheelEncoder(WHEELS_M2_ENCA, WHEELS_M2_ENCB);
+    leftEncoder = WheelEncoder(WHEELS_M1_ENCA, WHEELS_M1_ENCB, false);
+    rightEncoder = WheelEncoder(WHEELS_M2_ENCA, WHEELS_M2_ENCB, true);
     leftEncoder.clear();
     rightEncoder.clear();
 }
@@ -33,7 +33,7 @@ void WheelControls::clearEncoders()
     }
 }
 
-void WheelControls::moveForward(float distance, int targetSpeed)
+void WheelControls::moveForwardEncoders(float distance, int targetSpeed)
 {
     clearEncoders();
     float targetRotations = distance / INCH_PER_REV;
@@ -51,9 +51,9 @@ void WheelControls::moveForward(float distance, int targetSpeed)
     motorDriver.setSpeeds(0, 0);
 }
 
-void WheelControls::moveBackward(float distance, int targetSpeed)
+void WheelControls::moveBackwardEncoders(float distance, int targetSpeed)
 {
-    clearEncoders()
+    clearEncoders();
     float targetRotations = distance / INCH_PER_REV;
     int *currentPositions = getEncoderValues();
     int speed = WHEEL_MIN_SPEED;
