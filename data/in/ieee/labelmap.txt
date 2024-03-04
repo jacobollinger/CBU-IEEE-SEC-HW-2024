@@ -1,0 +1,10 @@
+# label:color_rgb:parts:actions
+background:0,0,0::
+small_package:128,0,0::
+large_package:0,128,0::
+fuel_tank:128,128,0::
+thruster:0,0,128::
+small_package_delivery_zone:128,0,128::
+large_package_delivery_zone:0,128,128::
+fuel_tank_pickup_zone:128,128,128::
+crater_line:64,0,0::

@@ -18,5 +18,6 @@ data/in/*
 !data/in/ieee
 data/in/ieee/*
 !data/in/ieee/data_split.json
+!data/in/ieee/labelmap.txt
 
 **/__pycache__
