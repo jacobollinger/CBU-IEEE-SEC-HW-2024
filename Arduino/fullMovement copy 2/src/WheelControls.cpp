@@ -9,6 +9,7 @@ WheelControls::WheelControls() : motorDriver(DualG2HighPowerMotorShield24v14(WHE
     //! This makes the arduino freeze
     // motorDriver.calibrateCurrentOffsets();
     motorDriver.enableDrivers();
+    ultrasonics = Ultrasonics();
     leftEncoder.clear();
     rightEncoder.clear();
 }
@@ -46,35 +47,52 @@ void WheelControls::updateRightEncoder()
 void WheelControls::moveForwardEncoders(float distance, int targetSpeed)
 {
     clearEncoders();
-    float targetRotations = distance / INCH_PER_REV;
+    float targetRotations = distance / (INCH_PER_REV);
     int *currentPositions = getEncoderPositions();
-    int speed = WHEEL_MIN_SPEED;
-    targetSpeed = min(targetSpeed, WHEEL_MAX_SPEED);
+    int speed = 400;
+    // targetSpeed = min(targetSpeed, WHEEL_MAX_SPEED);
 
-    while (currentPositions[0] < targetRotations && currentPositions[1] < targetRotations)
+    while (currentPositions[0] < targetRotations)
     {
+        Serial.print(currentPositions[0]);
+        Serial.print(" ");
+        Serial.print(targetRotations);
+        bool temp = currentPositions[0] < targetRotations;
+        Serial.println(temp);
+
         motorDriver.setSpeeds(speed, speed);
         currentPositions = getEncoderPositions();
 
-        speed = min(speed + 25, targetSpeed);
+        // speed = min(speed + 25, targetSpeed);
     }
+    Serial.print(currentPositions[0]);
+    Serial.print(" ");
+    Serial.print(targetRotations);
+    bool temp = currentPositions[0] < targetRotations;
+    Serial.println(temp);
     motorDriver.setSpeeds(0, 0);
 }
 
 void WheelControls::moveBackwardEncoders(float distance, int targetSpeed)
 {
     clearEncoders();
-    float targetRotations = distance / INCH_PER_REV;
+    float targetRotations = distance / (INCH_PER_REV);
     int *currentPositions = getEncoderPositions();
-    int speed = WHEEL_MIN_SPEED;
-    targetSpeed = min(targetSpeed, WHEEL_MAX_SPEED);
+    int speed = 400;
+    // targetSpeed = min(targetSpeed, WHEEL_MAX_SPEED);
 
-    while (currentPositions[0] > -targetRotations && currentPositions[1] > -targetRotations)
+    while (currentPositions[0] < targetRotations)
     {
-        motorDriver.setSpeeds(-speed, -speed);
+        Serial.print(currentPositions[1]);
+        Serial.print(" ");
+        Serial.println(targetRotations);
+        
+        motorDriver.setM1Speed(-400);
+        motorDriver.setM2Speed(-400);
         currentPositions = getEncoderPositions();
+        delay(100);
 
-        speed = min(speed + 25, targetSpeed);
+        // speed = min(speed + 25, targetSpeed);
     }
     motorDriver.setSpeeds(0, 0);
 }
@@ -84,7 +102,7 @@ void WheelControls::rotateClockwise(float degrees, int targetSpeed)
     clearEncoders();
     float targetRotations = degrees * PULSE_PER_DEG;
     int *currentPositions = getEncoderPositions();
-    int speed = WHEEL_MIN_SPEED;
+    int speed = 200;
     targetSpeed = min(targetSpeed, WHEEL_MAX_SPEED);
 
     while (currentPositions[0] < targetRotations && currentPositions[1] > -targetRotations)
@@ -92,7 +110,7 @@ void WheelControls::rotateClockwise(float degrees, int targetSpeed)
         motorDriver.setSpeeds(speed, -speed);
         currentPositions = getEncoderPositions();
 
-        speed = min(speed + 50, targetSpeed);
+        // speed = min(speed + 50, targetSpeed);
     }
     motorDriver.setSpeeds(0, 0);
 }
@@ -102,15 +120,20 @@ void WheelControls::rotateCounterClockwise(float degrees, int targetSpeed)
     clearEncoders();
     float targetRotations = degrees * PULSE_PER_DEG;
     int *currentPositions = getEncoderPositions();
-    int speed = WHEEL_MIN_SPEED;
+    int speed = 200;
     targetSpeed = min(targetSpeed, WHEEL_MAX_SPEED);
 
-    while (currentPositions[0] > -targetRotations && currentPositions[1] < targetRotations)
+    while (currentPositions[1] < targetRotations)
     {
-        motorDriver.setSpeeds(-speed, speed);
-        currentPositions = getEncoderPositions();
+        Serial.print(currentPositions[1]);
+        Serial.print(" ");
+        Serial.println(targetRotations);
 
-        speed = min(speed + 50, targetSpeed);
+        motorDriver.setSpeeds(speed, -speed);
+        currentPositions = getEncoderPositions();
+        delay(100);
+
+        // speed = min(speed + 50, targetSpeed);
     }
     motorDriver.setSpeeds(0, 0);
 }
@@ -118,18 +141,19 @@ void WheelControls::rotateCounterClockwise(float degrees, int targetSpeed)
 void WheelControls::moveUltrasonicsForward(float targetDistance, int speed)
 {
     float distanceFront = ultrasonics.getFrontDistance();
-    while (distanceFront > targetDistance + ULTRASONIC_THRESHOLD || distanceFront < targetDistance - ULTRASONIC_THRESHOLD)
+    while (distanceFront > targetDistance) // + ULTRASONIC_THRESHOLD || distanceFront < targetDistance - ULTRASONIC_THRESHOLD)
     {
         distanceFront = ultrasonics.getFrontDistance();
-        if (distanceFront > targetDistance)
-        {
-            motorDriver.setSpeeds(speed, speed);
-        }
-        else
-        {
-            motorDriver.setSpeeds(-speed, -speed);
-        }
-        delay(50);
+        Serial.println(distanceFront);
+        // if (distanceFront > targetDistance)
+        // {
+        motorDriver.setSpeeds(speed, speed);
+        // }
+        // else
+        // {
+        //     motorDriver.setSpeeds(-speed, -speed);
+        // }
+        delay(100);
     }
     motorDriver.setSpeeds(0, 0);
 }

@@ -1,4 +1,5 @@
 #include <Arduino.h>
+#include <NewPing.h>
 
 #include "./include/WheelControls.hpp"
 #include "./include/WheelEncoder.hpp"
@@ -34,14 +35,20 @@ WheelControls wheelControls;
 
 void setup()
 {
-    Serial.begin(4800);
+    Serial.begin(9600);
     Serial.println("Starting...");
 
-    // wheelControls = WheelControls();
+    wheelControls = WheelControls();
 
     // Attach interrupts == Once a high ENCA is read pulse counting begins
-    // attachInterrupt(digitalPinToInterrupt(WHEELS_M1_ENCA), [](){ wheelControls.updateLeftEncoder(); }, RISING);
-    // attachInterrupt(digitalPinToInterrupt(WHEELS_M2_ENCA), [](){ wheelControls.updateRightEncoder(); }, RISING);
+    attachInterrupt(
+        digitalPinToInterrupt(WHEELS_M1_ENCA), []()
+        { wheelControls.updateLeftEncoder(); },
+        RISING);
+    attachInterrupt(
+        digitalPinToInterrupt(WHEELS_M2_ENCA), []()
+        { wheelControls.updateRightEncoder(); },
+        RISING);
 }
 
 void loop()
@@ -64,28 +71,32 @@ void loop()
 
     // ATOMIC_BLOCK(ATOMIC_RESTORESTATE)
     // {
-        // pos[0] = encoder1.getPosition();
-        // pos[1] = encoder2.getPosition();
+    // pos[0] = encoder1.getPosition();
+    // pos[1] = encoder2.getPosition();
     // }
     // delay(1);
 
     // lineFollowerFoward(32.0,75,100,100); // distance, fowardspeed, rightturn speed, leftturn speed
-    /*wheelControls.moveForwardEncoders(32.0, 70);
-    delay(100);
+    // wheelControls.moveForwardEncoders(32.0, 70);
+    // delay(100);
 
-    wheelControls.rotateClockwise(192, 100); // 180 degrees
-    delay(100);
+    // wheelControls.rotateClockwise(192, 100); // 180 degrees
+    // delay(100);
 
-    wheelControls.moveBackwardEncoders(25.0, 35);
-    delay(100);
+    // Serial.println("Moving backwards...");
+    // wheelControls.moveBackwardEncoders(25.0, 35);
+    // delay(100);
 
-    //! Breaks here
-    wheelControls.rotateCounterClockwise(90, 100);
-    delay(100);
+    // Serial.println("Rotating counterclockwise...");
+    // //! Breaks here
+    // wheelControls.rotateCounterClockwise(90, 100);
+    // delay(100);
 
+    Serial.println("Moving ultrasonics forward...");
     wheelControls.moveUltrasonicsForward(3, 150);
     delay(100);
-
+    /*
+    Serial.println("Rotating clockwise...");
     wheelControls.rotateCounterClockwise(90, 100);
     delay(100);
 
