@@ -37,11 +37,11 @@ void setup()
     Serial.begin(4800);
     Serial.println("Starting...");
 
-    wheelControls = WheelControls();
+    // wheelControls = WheelControls();
 
     // Attach interrupts == Once a high ENCA is read pulse counting begins
-    attachInterrupt(digitalPinToInterrupt(WHEELS_M1_ENCA), [](){ wheelControls.updateLeftEncoder(); }, RISING);
-    attachInterrupt(digitalPinToInterrupt(WHEELS_M2_ENCA), [](){ wheelControls.updateRightEncoder(); }, RISING);
+    // attachInterrupt(digitalPinToInterrupt(WHEELS_M1_ENCA), [](){ wheelControls.updateLeftEncoder(); }, RISING);
+    // attachInterrupt(digitalPinToInterrupt(WHEELS_M2_ENCA), [](){ wheelControls.updateRightEncoder(); }, RISING);
 }
 
 void loop()
@@ -70,7 +70,7 @@ void loop()
     // delay(1);
 
     // lineFollowerFoward(32.0,75,100,100); // distance, fowardspeed, rightturn speed, leftturn speed
-    wheelControls.moveForwardEncoders(32.0, 70);
+    /*wheelControls.moveForwardEncoders(32.0, 70);
     delay(100);
 
     wheelControls.rotateClockwise(192, 100); // 180 degrees
@@ -83,13 +83,13 @@ void loop()
     wheelControls.rotateCounterClockwise(90, 100);
     delay(100);
 
-    wheelControls.moveUltrasonics(3, 150);
+    wheelControls.moveUltrasonicsForward(3, 150);
     delay(100);
 
     wheelControls.rotateCounterClockwise(90, 100);
     delay(100);
 
-    wheelControls.moveUltrasonics(4, 150);
+    wheelControls.moveUltrasonicsForward(4, 150);
     delay(100);
 
     wheelControls.rotateClockwise(45, 100);
@@ -101,7 +101,7 @@ void loop()
     wheelControls.rotateClockwise(45, 100);
     delay(100);
 
-    wheelControls.moveUltrasonics(8, 150);
+    wheelControls.moveUltrasonicsForward(8, 150);
     delay(100);
 
     wheelControls.rotateCounterClockwise(90, 100);
@@ -110,28 +110,29 @@ void loop()
     wheelControls.lineFollowConstant(10.0, 100, 75, 75);
     delay(100);
 
-    wheelControls.moveUltrasonics(4, 150);
+    wheelControls.moveUltrasonicsForward(4, 150);
     delay(100);
 
     wheelControls.rotateClockwise(90, 100);
     delay(100);
 
-    wheelControls.moveUltrasonics(3, 150);
+    wheelControls.moveUltrasonicsForward(3, 150);
     delay(100);
 
-    wheelControls.moveUltrasonics(10, 150);
-    delay(100);
-
-    wheelControls.rotateCounterClockwise(90, 100);
-    delay(100);
-
-    wheelControls.moveUltrasonics(6, 150);
+    wheelControls.moveUltrasonicsForward(10, 150);
     delay(100);
 
     wheelControls.rotateCounterClockwise(90, 100);
     delay(100);
 
-    wheelControls.lineFollow(30.0, 150, 150, 50);
+    wheelControls.moveUltrasonicsForward(6, 150);
+    delay(100);
+
+    wheelControls.rotateCounterClockwise(90, 100);
+    delay(100);
+
+    // wheelControls.lineFollow(30.0, 150, 150, 50);
+    wheelControls.lineFollowConstant(30.0, 150, 150, 50);
     delay(5000);
 
     wheelControls.rotateClockwise(190, 100);
@@ -142,6 +143,7 @@ void loop()
 
     wheelControls.moveBackwardEncoders(4.0, 20);
     delay(10000);
+    */
 
     // dropbridge()
 
