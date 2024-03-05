@@ -3,6 +3,7 @@
 
 #include <Arduino.h>
 #include <Servo.h>
+// #include <ServoEasing.hpp>
 #include <math.h>
 
 #include "Defines.hpp"
@@ -13,10 +14,10 @@ class RobotArmControl
 public:
     struct Angles
     {
-        double base;
-        double shoulder;
-        double wrist;
-        double gripper;
+        int base;
+        float shoulder;
+        float wrist;
+        float gripper;
     };
 
     RobotArmControl();
@@ -24,7 +25,7 @@ public:
     int angleToMicroseconds360(double angle);
     int calcVectorAngle(double x, double y); // Calculate angle of vector
     void moveToAngle(Angles angles);
-    void moveToAngle(double x, double y, double z, double g);
+    void moveToAngle(int x, float y, float z, float g);
     // void updatePosition(double x, double y, double z, double g);
     void updatePosition(String objective);
     void solveIK(double x, double y, double z);
@@ -34,10 +35,10 @@ public:
     static FunctionMap::Function *getFunctions();
 
 private:
-    Servo wristServo;    // DMA-MG90-A 270
+    // ServoEasing wristServo;    // DMA-MG90-A 270
+    // ServoEasing shoulderServo; // FS5106B-FB 180 W/FEEDBACK
+    // ServoEasing baseServo;     // FT6325M-360
     Servo gripperServo;  // DMA-MG90-A 270
-    Servo shoulderServo; // FS5106B-FB 180 W/FEEDBACK
-    Servo baseServo;     // FT6325M-360
 
     // Predefined Angles *Determine these
     const double gripLargePackage = 46;
