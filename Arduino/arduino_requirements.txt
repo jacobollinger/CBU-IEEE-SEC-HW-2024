@@ -1,2 +1,4 @@
 DualG2HighPowerMotorShield
+NewPing
 Servo
+ServoEasing
