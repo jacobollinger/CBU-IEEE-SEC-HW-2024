@@ -21,9 +21,9 @@ public:
     void rotateClockwise(float degree, int target_speed);
     void rotateCounterClockwise(float degree, int target_speed);
 
-    void moveUltrasonics(float targetDistance, int speed);
+    void moveUltrasonicsForward(float targetDistance, int speed);
 
-    void lineFollow(float targetDistance, int targetSpeed, int right, int left);
+    // void lineFollow(float targetDistance, int targetSpeed, int right, int left);
     void lineFollowConstant(float targetDistance, int targetSpeed, int right, int left);
 
     void stopIfFault();
