@@ -17,7 +17,7 @@
 #define WHEELS_M2_CS A14
 
 #define WHEEL_MIN_SPEED 0
-#define WHEEL_MAX_SPEED 255
+#define WHEEL_MAX_SPEED 400
 
 #define WHEELS_M1_ENCA 20
 #define WHEELS_M1_ENCB 21
