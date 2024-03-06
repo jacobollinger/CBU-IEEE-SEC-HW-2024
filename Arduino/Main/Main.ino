@@ -2,7 +2,6 @@
 #include "./include/FunctionMap.hpp"
 #include "./include/Logger.hpp"
 #include "./include/RobotArmControl.hpp"
-#include "./include/Wheels.hpp"
 
 RobotArmControl robotArmControl = RobotArmControl();
 
@@ -12,7 +11,7 @@ void setup()
 
     Logger::log("Setting up FunctionMap");
     FunctionMap::init();
-    FunctionMap::addFunctions(Wheels::getFunctions(), Wheels::getFunctionCount());
+    // FunctionMap::addFunctions(Class::getFunctions(), Class::getFunctionCount());
     // TODO: Add functions from other modules
 
     Logger::log("Initializing robot arm control");
