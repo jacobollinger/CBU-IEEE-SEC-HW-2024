@@ -1,15 +1,20 @@
+import cv2
+import numpy as np
 import torch
 
-from Python.modules.hardware.actuators import Wheels, Arm
-from Python.modules.hardware.sensors import Camera, Phototransistor, Ultrasonic
-from Python.modules import Timer
-from Python.custom_object_detection_ieee.src.model import create_model
-from Python.custom_object_detection_ieee.src.config import NUM_CLASSES, DEVICE, CLASSES
+from modules.hardware.actuators import Wheels, Arm
+from modules.hardware.sensors import Camera, Phototransistor, Ultrasonic
+from modules.hardware.serial import SerialInterface
+from modules.timer import Timer
+from custom_object_detection_ieee.src.model import create_model
+from custom_object_detection_ieee.src.config import NUM_CLASSES, DEVICE, CLASSES
 
-armCamera = Camera(0)
-fixedCamera = Camera(1)
+from time import sleep
+
+fixedCamera = Camera()
 model = create_model(num_classes=NUM_CLASSES, size=640)
 timer = Timer()
+serial = SerialInterface("/dev/tty.usbserial-14410", 9600)
 
 
 def main():
@@ -20,43 +25,36 @@ def main():
     )
     model.to(DEVICE).eval()
 
+    serial.start()
+
+    sleep(2)
+
     # Wait for the start signal
+    print("Waiting for start signal")
     while not detect_start_signal():
         pass
 
+    print("GO!")
     timer.start()
 
     # Collect the large package
-    Wheels.rotate(-90)
     collect_large_packages()
 
     # Collect the small package
-    Wheels.rotate(-90)
     collect_small_packages()
 
     # Traverse ramps
-    Wheels.rotate(180)
     traverse_ramps()
 
     # Deposit packages
-    while Ultrasonic.get_distance(FRONT) > 10:
-        Wheels.move_forward(10)
-    Wheels.rotate(90)
-    while Ultrasonic.get_distance(FRONT) > 10:
-        Wheels.move_forward(10)
-    Wheels.rotate(90)
+    go_to_deposit_location()
     deposit_packages()
 
     # Collect Fuel Tanks
-    Wheels.move_backwards(100)
-    Wheels.rotate(-90)
-    while Ultrasonic.get_distance(FRONT) > 10:
-        Wheels.move_forward(10)
-    Wheels.rotate(90)
+    go_to_fuel_tank_location()
     collect_fuel_tanks()
 
     # Cross the crater
-    Wheels.rotate(180)
     cross_crater()
 
     # Assemble the thrusters
@@ -179,7 +177,7 @@ def detect_start_signal():
     Returns:
         bool: whether or not the start signal was detected
     """
-    return Phototransistor.detect_start_signal()
+    return serial.read_line() == "START"
 
 
 def scan_for_objects():
@@ -207,8 +205,7 @@ def scan_for_objects():
 
 
 def collect_large_packages():
-    """Collects the large packages from the environment
-    """
+    """Collects the large packages from the environment"""
     object_positions = scan_for_objects()
     for object, position in object_positions[0].items():
         if object == "large_package":
@@ -222,8 +219,7 @@ def collect_large_packages():
 
 
 def collect_small_packages():
-    """Collects the small packages from the environment
-    """
+    """Collects the small packages from the environment"""
     object_positions = scan_for_objects()
     for object, position in object_positions[0].items():
         if object == "small_package":
@@ -248,8 +244,7 @@ def deposit_packages():
 
 
 def collect_fuel_tanks():
-    """Collects the fuel tanks from the environment
-    """
+    """Collects the fuel tanks from the environment"""
     object_positions = scan_for_objects()
     for object, position in object_positions[0].items():
         if object == "fuel_tank":
@@ -275,8 +270,7 @@ def display_team_promotion():
 
 
 def assemble_thrusters():
-    """Assembles the thrusters
-    """
+    """Assembles the thrusters"""
     object_positions = scan_for_objects()
     for object, position in object_positions[0].items():
         if object == "thruster":
