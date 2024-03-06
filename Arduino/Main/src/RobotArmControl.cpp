@@ -1,5 +1,13 @@
 #include "../include/RobotArmControl.hpp"
 
+#include <ServoEasing.hpp>
+
+#define EASE_SPEED 60
+
+ServoEasing wristServo;
+ServoEasing shoulderServo;
+ServoEasing baseServo;
+
 RobotArmControl::RobotArmControl()
 {
     // Intialize servos
@@ -14,6 +22,11 @@ void RobotArmControl::initialize()
     wristServo.attach(ARM_WRIST_PIN, ARM_WRIST_MIN, ARM_WRIST_MAX);
     shoulderServo.attach(ARM_SHOULDER_PIN, ARM_SHOULDER_MIN, ARM_SHOULDER_MAX);
     baseServo.attach(ARM_BASE_PIN, ARM_BASE_MIN, ARM_BASE_MAX);
+
+    // Set easing types
+    wristServo.setEasingType(EASE_SINE_IN_OUT);
+    shoulderServo.setEasingType(EASE_SINE_IN_OUT);
+    baseServo.setEasingType(EASE_SINE_IN_OUT);
 }
 
 // Servo.h write degrees is arbitary to the 360; warning: writeMicroseconds to DMA-MG90-A 270 = continuous motor = irreversible
@@ -63,22 +76,22 @@ void RobotArmControl::updatePosition(String objective)
     }
 }
 
-void RobotArmControl::moveToAngle(double b, double a1, double a2, double g)
+void RobotArmControl::moveToAngle(int baseAngle, float shoulderAngle, float wristAngle, float gripperAngle)
 {
-    moveToAngle(Angles{b, a1, a2, g});
+    moveToAngle(Angles{baseAngle, shoulderAngle, wristAngle, gripperAngle});
 }
 
 void RobotArmControl::moveToAngle(Angles angles)
 {
     // TODO: if coming down move base, shoulder, wrist
     // TODO: if moving up: wrist, shoulder, base
-    shoulderServo.write(angles.shoulder);
+    wristServo.easeTo(angles.wrist, EASE_SPEED); // Warning: .writeMicroseconds converts the motor into continuous
     delay(1000);
-    wristServo.write(angles.wrist); // Warning: .writeMicroseconds converts the motor into continuous
+    shoulderServo.easeTo(angles.shoulder, EASE_SPEED);
     delay(1000);
     gripperServo.write(angles.gripper);
     delay(1000);
-    baseServo.writeMicroseconds(angles.base);
+    baseServo.easeTo(angles.base, EASE_SPEED);
     // baseServo.writeMicroseconds(angleToMicroseconds360(angles.base));
     delay(1000);
 }
