@@ -1,10 +1,10 @@
 import cv2
-from gpio import GPIO
+# from gpio import GPIO
 import time
 
 class Camera:
 
-    def __init__(self, camera_id):
+    def __init__(self, camera_id=0):
         """Creates a camera object
 
         Args:
