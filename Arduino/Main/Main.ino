@@ -1,8 +1,10 @@
 #include "./include/Defines.hpp"
 #include "./include/FunctionMap.hpp"
 #include "./include/Logger.hpp"
+#include "./include/Phototransistor.hpp"
 #include "./include/RobotArmControl.hpp"
 
+Phototransistor phototransistor = Phototransistor(PHOTOTRANSISTOR_PIN);
 RobotArmControl robotArmControl = RobotArmControl();
 
 void setup()
