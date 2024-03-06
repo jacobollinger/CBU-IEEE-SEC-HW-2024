@@ -32,7 +32,7 @@ args = vars(parser.parse_args())
 
 # Load the best model and trained weights.
 model = create_model(num_classes=NUM_CLASSES, size=640)
-checkpoint = torch.load(f"{OUT_DIR}/best_model.pth", map_location=DEVICE)
+checkpoint = torch.load(f"{OUT_DIR}/e273_BEST/best_model.pth", map_location=DEVICE)
 model.load_state_dict(checkpoint["model_state_dict"])
 model.to(DEVICE).eval()
 
@@ -148,8 +148,8 @@ while cap.isOpened():
             cv2.imshow("image", frame)
         out.write(frame)
         # Press `q` to exit.
-        if cv2.waitKey(1) & 0xFF == ord("q"):
-            break
+        # if cv2.waitKey(1) & 0xFF == ord("q"):
+        #    break
 
     else:
         break
