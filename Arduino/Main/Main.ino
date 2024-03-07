@@ -1,9 +1,10 @@
 #include "./include/Defines.hpp"
 #include "./include/FunctionMap.hpp"
 #include "./include/Logger.hpp"
+#include "./include/Phototransistor.hpp"
 #include "./include/RobotArmControl.hpp"
-#include "./include/Wheels.hpp"
 
+Phototransistor phototransistor = Phototransistor(PHOTOTRANSISTOR_PIN);
 RobotArmControl robotArmControl = RobotArmControl();
 
 void setup()
@@ -12,7 +13,7 @@ void setup()
 
     Logger::log("Setting up FunctionMap");
     FunctionMap::init();
-    FunctionMap::addFunctions(Wheels::getFunctions(), Wheels::getFunctionCount());
+    // FunctionMap::addFunctions(Class::getFunctions(), Class::getFunctionCount());
     // TODO: Add functions from other modules
 
     Logger::log("Initializing robot arm control");

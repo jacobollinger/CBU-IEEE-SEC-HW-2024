@@ -12,12 +12,17 @@
 CytronMD motor1(PWM_DIR, 6, 7);  // PWM 1 = Pin 6, DIR 1 = Pin 7.
 CytronMD motor2(PWM_DIR, 9, 8); // PWM 2 = Pin 9, DIR 2 = Pin 8.
 // Define line follower sensor pins
-const int leftSensorPin = A0;
-const int rightSensorPin = A1;
+const int leftSensorPin = A5;
+const int rightSensorPin = A6;
+const int backRightSensorPin = A7;
+const int backLeftSensorPin = A8;
+
 
 // Define threshold values for line following
-const int thresholdLeft = 390;   // Adjust this value based on your setup
-const int thresholdRight = 3200;  // Adjust this value based on your setup
+const int thresholdLeft = 470;   // Adjust this value based on your setup
+const int thresholdRight = 470;  // Adjust this value based on your setup
+const int backRightSensorPin = 100;
+const int backLeftSensorPin = 100;
 
 void setup() {
   // Initialize serial communication for debugging
@@ -34,6 +39,8 @@ void loop() {
   // Read sensor values
   int leftSensorValue = analogRead(leftSensorPin);
   int rightSensorValue = analogRead(rightSensorPin);
+  int backRightSensorValue = analogRead(backRightSensorPin);
+  int backLeftSensorValue = analogRead(backLeftSensorPin);
 
   // Debugging information
   Serial.println("Left Sensor: ");
@@ -58,18 +65,18 @@ void loop() {
 }
 
 void moveForward() {
- motor1.setSpeed(-200);   // Motor 1 runs forward at 50% speed.
- motor2.setSpeed(200);  // Motor 2 runs backward at 50% speed.
+ motor1.setSpeed(150);   // Motor 1 runs forward at 50% speed.
+ motor2.setSpeed(150);  // Motor 2 runs backward at 50% speed.
 }
 
 void turnLeft() {
-  motor1.setSpeed(75);   // Motor 1 runs forward at 50% speed.
- motor2.setSpeed(75);  // Motor 2 runs backward at 50% speed.
+  motor1.setSpeed(-100);   // Motor 1 runs forward at 50% speed.
+ motor2.setSpeed(100);  // Motor 2 runs backward at 50% speed.
 }
 
 void turnRight() {
-  motor1.setSpeed(-200);   // Motor 1 runs forward at 50% speed.
- motor2.setSpeed(-200);  // Motor 2 runs backward at 50% speed.
+  motor1.setSpeed(100);   // Motor 1 runs forward at 50% speed.
+ motor2.setSpeed(-100);  // Motor 2 runs backward at 50% speed.
 }
 
 void stopMotors() {

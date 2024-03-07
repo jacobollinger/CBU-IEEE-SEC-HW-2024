@@ -6,9 +6,13 @@
 
 #define LINE_FOLLOW_LEFT A5
 #define LINE_FOLLOW_RIGHT A6
+#define LINE_FOLLOW_BACKRIGHT A7
+#define LINE_FOLLOW_BACKLEFT A8
 
 #define LINE_FOLLOW_LEFT_THRESHOLD 470
 #define LINE_FOLLOW_RIGHT_THRESHOLD 470
+#define LINE_FOLLOW_BACKLEFT_THRESHOLD 100
+#define LINE_FOLLOW_BACKRIGHT_THRESHOLD 100
 
 #define PULSE_PER_DEG 17.5
 
@@ -22,9 +26,13 @@ public:
     void rotateCounterClockwise(float degree, int target_speed);
 
     void moveUltrasonicsForward(float targetDistance, int speed);
+    void moveUltrasonicsBackward(float targetDistance, int speed);
 
     // void lineFollow(float targetDistance, int targetSpeed, int right, int left);
     void lineFollowConstant(float targetDistance, int targetSpeed, int right, int left);
+    void moveBackwardUntilSensors(int threshold, int speed);
+    void moveBackwardUntilSensor1(int threshold, int speed);
+    void moveBackwardUntilSensor2(int threshold, int speed);
 
     void stopIfFault();
 

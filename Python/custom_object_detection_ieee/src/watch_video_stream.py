@@ -32,7 +32,7 @@ import struct
 
 # Start a socket
 client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-client_socket.connect(("localhost", 8485))
+client_socket.connect(("192.168.55.1", 8485))
 
 data = b""
 payload_size = struct.calcsize("L")

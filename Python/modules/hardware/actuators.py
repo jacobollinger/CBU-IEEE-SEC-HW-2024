@@ -13,7 +13,7 @@ def __send_command(command, *args):
     """
 
     if args:
-        command = f"{command} {" ".join([str(i) for i in args])}"
+        command = f"{command} {' '.join([str(i) for i in args])}"
     # with SPI() as spi:
         # spi.writeASCII(command)
     serial.send_data(command)

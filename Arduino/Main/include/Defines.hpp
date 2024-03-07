@@ -53,6 +53,11 @@
 
 #pragma endregion
 
+#pragma region Phototransistor Definitions
+#define PHOTOTRANSISTOR_PIN A13
+// TODO: Add phototransistor threshold
+#define PHOTOTRANSISTOR_THRESHOLD 1000
+
 // #define SPI_EOT 0x04
 // #define SPI_BUFFER_SIZE 1UL << 8
 
