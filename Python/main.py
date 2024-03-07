@@ -17,7 +17,7 @@ STREAM_VIDEO = True
 fixedCamera = Camera()
 model = create_model(num_classes=NUM_CLASSES, size=640)
 timer = Timer()
-serial = SerialInterface("/dev/tty.usbmodem144201", 9600)
+serial = SerialInterface("/dev/ttyACM0", 9600)
 
 if STREAM_VIDEO:
     import pickle
@@ -27,16 +27,15 @@ if STREAM_VIDEO:
     from custom_object_detection_ieee.src.config import COLORS
 
     server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    server_socket.bind(("localhost", 8485))
+    server_socket.bind(("0.0.0.0", 8485))
     server_socket.listen()
 
     print("Waiting for client to connect")
     client_socket, addr = server_socket.accept()
 
-
 def main():
     model.load_state_dict(
-        torch.load("./data/out/ieee/best_model.pth", map_location=DEVICE)[
+        torch.load("./data/out/ieee/e273_BEST/best_model.pth", map_location=DEVICE)[
             "model_state_dict"
         ]
     )
@@ -235,6 +234,11 @@ def scan_for_objects(
 
             boxes = boxes[scores >= threshold].astype(np.int32)
 
+            if STREAM_VIDEO:
+                image_np = images[i].cpu().numpy().transpose(1, 2, 0)
+                image_np = cv2.cvtColor(image_np, cv2.COLOR_RGB2BGR)
+
+
             for j, box in enumerate(boxes):
                 class_name = CLASSES[output["labels"][j].cpu().numpy()]
                 if class_name not in object_types:
@@ -246,13 +250,6 @@ def scan_for_objects(
                     ymin = int((box[1] / images[i].shape[0]) * images[0].shape[0])
                     xmax = int((box[2] / images[i].shape[1]) * images[0].shape[1])
                     ymax = int((box[3] / images[i].shape[0]) * images[0].shape[0])
-                    print("1")
-                    image_np = images[i].cpu().numpy().transpose(1, 2, 0)
-                    print("1")
-                    image_np = cv2.cvtColor(image_np, cv2.COLOR_RGB2BGR)
-                    print("1")
-                    image_np = cv2.resize(image_np, (1920, 1080))
-                    print("1")
                     cv2.rectangle(
                         image_np,
                         (xmin, ymin),
@@ -260,7 +257,6 @@ def scan_for_objects(
                         color[::-1],
                         3,
                     )
-                    print("2")
                     cv2.putText(
                         image_np,
                         class_name,
@@ -272,17 +268,13 @@ def scan_for_objects(
                         lineType=cv2.LINE_AA,
                     )
 
-                    print("2")
-                    data = pickle.dumps(image_np)
-                    print("3")
-                    message_size = struct.pack("L", len(data))
-                    print("3")
-                    client_socket.settimeout(5.0)
-                    try:
-                        client_socket.sendall(message_size + data)
-                    except socket.timeout:
-                        print("Timeout")
-                    print("3")
+            if STREAM_VIDEO:
+                # image_np = cv2.resize(image_np, (1920, 1080))
+                # downscale the image 8x for faster transmission
+                image_np = cv2.resize(image_np, (240, 135))
+                data = pickle.dumps(image_np)
+                message_size = struct.pack("L", len(data))
+                client_socket.sendall(message_size + data)
 
     return fixed_ret
 
