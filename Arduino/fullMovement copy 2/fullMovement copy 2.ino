@@ -1,8 +1,20 @@
 #include <Arduino.h>
 #include <NewPing.h>
+#include <Servo.h>
 
 #include "./include/WheelControls.hpp"
 #include "./include/WheelEncoder.hpp"
+
+
+Servo myservo1; //servo for the small container d4
+Servo myservo2; //servo for the large container d5
+Servo myservo3; //servo for the bridge d13
+
+int pos1 = 90; //servo1 position for setup
+int pos2 = 0; //servo1 to drop container and bridge
+int pos3 = 180; //servo3 position for the bridge
+int pos4 = 50;  //servo2 posiiton for setup
+int pos5 = 150; //servo2 to drop container
 
 // const int trigPinFront = 26; // Ultrasonic sensor trigger pin
 // const int echoPinFront = 27; // Ultrasonic sensor echo pin
@@ -54,6 +66,17 @@ void setup()
         digitalPinToInterrupt(WHEELS_M2_ENCA), []()
         { wheelControls.updateRightEncoder(); },
         RISING);
+
+     myservo1.attach(4);
+     myservo2.attach(5);
+     myservo3.attach(13);
+
+     servoInit(myservo1, pos1); 
+     delay(500);
+     servoInit(myservo3, pos2); 
+     delay(500);
+     servoInit(myservo2, pos4);
+     delay(500);
 }
 
 void loop()
@@ -81,83 +104,101 @@ void loop()
     // pos[1] = encoder2.getPosition();
     // }
     // delay(1);
+ 
+    // delay(10000);
+    // wheelControls.rotateCounterClockwise(15,100);
+    // delay(1000); 
 
-    
-    wheelControls.moveForwardEncoders(32.0, 400);
-    delay(1000);
+    // wheelControls.moveForwardEncoders(2,100);
+    // delay(5000);
 
-    wheelControls.rotateClockwise(180, 100); // 180 degrees
-    delay(1000);
 
-    Serial.println("Moving backwards...");
-    wheelControls.moveBackwardEncoders(25.0, 35);
-    delay(1000);
+    // wheelControls.rotateCounterClockwise(65,100);
+    // delay(1000); 
 
-    Serial.println("Rotating counterclockwise...");
-    //! Breaks here
-    wheelControls.rotateCounterClockwise(80, 100);
-    delay(1000);
+    // wheelControls.moveBackwardEncoders(1,100);
+    // delay(100);
 
-    Serial.println("Moving ultrasonics forward...");
-    wheelControls.moveUltrasonicsForward(3, 150);
-    delay(2000);
+    // wheelControls.moveForwardEncoders(38.0, 400);
+    // delay(1000);
 
-    Serial.println("Rotating clockwise...");
-    wheelControls.rotateCounterClockwise(80, 100);
-    delay(1000);
+    // wheelControls.rotateClockwise(180, 100); // 180 degrees
+    // delay(1000);
 
-    wheelControls.moveUltrasonicsForward(4, 150);
-    delay(1000);
+    // Serial.println("Moving backwards...");
+    // wheelControls.moveBackwardEncoders(25.0, 35);
+    // delay(1000);
 
-    wheelControls.rotateClockwise(45, 100);
-    delay(1000);
+    // Serial.println("Rotating counterclockwise...");
+    // //! Breaks here
+    // wheelControls.rotateCounterClockwise(80, 100);
+    // delay(1000);
 
-    wheelControls.rotateCounterClockwise(90, 100);
-    delay(1000);
+    // Serial.println("Moving ultrasonics forward...");
+    // wheelControls.moveUltrasonicsForward(3, 150);
+    // delay(2000);
 
-    wheelControls.rotateClockwise(45, 100);
-    delay(1000);
+    // Serial.println("Rotating clockwise...");
+    // wheelControls.rotateCounterClockwise(90, 100);
+    // delay(1000);
 
-    Serial.println("UltraBackward...");
-    wheelControls.moveUltrasonicsBackward(8, 150);
-    delay(1000);
+    // wheelControls.moveUltrasonicsForward(5, 150);
+    // delay(1000);
 
-    wheelControls.rotateCounterClockwise(90, 100);
-    delay(1000);
+    // wheelControls.rotateClockwise(90, 100);
+    // delay(1000);
 
-    wheelControls.lineFollowConstant(10.0, 100, 75, 75);
-    delay(1000);
+    // servoUnlock(myservo2, pos5);
+    // delay(100);
+
+    // wheelControls.rotateCounterClockwise(135, 100);
+    // delay(1000);
+
+    // servoUnlock(myservo1, pos2);
+    // delay(500);
+
+    // wheelControls.rotateClockwise(45, 100);
+    // delay(1000);
+
+    // Serial.println("UltraBackward...");
+    // wheelControls.moveUltrasonicsBackward(8, 150);
+    // delay(1000);
+
+    // wheelControls.rotateCounterClockwise(90, 100);
+    // delay(1000);
+
+    // wheelControls.lineFollowConstant(14.0, 100, 75, 75);
+    // delay(1000);
 
     wheelControls.moveUltrasonicsForward(6, 150);
     delay(1000);
 
-    wheelControls.rotateCounterClockwise(90, 100);
+    wheelControls.rotateCounterClockwise(83, 100);
     delay(1000);
 
-    wheelControls.moveForwardEncoders(30.0,400);
-    delay(100); 
+     wheelControls.moveForwardEncoders(32.0,400);
+    delay(5000); 
 
 
     wheelControls.rotateClockwise(180, 100);
     delay(100);
 
-    wheelControls.lineFollowConstant(4.0, 50, 50, 50);
+
+    wheelControls.moveBackwardUntilSensors(50,50);
+    delay(5000);
+
+    servoUnlock(myservo3, pos3);
+    delay(5000);
+
+
+    wheelControls.moveForwardEncoders(3.0, 100);
     delay(100);
 
-    wheelControls.moveBackwardUntilSensor(100,100);
-    delay(10000);
-    
+    wheelControls.rotateClockwise(180, 100);
+    delay(100);
 
-    // dropbridge()
-
-    // wheelControls.moveForwardEncoders(3.0, 20);
-    // delay(10);
-
-    // wheelControls.moveBackwardEncoders(20.0, 25);
-    // delay(100);
-
-    // wheelControls.rotateClockwise(180, 100);
-    // delay(100);
+    wheelControls.moveForwardEncoders(20.0, 400);
+    delay(100);
 
     // wheelControls.moveUltrasonics(1, 100);
     // delay(100);
@@ -176,3 +217,15 @@ void loop()
 // {
 //     encoder2.update();
 // }
+
+void servoInit(Servo servoi, int initial_pos) {
+  servoi.write(initial_pos);
+  delay(100);
+  //servoi.detach();
+}
+void servoUnlock( Servo servo, int pos_move){
+ 
+  servo.write(pos_move);
+  delay(500);
+  servo.detach();
+  }
