@@ -83,14 +83,15 @@ void WheelControls::moveBackwardEncoders(float distance, int targetSpeed)
     int speed = 50;
     // targetSpeed = min(targetSpeed, WHEEL_MAX_SPEED);
 
-    while (currentPositions[0] > -targetRotations)
+    while (currentPositions[1] < targetRotations) // Edit 
     {
         Serial.print(currentPositions[1]);
         Serial.print(" ");
         Serial.println(targetRotations);
         
-        motorDriver.setM1Speed(-200);
-        motorDriver.setM2Speed(-200);
+        motorDriver.setM1Speed(-400); 
+        motorDriver.setM2Speed(-400); // Should 
+        currentPositions = getEncoderPositions();
         delay(100);
         currentPositions = getEncoderPositions();
        
@@ -108,9 +109,9 @@ void WheelControls::rotateClockwise(float degrees, int targetSpeed)
     int speed = 200;
     targetSpeed = min(targetSpeed, WHEEL_MAX_SPEED);
 
-    while (currentPositions[0] < targetRotations)
+    while (currentPositions[0] < targetRotations && currentPositions[1] > -targetRotations) // Edit: Correct 
     {
-        motorDriver.setSpeeds(-speed, speed);
+        motorDriver.setSpeeds(speed, -speed); // Edit: Correct 
         currentPositions = getEncoderPositions();
         Serial.print(currentPositions[0]);
         Serial.print(" ");
@@ -130,13 +131,13 @@ void WheelControls::rotateCounterClockwise(float degrees, int targetSpeed)
     int speed = 200;
     targetSpeed = min(targetSpeed, WHEEL_MAX_SPEED);
 
-    while (currentPositions[0] > -targetRotations)
+    while (currentPositions[1] < targetRotations) // currentPostitions[0] > -targetRotations // Edit: Correct logic but had to change speeds 
     {
         Serial.print(currentPositions[1]);
         Serial.print(" ");
         Serial.println(-targetRotations);
 
-        motorDriver.setSpeeds(speed, -speed);
+        motorDriver.setSpeeds(-speed, speed); // Edit: Switched Speeds 
         currentPositions = getEncoderPositions();
         delay(100);
 
