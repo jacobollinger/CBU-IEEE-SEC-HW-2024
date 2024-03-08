@@ -126,7 +126,7 @@ void loop()
     delay(1000);
 
     Serial.println("Moving backwards...");
-    wheelControls.moveBackwardEncoders(25.0, 35);
+    wheelControls.moveBackwardEncoders(25.0, 300);
     delay(1000);
 
     Serial.println("Rotating counterclockwise...");
