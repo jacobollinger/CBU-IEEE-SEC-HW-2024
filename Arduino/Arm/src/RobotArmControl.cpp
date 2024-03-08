@@ -50,28 +50,28 @@ void RobotArmControl::updatePosition(String objective){
     // calibrate();
     if (objective == "smallPackage"){	
 		gripperServo.write(gripSmallPackage);
-        delay(500);
+        //delay(500);
         moveToAngle(dropOffAnglesSmallPkg.base, dropOffAnglesSmallPkg.shoulder, dropOffAnglesSmallPkg.wrist, dropOffAnglesSmallPkg.gripper);
-        delay(500);
+        //delay(500);
         updatePosition("release");
-		delay(500);
+		///delay(500);
 		updatePosition("initial");
     }
     else if (objective == "largePackage"){  
 		gripperServo.write(gripLargePackage);
-		delay(200);
+		//delay(200);
 		shoulderServo.easeTo(SHOULDER_MID_POSITION, EASE_SPEED);
-        delay(500);
+        //delay(500);
 		wristServo.easeTo(WRIST_MID_POSITION, EASE_SPEED);
-        delay(500);
+        //delay(500);
         moveToAngle(dropOffAnglesLargePkg.base, dropOffAnglesLargePkg.shoulder, dropOffAnglesLargePkg.wrist, dropOffAnglesLargePkg.gripper);
         updatePosition("release");
-		delay(500);
+		//delay(500);
 		updatePosition("initial");
     }
     else if (objective == "initial") {	
 		moveToAngle(initializedAngles.base, initializedAngles.shoulder, initializedAngles.wrist, initializedAngles.gripper);
-        delay(500);
+        //delay(500);
     }
     /*else if (objective == "booster"){
             gripperServo.write(gripBooster);
@@ -81,7 +81,7 @@ void RobotArmControl::updatePosition(String objective){
     else if (objective == "release"){  
 		gripperServo.write(gripRelease);
         Serial.println(gripRelease);
-        delay(500);
+        //delay(500);
 	}
 }
 
@@ -93,24 +93,24 @@ void RobotArmControl::moveToAngle(Angles angles){
 	if(90 > angles.shoulder)    { // Moving down move base, wrist, shoulder 
 		baseServo.easeTo(angles.base, EASE_SPEED);
 		// baseServo.writeMicroseconds(angleToMicroseconds360(angles.base));
-		delay(500);
+		//delay(500);
 		shoulderServo.easeTo(angles.shoulder, EASE_SPEED);
-		delay(500);
+		//delay(500);
 		wristServo.easeTo(angles.wrist, EASE_SPEED); // Warning: .writeMicroseconds converts the motor into continuous
-		delay(500);
+		//delay(500);
 		gripperServo.write(angles.gripper);
-		delay(500);
+		//delay(500);
 	 }
 	 else if (90 < angles.shoulder){ // moving up: wrist, shoulder, base
 		wristServo.easeTo(angles.wrist, EASE_SPEED); // Warning: .writeMicroseconds converts the motor into continuous
-		delay(500);
+		//delay(500);
 		shoulderServo.easeTo(angles.shoulder, EASE_SPEED);
-		delay(500);
+		//delay(500);
 		gripperServo.write(angles.gripper);
-		delay(500);
+		//delay(500);
 		baseServo.easeTo(angles.base, EASE_SPEED);
 		// baseServo.writeMicroseconds(angleToMicroseconds360(angles.base));
-		delay(500);
+		//delay(500);
 	}
 	else{
 		;

@@ -28,10 +28,10 @@
 
 // TODO: Add arm definitions
 #pragma region ADC Definitions
-#define ARM_BASE_PIN 11
-#define ARM_SHOULDER_PIN 10
-#define ARM_WRIST_PIN 9
-#define ARM_GRIPPER_PIN 8
+#define ARM_BASE_PIN 12
+#define ARM_SHOULDER_PIN 11
+#define ARM_WRIST_PIN 10
+#define ARM_GRIPPER_PIN 9
 
 #define ARM_SHOULDER_FEEDBACK_PIN A2
 #define ARM_WRIST_FEEDBACK_PIN A0
