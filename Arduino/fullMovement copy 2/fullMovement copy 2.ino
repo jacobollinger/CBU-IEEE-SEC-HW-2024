@@ -53,114 +53,91 @@ void loop()
 {
     Serial.println("Top of the loop");
     delay(50); // Small delay for stability
-
-    // int distanceFront = sonarFront.ping_in();
-    // distanceFront = sonarFront.ping_in();
-
-    // int leftSensorValue = analogRead(leftSensorPin);
-    // int rightSensorValue = analogRead(rightSensorPin);
-    // int backSensorValue = analogRead(backSensorPin);
-
-    // float current_time = millis();
-    // float dt = current_time - prev_time;
-
-    // int target_speed1 = 255;
-    // int target_speed2 = -target_speed1;
-    // int pos[2];
-
-    // ATOMIC_BLOCK(ATOMIC_RESTORESTATE)
-    // {
-    // pos[0] = encoder1.getPosition();
-    // pos[1] = encoder2.getPosition();
-    // }
-    // delay(1);
  
     // delay(10000);
-    // wheelControls.rotateCounterClockwise(15,100);
-    // delay(1000); 
+    wheelControls.rotateCounterClockwise(15,100);
+    delay(1000); 
 
-    // wheelControls.moveForwardEncoders(2,100);
-    // delay(5000);
+    wheelControls.moveForwardEncoders(2,100);
+    delay(1000);
 
+    wheelControls.rotateCounterClockwise(65,100);
+    delay(1000); 
 
-    // wheelControls.rotateCounterClockwise(65,100);
-    // delay(1000); 
+    wheelControls.moveBackwardEncoders(1,100);
+    delay(100);
 
-    // wheelControls.moveBackwardEncoders(1,100);
-    // delay(100);
+    wheelControls.moveForwardEncoders(38.0, 400);
+    delay(1000);
 
-    // wheelControls.moveForwardEncoders(38.0, 400);
-    // delay(1000);
+    wheelControls.rotateClockwise(180, 100); // 180 degrees
+    delay(1000);
 
-    // wheelControls.rotateClockwise(180, 100); // 180 degrees
-    // delay(1000);
+    Serial.println("Moving backwards...");
+    wheelControls.moveBackwardEncoders(25.0, 35);
+    delay(1000);
 
-    // Serial.println("Moving backwards...");
-    // wheelControls.moveBackwardEncoders(25.0, 35);
-    // delay(1000);
+    Serial.println("Rotating counterclockwise...");
+    wheelControls.rotateCounterClockwise(80, 100);
+    delay(1000);
 
-    // Serial.println("Rotating counterclockwise...");
-    // //! Breaks here
-    // wheelControls.rotateCounterClockwise(80, 100);
-    // delay(1000);
+    Serial.println("Moving ultrasonics forward...");
+    wheelControls.moveUltrasonicsForward(3, 150);
+    delay(2000);
 
-    // Serial.println("Moving ultrasonics forward...");
-    // wheelControls.moveUltrasonicsForward(3, 150);
-    // delay(2000);
+    Serial.println("Rotating clockwise...");
+    wheelControls.rotateCounterClockwise(90, 100);
+    delay(1000);
 
-    // Serial.println("Rotating clockwise...");
-    // wheelControls.rotateCounterClockwise(90, 100);
-    // delay(1000);
+    wheelControls.moveUltrasonicsForward(5, 150);
+    delay(1000);
 
-    // wheelControls.moveUltrasonicsForward(5, 150);
-    // delay(1000);
+    wheelControls.rotateClockwise(90, 100);
+    delay(1000);
 
-    // wheelControls.rotateClockwise(90, 100);
-    // delay(1000);
+    // servoUnlock(myservo2, pos5);
+    servoLocks.unlockLargePackageContainer();
+    delay(100);
 
-    // // servoUnlock(myservo2, pos5);
-    // servoLocks.unlockLargePackageContainer();
-    // delay(100);
+    wheelControls.rotateCounterClockwise(135, 100);
+    delay(1000);
 
-    // wheelControls.rotateCounterClockwise(135, 100);
-    // delay(1000);
+    // servoUnlock(myservo1, pos2);
+    servoLocks.unlockSmallPackageContainer();
+    delay(500);
 
-    // // servoUnlock(myservo1, pos2);
-    // servoLocks.unlockSmallPackageContainer();
-    // delay(500);
+    wheelControls.rotateClockwise(45, 100);
+    delay(1000);
 
-    // wheelControls.rotateClockwise(45, 100);
-    // delay(1000);
+    Serial.println("UltraBackward...");
+    wheelControls.moveUltrasonicsBackward(8, 150);
+    delay(1000);
 
-    // Serial.println("UltraBackward...");
-    // wheelControls.moveUltrasonicsBackward(8, 150);
-    // delay(1000);
+    wheelControls.rotateCounterClockwise(90, 100);
+    delay(1000);
 
-    // wheelControls.rotateCounterClockwise(90, 100);
-    // delay(1000);
-
-    // wheelControls.lineFollowConstant(14.0, 100, 75, 75);
-    // delay(1000);
+    wheelControls.lineFollowConstant(14.0, 100, 75, 75);
+    delay(1000);
 
 
 
 
-    // wheelControls.moveUltrasonicsForward(6, 150);
-    // delay(100);
+    wheelControls.moveUltrasonicsForward(6, 150);
+    delay(100);
 
-    // wheelControls.rotateCounterClockwise(83, 100);
-    // delay(100);
+    wheelControls.rotateCounterClockwise(83, 100);
+    delay(100);
 
-    // wheelControls.moveBackwardEncoders(6.0,150);
-    // delay(1000); 
-
-
-    // wheelControls.moveForwardEncoders(38.0,400);
-    // delay(2000); 
+    wheelControls.moveBackwardEncoders(6.0,150);
+    delay(1000); 
 
 
-    // wheelControls.rotateClockwise(180, 100);
-    // delay(100);
+    wheelControls.moveForwardEncoders(38.0,400);
+    delay(2000); 
+
+
+    wheelControls.rotateClockwise(180, 100);
+    delay(100);
 
 
     wheelControls.moveBackwardUntilSensors(50,50);
@@ -197,16 +174,6 @@ void loop()
 
     delay(100000);
 }
-
-// void readEncoder1()
-// {
-//     encoder1.update();
-// }
-
-// void readEncoder2()
-// {
-//     encoder2.update();
-// }
 
 // void servoInit(Servo servoi, int initial_pos) {
 //   servoi.write(initial_pos);
