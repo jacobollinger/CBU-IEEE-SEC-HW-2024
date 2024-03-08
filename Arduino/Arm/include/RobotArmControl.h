@@ -50,8 +50,9 @@ private:
     // double dropOffAnglesSmallPkg[4] = {2194, 131, 11.76, 35}; // set angles for dropping off small packages * updateSerial.print("dropOffAnglesSmallPkg.base: ");
     // double dropOffAnglesBoosters[4] = {90, 90, 90, 18};		  // set angles for dropping off boosters *update) {}
 
-    Angles dropBridgeAngles = {90, 90, 90, 90};
-    // Angles dropContainers =; // Will send the arm to the designated postion
+    Angles dropBridgeAngles = {1888, 152, 34, 0};
+    Angles dropSmallContainer = {2094, 138, 7, 0};
+    Angles dropLargeContainer = {1888, 154, 7, 20};
     Angles initializedAngles = {888, 170, 15, gripRelease};
     Angles currentAngles = {90, 90, 90, 90};
     Angles dropOffAnglesLargePkg = {1583, 167.22, 14, 46};

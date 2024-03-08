@@ -3,8 +3,8 @@
 #include <ServoEasing.hpp>
 
 #define EASE_SPEED 60
-#define SHOULDER_MID_POSITION 90 
-#define WRIST_MID_POSITION 45
+#define SHOULDER_MID_POSITION 80 
+#define WRIST_MID_POSITION 60
 
 ServoEasing wristServo;
 ServoEasing shoulderServo;
@@ -59,30 +59,41 @@ void RobotArmControl::updatePosition(String objective){
     }
     else if (objective == "largePackage"){  
 		gripperServo.write(gripLargePackage);
-		//delay(200);
+		delay(500);
 		shoulderServo.easeTo(SHOULDER_MID_POSITION, EASE_SPEED);
-        //delay(500);
+        delay(500);
 		wristServo.easeTo(WRIST_MID_POSITION, EASE_SPEED);
-        //delay(500);
+        delay(500);
         moveToAngle(dropOffAnglesLargePkg.base, dropOffAnglesLargePkg.shoulder, dropOffAnglesLargePkg.wrist, dropOffAnglesLargePkg.gripper);
         updatePosition("release");
-		//delay(500);
-		updatePosition("initial");
+		delay(500);
+		//updatePosition("initial");
     }
     else if (objective == "initial") {	
 		moveToAngle(initializedAngles.base, initializedAngles.shoulder, initializedAngles.wrist, initializedAngles.gripper);
         //delay(500);
     }
-    /*else if (objective == "booster"){
-            gripperServo.write(gripBooster);
-            delay(500);
-            updatePosition(dropBridgeAngles, "release");
-        }*/
+    else if (objective == "dropSmall"){
+        moveToAngle(dropSmallContainer.base, dropSmallContainer.shoulder, dropSmallContainer.wrist, dropSmallContainer.gripper);
+        baseServo.easeTo(2200,EASE_SPEED);
+        }
+    else if(objective == "dropLarge"){
+        moveToAngle(dropLargeContainer.base, dropLargeContainer.shoulder, dropLargeContainer.wrist, dropLargeContainer.gripper);
+        baseServo.easeTo(1388, EASE_SPEED); 
+    }
+    else if(objective == "dropBridge"){
+        moveToAngle(dropBridgeAngles.base, dropBridgeAngles.shoulder, dropBridgeAngles.wrist, dropBridgeAngles.gripper);
+        wristServo.easeTo(70, EASE_SPEED);
+    }
     else if (objective == "release"){  
 		gripperServo.write(gripRelease);
         Serial.println(gripRelease);
         //delay(500);
 	}
+
+    else{
+        ;
+    }
 }
 
 void RobotArmControl::moveToAngle(int baseAngle, float shoulderAngle, float wristAngle, float gripperAngle){

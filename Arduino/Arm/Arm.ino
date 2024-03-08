@@ -5,13 +5,13 @@ RobotArmControl Arm;
 
 void setup(){
 
-    //Serial.begin(9600); // Initialize serial communication
+    Serial.begin(BAUDRATE); // Initialize serial communication
     Arm.initialize(); // Initialize the robot arm
     //Arm.updatePosition("initial");
     collectLargePackages();
 }
 
-void loop(){   
+void loop(){  
 //     // Check for new SPI data and update robot arm position accordingly
 //     // if (SPIReceiver::messageEndFlag)
 //     // {
@@ -63,10 +63,14 @@ void loop(){
 //      Arm.solveIK(x,y,z);
 //      Arm.updatePosition(obj);
 //      delay(500); 
+//      }
+//     }
+// }
 }
 
 
 void collectLargePackages(){
+    delay(1000);
     // Collect Center package 
     Arm.solveIK(-3.81, 13, 1.27);
     Arm.updatePosition("largePackage");
@@ -76,7 +80,7 @@ void collectLargePackages(){
     Arm.updatePosition("largePackage");
     
     // Collect Left1 package 
-    Arm.solveIK(-10, 12,0);
+    Arm.solveIK(-10, 12, 0);
     Arm.updatePosition("largePackage");
     
     // Collect Right2 package 
