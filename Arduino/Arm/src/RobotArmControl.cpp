@@ -2,7 +2,11 @@
 
 #include <ServoEasing.hpp>
 
+<<<<<<< HEAD
 #define EASE_SPEED 80
+=======
+#define EASE_SPEED 60
+>>>>>>> 5bfe4d7 (edited for faster procedure)
 #define SHOULDER_MID_POSITION 80 
 #define WRIST_MID_POSITION 60
 
@@ -70,7 +74,11 @@ void RobotArmControl::updatePosition(String objective){
         moveToAngle(dropOffAnglesLargePkg.base, dropOffAnglesLargePkg.shoulder, dropOffAnglesLargePkg.wrist, dropOffAnglesLargePkg.gripper);
         updatePosition("release");
 		//delay(500);
+<<<<<<< HEAD
 		//updatePosition("initial");
+=======
+        // wristServo.easeTo(initializedAngles.wrist);
+>>>>>>> 5bfe4d7 (edited for faster procedure)
     }
     else if (objective == "initial") {	
 		moveToAngle(initializedAngles.base, initializedAngles.shoulder, initializedAngles.wrist, initializedAngles.gripper);
