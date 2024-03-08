@@ -1,16 +1,14 @@
-#include <RobotArmControl.h>
+#include "./include/RobotArmControl.h"
 
 #include <Servo.h>
 RobotArmControl Arm;
 
 void setup(){
 
-    Serial.begin(9600); // Initialize serial communication
+    //Serial.begin(9600); // Initialize serial communication
     Arm.initialize(); // Initialize the robot arm
     //Arm.updatePosition("initial");
     collectLargePackages();
-   
-
 }
 
 void loop(){   

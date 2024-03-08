@@ -3,11 +3,10 @@
 
 #include <Arduino.h>
 #include <Servo.h>
-// #include <ServoEasing.hpp>
 #include <math.h>
 
 #include "Defines.hpp"
-//#include "FunctionMap.hpp"
+// #include "FunctionMap.hpp"
 
 class RobotArmControl
 {
@@ -31,14 +30,11 @@ public:
     void solveIK(double x, double y, double z);
     void calibrate();
 
-    //static int getFunctionCount();
-    //static FunctionMap::Function *getFunctions();
+    // static int getFunctionCount();
+    // static FunctionMap::Function *getFunctions();
 
 private:
-    // ServoEasing wristServo;    // DMA-MG90-A 270
-    // ServoEasing shoulderServo; // FS5106B-FB 180 W/FEEDBACK
-    // ServoEasing baseServo;     // FT6325M-360
-    Servo gripperServo;  // DMA-MG90-A 270
+    Servo gripperServo; // DMA-MG90-A 270
 
     // Predefined Angles *Determine these
     const double gripLargePackage = 46;
@@ -53,14 +49,14 @@ private:
     // double dropOffAnglesLargePkg[4] = {1583, 167.22, 14, 46}; // set angles for dropping off large packages *update
     // double dropOffAnglesSmallPkg[4] = {2194, 131, 11.76, 35}; // set angles for dropping off small packages * updateSerial.print("dropOffAnglesSmallPkg.base: ");
     // double dropOffAnglesBoosters[4] = {90, 90, 90, 18};		  // set angles for dropping off boosters *update) {}
-    
-	Angles dropBridgeAngles = {90, 90, 90, 90};
-   // Angles dropContainers =; // Will send the arm to the designated postion 
+
+    Angles dropBridgeAngles = {90, 90, 90, 90};
+    // Angles dropContainers =; // Will send the arm to the designated postion
     Angles initializedAngles = {888, 170, 15, gripRelease};
     Angles currentAngles = {90, 90, 90, 90};
     Angles dropOffAnglesLargePkg = {1583, 167.22, 14, 46};
     Angles dropOffAnglesSmallPkg = {2222, 147, 35, 35};
-    //Angles dropOffAnglesBoosters = {90, 90, 90, 18};
+    // Angles dropOffAnglesBoosters = {90, 90, 90, 18};
 
     const float L0 = 10.125;   // length from ground to second joint (shoulder)
     const float L1 = 18.25625; // length from 2nd joint to 3rd joint (shoulder to wrist)
