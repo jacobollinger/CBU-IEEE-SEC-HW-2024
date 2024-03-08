@@ -13,8 +13,7 @@ void setup(){
 
 }
 
-void loop()
-{   
+void loop(){   
 //     // Check for new SPI data and update robot arm position accordingly
 //     // if (SPIReceiver::messageEndFlag)
 //     // {
@@ -66,14 +65,12 @@ void loop()
 //      Arm.solveIK(x,y,z);
 //      Arm.updatePosition(obj);
 //      delay(500); 
-     }
-    }
 }
-   }
 
-void collectLargepackages(){
+
+void collectLargePackages(){
     // Collect Center package 
-    Arm.solveIK(-3.81, 13. 1.27);
+    Arm.solveIK(-3.81, 13, 1.27);
     Arm.updatePosition("largePackage");
 
     // Collect Right1 package 
@@ -81,7 +78,7 @@ void collectLargepackages(){
     Arm.updatePosition("largePackage");
     
     // Collect Left1 package 
-    Arm.solveIK(-10, 12 ,0);
+    Arm.solveIK(-10, 12,0);
     Arm.updatePosition("largePackage");
     
     // Collect Right2 package 
