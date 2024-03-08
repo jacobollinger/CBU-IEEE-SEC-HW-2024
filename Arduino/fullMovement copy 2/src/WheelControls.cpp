@@ -81,7 +81,7 @@ void WheelControls::moveBackwardEncoders(float distance, int targetSpeed)
     float targetRotations = distance / (INCH_PER_REV);
     int *currentPositions = getEncoderPositions();
     int speed = 50;
-    // targetSpeed = min(targetSpeed, WHEEL_MAX_SPEED);
+    targetSpeed = min(targetSpeed, WHEEL_MAX_SPEED);
 
     while (currentPositions[1] < targetRotations) // Edit 
     {
@@ -95,7 +95,7 @@ void WheelControls::moveBackwardEncoders(float distance, int targetSpeed)
         delay(100);
         currentPositions = getEncoderPositions();
        
-        //speed = min(speed + 25, targetSpeed);
+        speed = min(speed + 25, targetSpeed);
     }
     motorDriver.setSpeeds(0, 0);
     delay(100); 

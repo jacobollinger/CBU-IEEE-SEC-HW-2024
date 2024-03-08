@@ -170,38 +170,55 @@ void loop()
     // wheelControls.lineFollowConstant(14.0, 100, 75, 75);
     // delay(1000);
 
-    wheelControls.moveUltrasonicsForward(6, 150);
-    delay(1000);
-
-    wheelControls.rotateCounterClockwise(83, 100);
-    delay(1000);
-
-     wheelControls.moveForwardEncoders(32.0,400);
-    delay(5000); 
 
 
-    wheelControls.rotateClockwise(180, 100);
-    delay(100);
+
+    // wheelControls.moveUltrasonicsForward(6, 150);
+    // delay(100);
+
+    // wheelControls.rotateCounterClockwise(83, 100);
+    // delay(100);
+
+    // wheelControls.moveBackwardEncoders(6.0,150);
+    // delay(1000); 
+
+
+    // wheelControls.moveForwardEncoders(38.0,400);
+    // delay(2000); 
+
+
+    // wheelControls.rotateClockwise(180, 100);
+    // delay(100);
 
 
     wheelControls.moveBackwardUntilSensors(50,50);
-    delay(5000);
+    delay(100);
+
+    wheelControls.moveForwardEncoders(1.0, 100);
+    delay(100);
 
     servoUnlock(myservo3, pos3);
     delay(5000);
 
 
-    wheelControls.moveForwardEncoders(3.0, 100);
-    delay(100);
+    wheelControls.moveForwardEncoders(4.0, 100);
+    delay(1000);
 
     wheelControls.rotateClockwise(180, 100);
     delay(100);
 
-    wheelControls.moveForwardEncoders(20.0, 400);
+    wheelControls.moveForwardEncoders(35.0, 100);
     delay(100);
 
-    // wheelControls.moveUltrasonics(1, 100);
-    // delay(100);
+    
+    wheelControls.moveUltrasonicsForward(3, 100);
+    delay(100);
+
+    wheelControls.rotateClockwise(80, 100);
+    delay(100);
+
+   wheelControls.moveForwardEncoders(5.0, 200);
+    delay(100);
 
     Serial.print("done");
 
