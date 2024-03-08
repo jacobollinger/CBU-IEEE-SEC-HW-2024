@@ -6,10 +6,6 @@
 
 WheelControls::WheelControls() : motorDriver(DualG2HighPowerMotorShield24v14(WHEELS_M1_SLP, WHEELS_M1_DIR, WHEELS_M1_PWM, WHEELS_M1_FLT, WHEELS_M1_CS, WHEELS_M2_SLP, WHEELS_M2_DIR, WHEELS_M2_PWM, WHEELS_M2_FLT, WHEELS_M2_CS)), leftEncoder(WheelEncoder(WHEELS_M1_ENCA, WHEELS_M1_ENCB, false)), rightEncoder(WheelEncoder(WHEELS_M2_ENCA, WHEELS_M2_ENCB, true))
 {
-}
-
-void WheelControls::init()
-{
     motorDriver.init();
     //! This makes the arduino freeze
     // motorDriver.calibrateCurrentOffsets();
