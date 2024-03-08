@@ -59,7 +59,7 @@ void RobotArmControl::updatePosition(String objective){
     }
     else if (objective == "largePackage"){  
 		gripperServo.write(gripLargePackage);
-		delay(500);
+		delay(700);
 		shoulderServo.easeTo(SHOULDER_MID_POSITION, EASE_SPEED);
         delay(500);
 		wristServo.easeTo(WRIST_MID_POSITION, EASE_SPEED);
