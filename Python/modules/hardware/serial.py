@@ -26,6 +26,9 @@ class SerialInterface:
         if self.lines:
             return self.lines.pop(0)
         return None
+    
+    def is_data_available(self):
+        return len(self.lines) > 0
 
     def _read_data(self):
         while self.running:
