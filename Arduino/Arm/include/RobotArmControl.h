@@ -53,8 +53,8 @@ private:
     Angles dropBridgeAngles = {1888, 152, 34, 0};
     Angles dropSmallContainer = {2094, 138, 7, 0};
     Angles dropLargeContainer = {1888, 154, 7, 20};
-    Angles initializedAngles = {888, 170, 15, gripRelease};
-    Angles currentAngles = {90, 90, 90, 90};
+    Angles initializedAngles = {888, 170, 25, gripRelease};
+    Angles uprightAngles = {888, 180, 85, gripRelease};
     Angles dropOffAnglesLargePkg = {1583, 167.22, 14, 46};
     Angles dropOffAnglesSmallPkg = {2222, 147, 35, 35};
     // Angles dropOffAnglesBoosters = {90, 90, 90, 18};

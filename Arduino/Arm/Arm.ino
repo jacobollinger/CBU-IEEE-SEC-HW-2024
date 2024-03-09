@@ -7,7 +7,8 @@ void setup(){
 
     Serial.begin(BAUDRATE); // Initialize serial communication
     Arm.initialize(); // Initialize the robot arm
-    //Arm.updatePosition("initial");
+    Arm.updatePosition("initial");
+    delay(500);
     collectLargePackages();
 }
 
@@ -65,34 +66,29 @@ void loop(){
 //      delay(500); 
 //      }
 //     }
-// }
+//}
 }
 
 
 void collectLargePackages(){
-    delay(1000);
+    //delay(1000);
     // Collect Center package 
     Arm.solveIK(-3.81, 13, 1.27);
     Arm.updatePosition("largePackage");
-    delay(500);
 
     // Collect Right1 package 
     Arm.solveIK(2.54, 14, 2.54);
     Arm.updatePosition("largePackage");
-    delay(500);
 
     // Collect Left1 package 
     Arm.solveIK(-10, 12, 0);
     Arm.updatePosition("largePackage");
-    delay(500);
 
     // Collect Right2 package 
     Arm.solveIK(10, 17, 0);
     Arm.updatePosition("largePackage");
-    delay(500);
 
     // Collect Left2 package 
     Arm.solveIK(-18, 13, -3);
     Arm.updatePosition("largePackage");
-    delay(500);
 }

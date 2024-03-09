@@ -2,7 +2,7 @@
 
 #include <ServoEasing.hpp>
 
-#define EASE_SPEED 60
+#define EASE_SPEED 80
 #define SHOULDER_MID_POSITION 80 
 #define WRIST_MID_POSITION 60
 
@@ -48,25 +48,28 @@ int RobotArmControl::angleToMicroseconds360(double angle){
 void RobotArmControl::updatePosition(String objective){
     objective.trim();
     // calibrate();
-    if (objective == "smallPackage"){	
+    if (objective == "smallPackage"){
+        delay(200);
 		gripperServo.write(gripSmallPackage);
         //delay(500);
+        moveToAngle(dropOffAnglesSmallPkg.base, uprightAngles.shoulder, dropOffAnglesSmallPkg.wrist, dropOffAnglesSmallPkg.gripper);
         moveToAngle(dropOffAnglesSmallPkg.base, dropOffAnglesSmallPkg.shoulder, dropOffAnglesSmallPkg.wrist, dropOffAnglesSmallPkg.gripper);
-        //delay(500);
+        delay(200);
         updatePosition("release");
+        shoulderServo.easeTo(uprightAngles.shoulder, EASE_SPEED);
 		///delay(500);
-		updatePosition("initial");
+		//updatePosition("initial");
     }
     else if (objective == "largePackage"){  
 		gripperServo.write(gripLargePackage);
-		delay(700);
+		delay(500);
 		shoulderServo.easeTo(SHOULDER_MID_POSITION, EASE_SPEED);
-        delay(500);
-		wristServo.easeTo(WRIST_MID_POSITION, EASE_SPEED);
-        delay(500);
+        //delay(500);
+		//wristServo.easeTo(WRIST_MID_POSITION, EASE_SPEED);
+        //delay(500);
         moveToAngle(dropOffAnglesLargePkg.base, dropOffAnglesLargePkg.shoulder, dropOffAnglesLargePkg.wrist, dropOffAnglesLargePkg.gripper);
         updatePosition("release");
-		delay(500);
+		//delay(500);
 		//updatePosition("initial");
     }
     else if (objective == "initial") {	
@@ -74,11 +77,15 @@ void RobotArmControl::updatePosition(String objective){
         //delay(500);
     }
     else if (objective == "dropSmall"){
-        moveToAngle(dropSmallContainer.base, dropSmallContainer.shoulder, dropSmallContainer.wrist, dropSmallContainer.gripper);
+        delay(500);
+        moveToAngle(dropSmallContainer.base, uprightAngles.shoulder, uprightAngles.wrist, dropSmallContainer.gripper);
+        moveToAngle(dropSmallContainer.base, dropSmallContainer.shoulder, dropSmallContainer.wrist, dropSmallContainer.gripper);        //gripperServo.write(dropSmallContainer.gripper, EASE_SPEED);
         baseServo.easeTo(2200,EASE_SPEED);
         }
     else if(objective == "dropLarge"){
+        moveToAngle(dropLargeContainer.base, uprightAngles.shoulder, uprightAngles.wrist, dropLargeContainer.gripper);
         moveToAngle(dropLargeContainer.base, dropLargeContainer.shoulder, dropLargeContainer.wrist, dropLargeContainer.gripper);
+        //wristServo.easeTo(dropLargeContainer.wrist, EASE_SPEED);
         baseServo.easeTo(1388, EASE_SPEED); 
     }
     else if(objective == "dropBridge"){
