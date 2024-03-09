@@ -24,6 +24,7 @@ void setup()
 
     Logger::log("Initializing robot arm control");
     robotArmControl.initialize();
+    robotArmControl.updatePosition("initial");
 
     Logger::log("Initializing servo locks");
     servoLocks.init();
@@ -45,9 +46,14 @@ void loop()
         delay(100);
     }
 
+    Logger::log("Collecting large packages");
     collectLargePackages();
+    Logger::log("Done collecting large packages");
+    delay(1000);
 
+    Logger::log("Collecting small packages");
     collectSmallPackages();
+    Logger::log("Done collecting small packages");
 
     // Do the rest of the tasks
     doEverythingElse();
@@ -56,9 +62,27 @@ void loop()
     hasExecutedOnce = true;
 }
 
-void collectLargePackages()
-{
-    // TODO: Implement
+void collectLargePackages(){
+    //delay(1000);
+    // Collect Center package 
+    robotArmControl.solveIK(-3.81, 13, 1.27);
+    robotArmControl.updatePosition("largePackage");
+
+    // Collect Right1 package 
+    robotArmControl.solveIK(2.54, 14, 2.54);
+    robotArmControl.updatePosition("largePackage");
+
+    // Collect Left1 package 
+    robotArmControl.solveIK(-10, 12, 0);
+    robotArmControl.updatePosition("largePackage");
+
+    // Collect Right2 package 
+    robotArmControl.solveIK(10, 17, 0);
+    robotArmControl.updatePosition("largePackage");
+
+    // Collect Left2 package 
+    robotArmControl.solveIK(-18, 13, -3);
+    robotArmControl.updatePosition("largePackage");
 }
 
 void collectSmallPackages()
@@ -182,7 +206,13 @@ void doEverythingElse()
     wheelControls.rotateClockwise(184, 100);
     delay(100);
 
-    wheelControls.moveForwardEncoders(15.0, 100);
+    wheelControls.moveForwardEncoders(5.0, 100);
+    delay(1000);
+
+    wheelControls.lineFollowConstant(5.0, 100, 75, 75);
+    delay(100);
+
+    wheelControls.moveForwardEncoders(10.0, 100);
     delay(100);
 
     wheelControls.moveUltrasonicsForward(3, 200);

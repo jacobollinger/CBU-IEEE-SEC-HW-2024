@@ -3,7 +3,6 @@
 
 #include <Arduino.h>
 #include <Servo.h>
-// #include <ServoEasing.hpp>
 #include <math.h>
 
 #include "Defines.hpp"
@@ -35,30 +34,30 @@ public:
     static FunctionMap::Function *getFunctions();
 
 private:
-    // ServoEasing wristServo;    // DMA-MG90-A 270
-    // ServoEasing shoulderServo; // FS5106B-FB 180 W/FEEDBACK
-    // ServoEasing baseServo;     // FT6325M-360
-    Servo gripperServo;  // DMA-MG90-A 270
+    Servo gripperServo; // DMA-MG90-A 270
 
     // Predefined Angles *Determine these
     const double gripLargePackage = 46;
     const double gripSmallPackage = 35;
     const double gripBooster = 18;
-    const double gripRelease = 88;
+    const double gripRelease = 70;
 
     // Store specific angles in arrays
     // double dropBridgeAngles[4] = {90, 90, 90, 90};			  // set angles for droppping off bridge *update
-    // double initializedAngles[4] = {888, 177.56, 0, 88};		  // set angles for statup *update
+    // double initializedAngles[4] = {888, 170, 30, 75};		  // set angles for statup *update
     // double currentAngles[4] = {90, 90, 90, 90};				  //
-    // double dropOffAnglesLargePkg[4] = {1666, 140, 11.76, 46}; // set angles for dropping off large packages *update
+    // double dropOffAnglesLargePkg[4] = {1583, 167.22, 14, 46}; // set angles for dropping off large packages *update
     // double dropOffAnglesSmallPkg[4] = {2194, 131, 11.76, 35}; // set angles for dropping off small packages * updateSerial.print("dropOffAnglesSmallPkg.base: ");
     // double dropOffAnglesBoosters[4] = {90, 90, 90, 18};		  // set angles for dropping off boosters *update) {}
-    Angles dropBridgeAngles = {90, 90, 90, 90};
-    Angles initializedAngles = {888, 177.56, 0, 88};
-    Angles currentAngles = {90, 90, 90, 90};
-    Angles dropOffAnglesLargePkg = {1666, 140, 11.76, 46};
-    Angles dropOffAnglesSmallPkg = {2194, 131, 11.76, 35};
-    Angles dropOffAnglesBoosters = {90, 90, 90, 18};
+
+    Angles dropBridgeAngles = {1888, 152, 34, 0};
+    Angles dropSmallContainer = {2094, 138, 7, 0};
+    Angles dropLargeContainer = {1888, 154, 7, 20};
+    Angles initializedAngles = {888, 170, 25, gripRelease};
+    Angles uprightAngles = {888, 180, 85, gripRelease};
+    Angles dropOffAnglesLargePkg = {1583, 167.22, 14, 46};
+    Angles dropOffAnglesSmallPkg = {2222, 147, 35, 35};
+    // Angles dropOffAnglesBoosters = {90, 90, 90, 18};
 
     const float L0 = 10.125;   // length from ground to second joint (shoulder)
     const float L1 = 18.25625; // length from 2nd joint to 3rd joint (shoulder to wrist)
