@@ -20,6 +20,7 @@ class WheelControls
 {
 public:
     WheelControls();
+    void init();
     void moveForwardEncoders(float targetDistance, int speed);
     void moveBackwardEncoders(float targetDistance, int speed);
     void rotateClockwise(float degree, int target_speed);

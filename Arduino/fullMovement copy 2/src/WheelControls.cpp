@@ -6,6 +6,10 @@
 
 WheelControls::WheelControls() : motorDriver(DualG2HighPowerMotorShield24v14(WHEELS_M1_SLP, WHEELS_M1_DIR, WHEELS_M1_PWM, WHEELS_M1_FLT, WHEELS_M1_CS, WHEELS_M2_SLP, WHEELS_M2_DIR, WHEELS_M2_PWM, WHEELS_M2_FLT, WHEELS_M2_CS)), leftEncoder(WheelEncoder(WHEELS_M1_ENCA, WHEELS_M1_ENCB, false)), rightEncoder(WheelEncoder(WHEELS_M2_ENCA, WHEELS_M2_ENCB, true))
 {
+}
+
+void WheelControls::init()
+{
     motorDriver.init();
     //! This makes the arduino freeze
     // motorDriver.calibrateCurrentOffsets();
@@ -56,11 +60,10 @@ void WheelControls::moveForwardEncoders(float distance, int targetSpeed)
 
     while (currentPositions[0] < targetRotations)
     {
+        Serial.print("Move Forward Encoders: ");
         Serial.print(currentPositions[0]);
         Serial.print(" ");
-        Serial.print(targetRotations);
-        bool temp = currentPositions[0] < targetRotations;
-        Serial.println(temp);
+        Serial.println(targetRotations);
 
         motorDriver.setSpeeds(speed, speed);
         currentPositions = getEncoderPositions();
@@ -70,8 +73,6 @@ void WheelControls::moveForwardEncoders(float distance, int targetSpeed)
     Serial.print(currentPositions[0]);
     Serial.print(" ");
     Serial.print(targetRotations);
-    bool temp = currentPositions[0] < targetRotations;
-    Serial.println(temp);
     motorDriver.setSpeeds(0, 0);
 }
 
