@@ -81,20 +81,21 @@ void WheelControls::moveBackwardEncoders(float distance, int targetSpeed)
     float targetRotations = distance / (INCH_PER_REV);
     int *currentPositions = getEncoderPositions();
     int speed = 50;
-    // targetSpeed = min(targetSpeed, WHEEL_MAX_SPEED);
+    targetSpeed = min(targetSpeed, WHEEL_MAX_SPEED);
 
-    while (currentPositions[0] > -targetRotations)
+    while (currentPositions[1] < targetRotations) // Edit 
     {
         Serial.print(currentPositions[1]);
         Serial.print(" ");
         Serial.println(targetRotations);
         
-        motorDriver.setM1Speed(-200);
-        motorDriver.setM2Speed(-200);
+        motorDriver.setM1Speed(-200); 
+        motorDriver.setM2Speed(-200); // Should 
+        currentPositions = getEncoderPositions();
         delay(100);
         currentPositions = getEncoderPositions();
        
-        //speed = min(speed + 25, targetSpeed);
+        speed = min(speed + 25, targetSpeed);
     }
     motorDriver.setSpeeds(0, 0);
     delay(100); 
@@ -122,6 +123,7 @@ void WheelControls::rotateClockwise(float degrees, int targetSpeed)
     motorDriver.setSpeeds(0, 0);
 }
 
+
 void WheelControls::rotateCounterClockwise(float degrees, int targetSpeed)
 {
     clearEncoders();
@@ -130,13 +132,13 @@ void WheelControls::rotateCounterClockwise(float degrees, int targetSpeed)
     int speed = 200;
     targetSpeed = min(targetSpeed, WHEEL_MAX_SPEED);
 
-    while (currentPositions[0] > -targetRotations)
+    while (currentPositions[0] > -targetRotations) // currentPostitions[0] > -targetRotations // Edit: Correct logic but had to change speeds 
     {
-        Serial.print(currentPositions[1]);
+        Serial.print(currentPositions[0]);
         Serial.print(" ");
         Serial.println(-targetRotations);
 
-        motorDriver.setSpeeds(speed, -speed);
+        motorDriver.setSpeeds(speed, -speed); // Edit: Switched Speeds 
         currentPositions = getEncoderPositions();
         delay(100);
 
@@ -198,12 +200,12 @@ void WheelControls::lineFollowConstant(float targetDistance, int targetSpeed, in
 {
     clearEncoders();
     int *currentPositions = getEncoderPositions();
-    const float targetRotations = targetDistance / INCH_PER_REV;
+    float targetRotations1 = targetDistance / (INCH_PER_REV);
     
-    while (currentPositions[0] < targetRotations)
+    while (currentPositions[1] < targetRotations1)
     {
         // Read encoder positions
-        clearEncoders();
+        
         currentPositions = getEncoderPositions();
         int leftSensorValue = analogRead(LINE_FOLLOW_LEFT);
         int rightSensorValue = analogRead(LINE_FOLLOW_RIGHT);
@@ -214,8 +216,11 @@ void WheelControls::lineFollowConstant(float targetDistance, int targetSpeed, in
         Serial.print("  Right Sensor: ");
         Serial.print(rightSensorValue);
         Serial.print("\t");
-        Serial.print("  Line Follow threshold: ");
-        Serial.println(LINE_FOLLOW_LEFT_THRESHOLD);
+        Serial.print("encoder1: ");
+        Serial.print(currentPositions[1]);
+        Serial.print("target: ");
+        Serial.println(targetRotations1);
+        delay(10);
 
         if (leftSensorValue < LINE_FOLLOW_LEFT_THRESHOLD && rightSensorValue < LINE_FOLLOW_RIGHT_THRESHOLD)
         {
@@ -248,42 +253,77 @@ void WheelControls::lineFollowConstant(float targetDistance, int targetSpeed, in
 }
 
 
-void WheelControls::moveBackwardUntilSensor(int threshold, int speed) {
-  int sensorValue = analogRead(LINE_FOLLOW_BACKRIGHT);
+void WheelControls::moveBackwardUntilSensors(int threshold, int speed) {
+  int leftSensorValue, rightSensorValue;
 
-  while (sensorValue > threshold) {
-    motorDriver.setM1Speed(-speed);
-    motorDriver.setM2Speed(-speed);
+  do {
+    leftSensorValue = analogRead(LINE_FOLLOW_BACKLEFT);
+    rightSensorValue = analogRead(LINE_FOLLOW_BACKRIGHT);
 
-    delay(100);
+    if (leftSensorValue > threshold) {
+      motorDriver.setM1Speed(-speed);
+    } else {
+      motorDriver.setM1Speed(0);
+    }
 
-    sensorValue = analogRead(LINE_FOLLOW_BACKRIGHT);
-
-    Serial.print("Line Follower Sensor Value: ");
-    Serial.println(sensorValue);
-  }
-
-  motorDriver.setM1Speed(0);
-  motorDriver.setM2Speed(0);
-  delay(500);
-}
-
-void WheelControls::moveBackwardUntilSensor1(int threshold, int speed) {
-  int sensorValue = analogRead(LINE_FOLLOW_BACKLEFT);
-
-  while (sensorValue > threshold) {
-
-    motorDriver.setM2Speed(-speed);
+    if (rightSensorValue > threshold) {
+      motorDriver.setM2Speed(-speed);
+    } else {
+      motorDriver.setM2Speed(0);
+    }
 
     delay(100);
 
-    sensorValue = analogRead(LINE_FOLLOW_BACKRIGHT);
+    Serial.print("Left Sensor Value: ");
+    Serial.println(leftSensorValue);
+    Serial.print("Right Sensor Value: ");
+    Serial.println(rightSensorValue);
 
-    Serial.print("Line Follower Sensor Value: ");
-    Serial.println(sensorValue);
-  }
+  } while (leftSensorValue > threshold || rightSensorValue > threshold);
 
   motorDriver.setM1Speed(0);
   motorDriver.setM2Speed(0);
-  delay(500);
+  delay(10);
 }
+
+
+
+// void WheelControls::moveBackwardUntilSensor2(int threshold, int speed) {
+//   int sensorValue = analogRead(LINE_FOLLOW_BACKRIGHT);
+
+//   while (sensorValue > threshold) {
+//     motorDriver.setM1Speed(-speed);
+//     motorDriver.setM2Speed(-speed);
+
+//     delay(100);
+
+//     sensorValue = analogRead(LINE_FOLLOW_BACKRIGHT);
+
+//     Serial.print("Line Follower Sensor Value: ");
+//     Serial.println(sensorValue);
+//   }
+
+//   motorDriver.setM1Speed(0);
+//   motorDriver.setM2Speed(0);
+//   delay(500);
+// }
+
+// void WheelControls::moveBackwardUntilSensor1(int threshold, int speed) {
+//   int sensorValue = analogRead(LINE_FOLLOW_BACKLEFT);
+
+//   while (sensorValue > threshold) {
+
+//     motorDriver.setM2Speed(-speed);
+
+//     delay(100);
+
+//     sensorValue = analogRead(LINE_FOLLOW_BACKRIGHT);
+
+//     Serial.print("Line Follower Sensor Value: ");
+//     Serial.println(sensorValue);
+//   }
+
+//   motorDriver.setM1Speed(0);
+//   motorDriver.setM2Speed(0);
+//   delay(500);
+// }

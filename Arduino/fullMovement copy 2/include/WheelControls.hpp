@@ -30,7 +30,9 @@ public:
 
     // void lineFollow(float targetDistance, int targetSpeed, int right, int left);
     void lineFollowConstant(float targetDistance, int targetSpeed, int right, int left);
-    void moveBackwardUntilSensor(int threshold, int speed);
+    void moveBackwardUntilSensors(int threshold, int speed);
+    void moveBackwardUntilSensor1(int threshold, int speed);
+    void moveBackwardUntilSensor2(int threshold, int speed);
 
     void stopIfFault();
 
