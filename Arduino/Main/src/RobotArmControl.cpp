@@ -13,7 +13,7 @@ ServoEasing baseServo;
 RobotArmControl::RobotArmControl(){
     // Intialize servos
     // RobotArmControl::initialize();
-	Servo gripperServo;
+	// Servo gripperServo;
 }
 
 void RobotArmControl::initialize(){
@@ -194,25 +194,25 @@ void RobotArmControl::calibrate(){
 
 // int RobotArmControl::getFunctionCount()
 // {
-//     return 7;
+//     return 2;
 // }
 
 // FunctionMap::Function *RobotArmControl::getFunctions()
 // {
 //     FunctionMap::Function *functions = new FunctionMap::Function[getFunctionCount()];
-//     // functions[0].name = "initialize";
-//     // functions[0].function = &RobotArmControl::initialize;
-//     // functions[1].name = "moveToAngle";
-//     // functions[1].function = &RobotArmControl::moveToAngle;
-//     // functions[2].name = "updatePosition";
-//     // functions[2].function = &RobotArmControl::updatePosition;
-//     // functions[3].name = "solveIK";
-//     // functions[3].function = &RobotArmControl::solveIK;
-//     // functions[4].name = "calibrate";
-//     // functions[4].function = &RobotArmControl::calibrate;
-//     // functions[5].name = "angleToMicroseconds360";
-//     // functions[5].function = &RobotArmControl::angleToMicroseconds360;
-//     // functions[6].name = "calcVectorAngle";
-//     // functions[6].function = &RobotArmControl::calcVectorAngle;
+//     functions[0].name = "updatePosition";
+//     functions[0].function = [this](String *args) { this->updatePositionSerial(args); };
+//     functions[1].name = "solveIK";
+//     functions[1].function = [this](String *args) { this->solveIKSerial(args); };
 //     return functions;
+// }
+
+// void RobotArmControl::updatePositionSerial(String *args)
+// {
+//     updatePosition(args[0]);
+// }
+
+// void RobotArmControl::solveIKSerial(String *args)
+// {
+//     solveIK(args[0].toDouble(), args[1].toDouble(), args[2].toDouble());
 // }

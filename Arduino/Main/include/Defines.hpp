@@ -2,7 +2,7 @@
 #define DEFINES_HPP
 
 #define DEBUG true
-#define BAUDRATE 115200
+#define BAUDRATE 4800
 
 #pragma region Wheel Definitions
 #define WHEELS_M1_FLT 33

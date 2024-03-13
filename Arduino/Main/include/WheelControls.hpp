@@ -25,6 +25,7 @@ public:
     void moveBackwardEncoders(float targetDistance, int speed);
     void rotateClockwise(float degree, int target_speed);
     void rotateCounterClockwise(float degree, int target_speed);
+    void rotateCounterClockwise2(float degree, int target_speed);
 
     void moveUltrasonicsForward(float targetDistance, int speed);
     void moveUltrasonicsBackward(float targetDistance, int speed);

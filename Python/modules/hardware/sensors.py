@@ -12,6 +12,8 @@ class Camera:
         """
         self.camera_id = camera_id
         self.cap = cv2.VideoCapture(camera_id)
+        self.width = self.cap.get(cv2.CAP_PROP_FRAME_WIDTH)
+        self.height = self.cap.get(cv2.CAP_PROP_FRAME_HEIGHT)
 
     def get_image(self):
         """returns a single image from the camera

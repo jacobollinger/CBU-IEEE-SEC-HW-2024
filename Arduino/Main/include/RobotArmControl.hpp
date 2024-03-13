@@ -30,15 +30,17 @@ public:
     void solveIK(double x, double y, double z);
     void calibrate();
 
-    static int getFunctionCount();
-    static FunctionMap::Function *getFunctions();
+    // int getFunctionCount();
+    // FunctionMap::Function *getFunctions();
+    // void updatePositionSerial(String *args);
+    // void solveIKSerial(String *args);
 
 private:
     Servo gripperServo; // DMA-MG90-A 270
 
     // Predefined Angles *Determine these
     const double gripLargePackage = 46;
-    const double gripSmallPackage = 35;
+    const double gripSmallPackage = 27;
     const double gripBooster = 18;
     const double gripRelease = 70;
 
@@ -56,7 +58,7 @@ private:
     Angles initializedAngles = {888, 170, 25, gripRelease};
     Angles uprightAngles = {888, 180, 85, gripRelease};
     Angles dropOffAnglesLargePkg = {1583, 167.22, 14, 46};
-    Angles dropOffAnglesSmallPkg = {2222, 147, 35, 35};
+    Angles dropOffAnglesSmallPkg = {2222, 147, 35, gripSmallPackage};
     // Angles dropOffAnglesBoosters = {90, 90, 90, 18};
 
     const float L0 = 10.125;   // length from ground to second joint (shoulder)
