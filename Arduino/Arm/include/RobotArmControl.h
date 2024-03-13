@@ -28,6 +28,7 @@ public:
     // void updatePosition(double x, double y, double z, double g);
     void updatePosition(String objective);
     void solveIK(double x, double y, double z);
+    void sweep();
     void calibrate();
 
     // static int getFunctionCount();
@@ -41,6 +42,7 @@ private:
     const double gripSmallPackage = 35;
     const double gripBooster = 18;
     const double gripRelease = 70;
+    const double gripSweep = 5; 
 
     // Store specific angles in arrays
     // double dropBridgeAngles[4] = {90, 90, 90, 90};			  // set angles for droppping off bridge *update
@@ -57,7 +59,7 @@ private:
     Angles uprightAngles = {888, 180, 85, gripRelease};
     Angles dropOffAnglesLargePkg = {1583, 167.22, 14, 46};
     Angles dropOffAnglesSmallPkg = {2222, 147, 35, 35};
-    // Angles dropOffAnglesBoosters = {90, 90, 90, 18};
+    Angles pickupSweep= {2177, 135, 6, gripRelease};
 
     const float L0 = 10.125;   // length from ground to second joint (shoulder)
     const float L1 = 18.25625; // length from 2nd joint to 3rd joint (shoulder to wrist)

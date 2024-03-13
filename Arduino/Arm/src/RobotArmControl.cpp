@@ -1,19 +1,18 @@
 #include "../include/RobotArmControl.h"
 
 #include <ServoEasing.hpp>
-
-<<<<<<< HEAD
 #define EASE_SPEED 80
-=======
-#define EASE_SPEED 60
->>>>>>> 5bfe4d7 (edited for faster procedure)
 #define SHOULDER_MID_POSITION 80 
 #define WRIST_MID_POSITION 60
+#define BASE_X_AXIS_LOCATION 330
+#define BASE_NEGATIVE_X_AXIS_LOCATION 1388
+#define BASE_Y_AXIS_LOCATION 888
+#define BRIDGE_CONTACT_POINT 70
+#define SWEEP_EASE_SPEED 250
 
 ServoEasing wristServo;
 ServoEasing shoulderServo;
 ServoEasing baseServo;
-
 RobotArmControl::RobotArmControl(){
     // Intialize servos
     // RobotArmControl::initialize();
@@ -31,7 +30,7 @@ void RobotArmControl::initialize(){
     delay(500);
 
     // Define Pins
-    gripperServo.attach(ARM_GRIPPER_PIN, ARM_GRIPPER_MIN, ARM_GRIPPER_MAX);
+    gripperServo.attach(ARM_GRIPPER_PIN);
     wristServo.attach(ARM_WRIST_PIN, ARM_WRIST_MIN, ARM_WRIST_MAX);
     shoulderServo.attach(ARM_SHOULDER_PIN, ARM_SHOULDER_MIN, ARM_SHOULDER_MAX);
     baseServo.attach(ARM_BASE_PIN, ARM_BASE_MIN, ARM_BASE_MAX);
@@ -74,11 +73,8 @@ void RobotArmControl::updatePosition(String objective){
         moveToAngle(dropOffAnglesLargePkg.base, dropOffAnglesLargePkg.shoulder, dropOffAnglesLargePkg.wrist, dropOffAnglesLargePkg.gripper);
         updatePosition("release");
 		//delay(500);
-<<<<<<< HEAD
-		//updatePosition("initial");
-=======
         // wristServo.easeTo(initializedAngles.wrist);
->>>>>>> 5bfe4d7 (edited for faster procedure)
+		//updatePosition("initial");>>>>> cc3622ee42282b8d04944cf6670ff6a414f08ebc
     }
     else if (objective == "initial") {	
 		moveToAngle(initializedAngles.base, initializedAngles.shoulder, initializedAngles.wrist, initializedAngles.gripper);
@@ -92,19 +88,45 @@ void RobotArmControl::updatePosition(String objective){
         }
     else if(objective == "dropLarge"){
         moveToAngle(dropLargeContainer.base, uprightAngles.shoulder, uprightAngles.wrist, dropLargeContainer.gripper);
-        moveToAngle(dropLargeContainer.base, dropLargeContainer.shoulder, dropLargeContainer.wrist, dropLargeContainer.gripper);
+        moveToAngle(dropLargeContainer);
         //wristServo.easeTo(dropLargeContainer.wrist, EASE_SPEED);
-        baseServo.easeTo(1388, EASE_SPEED); 
+        baseServo.easeTo(BASE_NEGATIVE_X_AXIS_LOCATION, EASE_SPEED); 
     }
     else if(objective == "dropBridge"){
-        moveToAngle(dropBridgeAngles.base, dropBridgeAngles.shoulder, dropBridgeAngles.wrist, dropBridgeAngles.gripper);
-        wristServo.easeTo(70, EASE_SPEED);
+        moveToAngle(dropBridgeAngles);
+        wristServo.easeTo(BRIDGE_CONTACT_POINT, EASE_SPEED);
     }
     else if (objective == "release"){  
 		gripperServo.write(gripRelease);
         Serial.println(gripRelease);
         //delay(500);
 	}
+    else if( objective == "sweep"){
+        // moveToAngle(pickupSweep.base, uprightAngles.shoulder, uprightAngles.wrist,gripRelease);
+        // moveToAngle(pickupSweep); //determine position to pickup "sweep" metal
+        // delay(200);
+        gripperServo.write(0);
+        delay(100);
+        
+        //Move to Upright Position to avoid collisions
+        shoulderServo.easeTo(uprightAngles.shoulder, EASE_SPEED);
+        wristServo.easeTo(uprightAngles.wrist, EASE_SPEED);
+        baseServo.easeTo(uprightAngles.base, EASE_SPEED);
+        delay(200);
+
+        // Move to First Sweep location; 
+        baseServo.easeTo(888, EASE_SPEED);
+        shoulderServo.easeTo(90, EASE_SPEED);
+        wristServo.easeTo(25, EASE_SPEED);
+
+        // First Sweep 
+        sweep();
+    //    Second Sweep 
+    //    solveik() // FIND SECOND LOCATION TO SWEEP 
+    //    wristServo.easeTo(...); // FIND SECOND LOCATION TO SWEEP 
+    //    sweep();
+        //updatePosition("release");
+    }
 
     else{
         ;
@@ -184,21 +206,32 @@ void RobotArmControl::solveIK(double x_coordinate, double y_coordinate, double z
         moveToAngle(baseAngle, shoulderAngle, wristAngle, gripAngle);
     }
 }
+void RobotArmControl::sweep(){
+    // Sweep to right
+        baseServo.easeTo(BASE_X_AXIS_LOCATION + 50,SWEEP_EASE_SPEED); 
+    // Sweep back to left
+        baseServo.easeTo(BASE_NEGATIVE_X_AXIS_LOCATION - 50, SWEEP_EASE_SPEED);
+    // Return to neutral position
+        baseServo.easeTo(BASE_Y_AXIS_LOCATION,SWEEP_EASE_SPEED); 
 
-void RobotArmControl::calibrate(){	
-	int shoulderFeedback = analogRead(ARM_SHOULDER_FEEDBACK_PIN);
-    // int elbowFeedback = analogRead(ARM_ELBOW_FEEDBACK_PIN);
-    int wristFeedback = analogRead(ARM_WRIST_FEEDBACK_PIN);
-    int gripperFeedback = analogRead(ARM_GRIPPER_FEEDBACK_PIN);
-    // Convert feedback to angles - this requires mapping sensor values to degrees
 
-    /* Do not understand this portion
-    // Placeholder for conversion logic: map(value, fromLow, fromHigh, toLow, toHigh)
-    shoulderServo.write(map(shoulderFeedback, 0, 1023, 0, 180));
-    // elbowServo.write(map(elbowFeedback, 0, 1023, 0, 180));
-     wristServo.write(map(wristFeedback, 0, 1023, 0, 180));
-    gripperServo.write(map(gripperFeedback, 0, 1023, 0, 180));*/
 }
+
+
+// void RobotArmControl::calibrate(){	
+// 	int shoulderFeedback = analogRead(ARM_SHOULDER_FEEDBACK_PIN);
+//     // int elbowFeedback = analogRead(ARM_ELBOW_FEEDBACK_PIN);
+//     int wristFeedback = analogRead(ARM_WRIST_FEEDBACK_PIN);
+//     int gripperFeedback = analogRead(ARM_GRIPPER_FEEDBACK_PIN);
+//     // Convert feedback to angles - this requires mapping sensor values to degrees
+
+//     /* Do not understand this portion
+//     // Placeholder for conversion logic: map(value, fromLow, fromHigh, toLow, toHigh)
+//     shoulderServo.write(map(shoulderFeedback, 0, 1023, 0, 180));
+//     // elbowServo.write(map(elbowFeedback, 0, 1023, 0, 180));
+//      wristServo.write(map(wristFeedback, 0, 1023, 0, 180));
+//     gripperServo.write(map(gripperFeedback, 0, 1023, 0, 180));*/
+// }
 
 // int RobotArmControl::getFunctionCount()
 // {

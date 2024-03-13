@@ -9,7 +9,7 @@ void setup(){
     Arm.initialize(); // Initialize the robot arm
     Arm.updatePosition("initial");
     delay(500);
-    collectLargePackages();
+   // collectLargePackages();
 }
 
 void loop(){  
@@ -26,47 +26,47 @@ void loop(){
 //     //     SPIReceiver::clearBuffer(); // Clear the SPI buffer after processing
 //     // }
 
-//     while (!Serial.available()) {}
-// String input = Serial.readString();
+    while (!Serial.available()) {}
+String input = Serial.readString();
 
-// // Find the first space separating x and y
-// int spaceIndex1 = input.indexOf(' ');
+// Find the first space separating x and y
+int spaceIndex1 = input.indexOf(' ');
 
-// if (spaceIndex1 != -1) {
-//     // Extract x as a substring from the start of the string to the first space
-//     String xStr = input.substring(0, spaceIndex1);
-//     double x = xStr.toDouble();
-//     Serial.println(x); // Print x with 2 decimal places
+if (spaceIndex1 != -1) {
+    // Extract x as a substring from the start of the string to the first space
+    String xStr = input.substring(0, spaceIndex1);
+    double x = xStr.toDouble();
+    Serial.println(x); // Print x with 2 decimal places
 
-//     // Find the second space separating y and z
-//     int spaceIndex2 = input.indexOf(' ', spaceIndex1 + 1);
+    // Find the second space separating y and z
+    int spaceIndex2 = input.indexOf(' ', spaceIndex1 + 1);
 
-//     if (spaceIndex2 != -1) {
-//         // Extract y as a substring between the first and second space
-//         String yStr = input.substring(spaceIndex1 + 1, spaceIndex2);
-//         double y = yStr.toDouble();
-//         Serial.println(y); // Print y with 2 decimal places
+    if (spaceIndex2 != -1) {
+        // Extract y as a substring between the first and second space
+        String yStr = input.substring(spaceIndex1 + 1, spaceIndex2);
+        double y = yStr.toDouble();
+        Serial.println(y); // Print y with 2 decimal places
 
-//         // Find the third space separating z and objective
-//         int spaceIndex3 = input.indexOf(' ', spaceIndex2 + 1);
+        // Find the third space separating z and objective
+        int spaceIndex3 = input.indexOf(' ', spaceIndex2 + 1);
 
-//         if (spaceIndex3 != -1) {
-//             // Extract z as a substring between the second and third space
-//             String zStr = input.substring(spaceIndex2 + 1, spaceIndex3);
-//             double z = zStr.toDouble();
-//             Serial.println(z); // Print z with 2 decimal places
+        if (spaceIndex3 != -1) {
+            // Extract z as a substring between the second and third space
+            String zStr = input.substring(spaceIndex2 + 1, spaceIndex3);
+            double z = zStr.toDouble();
+            Serial.println(z); // Print z with 2 decimal places
 
-//             // Extract objective as a substring from the third space to the end of the string
-//             String obj = input.substring(spaceIndex3 + 1);
-//             Serial.println(obj);
+            // Extract objective as a substring from the third space to the end of the string
+            String obj = input.substring(spaceIndex3 + 1);
+            Serial.println(obj);
             
-// // Set the servo position to y degrees
-//      Arm.solveIK(x,y,z);
-//      Arm.updatePosition(obj);
-//      delay(500); 
-//      }
-//     }
-//}
+// Set the servo position to y degrees
+     Arm.solveIK(x,y,z);
+     Arm.updatePosition(obj);
+     delay(500); 
+     }
+    }
+}
 }
 
 
