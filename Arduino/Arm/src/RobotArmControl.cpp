@@ -102,22 +102,26 @@ void RobotArmControl::updatePosition(String objective){
         //delay(500);
 	}
     else if( objective == "sweep"){
-        // moveToAngle(pickupSweep.base, uprightAngles.shoulder, uprightAngles.wrist,gripRelease);
-        // moveToAngle(pickupSweep); //determine position to pickup "sweep" metal
-        // delay(200);
+        moveToAngle(pickupSweep.base, uprightAngles.shoulder, uprightAngles.wrist,gripRelease);
+        moveToAngle(pickupSweep); //determine position to pickup "sweep" metal
+        delay(200);
         gripperServo.write(0);
         delay(100);
         
-        //Move to Upright Position to avoid collisions
+        // //Move to Upright Position to avoid collisions
         shoulderServo.easeTo(uprightAngles.shoulder, EASE_SPEED);
         wristServo.easeTo(uprightAngles.wrist, EASE_SPEED);
-        baseServo.easeTo(uprightAngles.base, EASE_SPEED);
+        //baseServo.easeTo(uprightAngles.base, EASE_SPEED);
         delay(200);
 
-        // Move to First Sweep location; 
-        baseServo.easeTo(888, EASE_SPEED);
-        shoulderServo.easeTo(90, EASE_SPEED);
+        // // Move to First Sweep location; 
+        baseServo.easeTo(1300, EASE_SPEED);
         wristServo.easeTo(25, EASE_SPEED);
+        shoulderServo.easeTo(90, EASE_SPEED);
+        delay(200);
+        //baseServo.easeTo(1320,EASE_SPEED);
+        shoulderServo.easeTo(78,EASE_SPEED);
+        
 
         // First Sweep 
         sweep();
@@ -207,14 +211,31 @@ void RobotArmControl::solveIK(double x_coordinate, double y_coordinate, double z
     }
 }
 void RobotArmControl::sweep(){
-    // Sweep to right
-        baseServo.easeTo(BASE_X_AXIS_LOCATION + 50,SWEEP_EASE_SPEED); 
-    // Sweep back to left
-        baseServo.easeTo(BASE_NEGATIVE_X_AXIS_LOCATION - 50, SWEEP_EASE_SPEED);
-    // Return to neutral position
-        baseServo.easeTo(BASE_Y_AXIS_LOCATION,SWEEP_EASE_SPEED); 
-
-
+    // longest 
+    delay(100);
+    baseServo.easeTo(1320,EASE_SPEED);
+    delay(100);
+    // Sweep Quarter of the way
+    baseServo.easeTo(1240, EASE_SPEED);
+    wristServo.easeTo(25, EASE_SPEED); 
+    delay(500); 
+    // // Sweep to Y-axi
+    baseServo.easeTo(BASE_Y_AXIS_LOCATION,SWEEP_EASE_SPEED);
+    delay(500);
+    shoulderServo.easeTo(105,EASE_SPEED);
+    wristServo.easeTo(70, EASE_SPEED);
+    delay(700);
+    // Sweep 3/4 of the right 
+    wristServo.easeTo(25, EASE_SPEED);
+    baseServo.easeTo(700, SWEEP_EASE_SPEED);
+    delay(500);
+    shoulderServo.easeTo(92, EASE_SPEED);
+    wristServo.easeTo(70, EASE_SPEED);
+    delay(700);
+    shoulderServo.easeTo(90, EASE_SPEED);
+    // Sweep back to right 
+    wristServo.easeTo(25, EASE_SPEED);
+    baseServo.easeTo(BASE_X_AXIS_LOCATION + 100, SWEEP_EASE_SPEED);
 }
 
 

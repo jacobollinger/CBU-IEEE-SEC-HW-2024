@@ -59,7 +59,7 @@ private:
     Angles uprightAngles = {888, 180, 85, gripRelease};
     Angles dropOffAnglesLargePkg = {1583, 167.22, 14, 46};
     Angles dropOffAnglesSmallPkg = {2222, 147, 35, 35};
-    Angles pickupSweep= {2177, 135, 6, gripRelease};
+    Angles pickupSweep= {2177, 145, 5, gripRelease};
 
     const float L0 = 10.125;   // length from ground to second joint (shoulder)
     const float L1 = 18.25625; // length from 2nd joint to 3rd joint (shoulder to wrist)
