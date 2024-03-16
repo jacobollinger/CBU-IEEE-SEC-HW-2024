@@ -174,26 +174,8 @@ void collectSmallPackages()
             robotArmControl.updatePosition("initial");
             Serial.println("WAITING");
         }
-        else if (command == "dropSmall")
+        else if (command == "initial")
         {
-            robotArmControl.updatePosition("dropSmall");
-            delay(100);
-            robotArmControl.updatePosition("initial");
-            delay(100);
-            Serial.println("WAITING");
-        }
-        else if (command == "pickupLarge")
-        {
-            robotArmControl.updatePosition("pickupLarge");
-            delay(100);
-            robotArmControl.updatePosition("initial");
-            delay(100);
-            Serial.println("WAITING");
-        }
-        else if (command == "dropLarge")
-        {
-            robotArmControl.updatePosition("dropLarge");
-            delay(100);
             robotArmControl.updatePosition("initial");
             delay(100);
             Serial.println("WAITING");

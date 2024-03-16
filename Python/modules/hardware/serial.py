@@ -53,7 +53,7 @@ class SerialInterface:
         while self.running:
             data = self.serial.readline().decode('utf-8', 'ignore').strip()
             if data.startswith("LOG"):
-                print(f"ARDUINO {data}")
+                print(f"\t\t\t\t\t\t\t\t\t\t\t\tARDUINO {data}")
                 pass
             elif data == "WAITING":
                 self.waiting = True
