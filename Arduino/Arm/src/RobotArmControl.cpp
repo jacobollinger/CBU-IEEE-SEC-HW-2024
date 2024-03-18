@@ -111,25 +111,18 @@ void RobotArmControl::updatePosition(String objective){
         // //Move to Upright Position to avoid collisions
         shoulderServo.easeTo(uprightAngles.shoulder, EASE_SPEED);
         wristServo.easeTo(uprightAngles.wrist, EASE_SPEED);
-        //baseServo.easeTo(uprightAngles.base, EASE_SPEED);
         delay(200);
 
-        // // Move to First Sweep location; 
-        baseServo.easeTo(1300, EASE_SPEED);
+        // // // Move to First Sweep location; 
+        baseServo.easeTo(1320, EASE_SPEED);
         wristServo.easeTo(25, EASE_SPEED);
         shoulderServo.easeTo(90, EASE_SPEED);
         delay(200);
-        //baseServo.easeTo(1320,EASE_SPEED);
-        shoulderServo.easeTo(78,EASE_SPEED);
+        wristServo.easeTo(55, EASE_SPEED);
         
 
         // First Sweep 
         sweep();
-    //    Second Sweep 
-    //    solveik() // FIND SECOND LOCATION TO SWEEP 
-    //    wristServo.easeTo(...); // FIND SECOND LOCATION TO SWEEP 
-    //    sweep();
-        //updatePosition("release");
     }
 
     else{
@@ -211,30 +204,7 @@ void RobotArmControl::solveIK(double x_coordinate, double y_coordinate, double z
     }
 }
 void RobotArmControl::sweep(){
-    // longest 
-    delay(100);
-    baseServo.easeTo(1320,EASE_SPEED);
-    delay(100);
-    // Sweep Quarter of the way
-    baseServo.easeTo(1240, EASE_SPEED);
-    wristServo.easeTo(25, EASE_SPEED); 
-    delay(500); 
-    // // Sweep to Y-axi
-    baseServo.easeTo(BASE_Y_AXIS_LOCATION,SWEEP_EASE_SPEED);
     delay(500);
-    shoulderServo.easeTo(105,EASE_SPEED);
-    wristServo.easeTo(70, EASE_SPEED);
-    delay(700);
-    // Sweep 3/4 of the right 
-    wristServo.easeTo(25, EASE_SPEED);
-    baseServo.easeTo(700, SWEEP_EASE_SPEED);
-    delay(500);
-    shoulderServo.easeTo(92, EASE_SPEED);
-    wristServo.easeTo(70, EASE_SPEED);
-    delay(700);
-    shoulderServo.easeTo(90, EASE_SPEED);
-    // Sweep back to right 
-    wristServo.easeTo(25, EASE_SPEED);
     baseServo.easeTo(BASE_X_AXIS_LOCATION + 100, SWEEP_EASE_SPEED);
 }
 
