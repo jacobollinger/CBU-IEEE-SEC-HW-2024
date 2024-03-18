@@ -53,6 +53,23 @@
 #define ARM_GRIPPER_GRIP_SMALL_PACKAGE
 #define ARM_GRIPPER_GRIP_LARGE_PACKAGE
 
+// DONT KNOW PROPER PINS
+#define LCD_SCREEN_RS_PIN 
+#define LCD_SCREEN_RW_PIN 
+#define LCD_SCREEN_E_PIN 
+#define LCD_SCREEN_D4_PIN
+#define LCD_SCREEN_D5_PIN 
+#define LCD_SCREEN_D6_PIN 
+#define LCD_SCREEN_D7_PIN 
+#define LCD_SCREEN_A_PIN 
+#define LCD_SCREEN_K_PIN 
+
+
+
+
+
+
+
 #pragma endregion
 
 // #define SPI_EOT 0x04
