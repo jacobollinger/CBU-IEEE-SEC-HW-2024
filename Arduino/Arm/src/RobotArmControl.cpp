@@ -65,17 +65,27 @@ void RobotArmControl::updatePosition(String objective){
     }
     else if (objective == "largePackage"){  
 		gripperServo.write(gripLargePackage);
-		delay(500);
+		delay(200);
 		shoulderServo.easeTo(SHOULDER_MID_POSITION, EASE_SPEED);
         //delay(500);
 		//wristServo.easeTo(WRIST_MID_POSITION, EASE_SPEED);
         //delay(500);
-        moveToAngle(dropOffAnglesLargePkg.base, dropOffAnglesLargePkg.shoulder, dropOffAnglesLargePkg.wrist, dropOffAnglesLargePkg.gripper);
+        moveToAngle(dropOffAnglesLargePkg.base, dropOffAnglesLargePkg.shoulder, dropOffAnglesLargePkg.wrist, gripLargePackage);
+        delay(200);
         updatePosition("release");
-		//delay(500);
-        // wristServo.easeTo(initializedAngles.wrist);
-		//updatePosition("initial");>>>>> cc3622ee42282b8d04944cf6670ff6a414f08ebc
-    }
+	}
+    else if (objective == "largePackage2"){  
+		gripperServo.write(gripLargePackage);
+		delay(200);
+		shoulderServo.easeTo(SHOULDER_MID_POSITION, EASE_SPEED);
+        //delay(500);
+		//wristServo.easeTo(WRIST_MID_POSITION, EASE_SPEED);
+        //delay(500);
+        moveToAngle(dropOffAnglesLargePkg.base + 100, dropOffAnglesLargePkg.shoulder, dropOffAnglesLargePkg.wrist, gripLargePackage);
+        delay(200);
+        updatePosition("release");
+	}
+    
     else if (objective == "initial") {	
 		moveToAngle(initializedAngles.base, initializedAngles.shoulder, initializedAngles.wrist, initializedAngles.gripper);
         //delay(500);
@@ -115,14 +125,21 @@ void RobotArmControl::updatePosition(String objective){
 
         // // // Move to First Sweep location; 
         baseServo.easeTo(1320, EASE_SPEED);
-        wristServo.easeTo(25, EASE_SPEED);
-        shoulderServo.easeTo(90, EASE_SPEED);
+        wristServo.easeTo(33, EASE_SPEED);
+        shoulderServo.easeTo(80, EASE_SPEED);
         delay(200);
         wristServo.easeTo(55, EASE_SPEED);
         
 
         // First Sweep 
         sweep();
+    }
+    else if(objective == "disposeSweep") {
+        moveToAngle(disposeSweepAngles.base, uprightAngles.shoulder, uprightAngles.wrist, gripSweep);
+        moveToAngle(disposeSweepAngles);
+        updatePosition("release");
+
+    
     }
 
     else{

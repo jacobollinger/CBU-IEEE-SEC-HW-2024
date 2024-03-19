@@ -9,7 +9,7 @@ void setup(){
     Arm.initialize(); // Initialize the robot arm
     Arm.updatePosition("initial");
     delay(500);
-   // collectLargePackages();
+  //  collectLargePackages();
 }
 
 void loop(){  
@@ -73,22 +73,22 @@ if (spaceIndex1 != -1) {
 void collectLargePackages(){
     //delay(1000);
     // Collect Center package 
-    Arm.solveIK(-3.81, 13, 1.27);
-    Arm.updatePosition("largePackage");
+    Arm.solveIK(-4.5, 13, 1.27);
+    Arm.updatePosition("largePackage2");
 
     // Collect Right1 package 
-    Arm.solveIK(2.54, 14, 2.54);
+    Arm.solveIK(1.8, 14, 2.54);
     Arm.updatePosition("largePackage");
 
     // Collect Left1 package 
-    Arm.solveIK(-10, 12, 0);
+    Arm.solveIK(-11, 13, 0);
     Arm.updatePosition("largePackage");
 
     // Collect Right2 package 
-    Arm.solveIK(10, 17, 0);
+    Arm.solveIK(9, 17, 0);
     Arm.updatePosition("largePackage");
 
     // Collect Left2 package 
-    Arm.solveIK(-18, 13, -3);
+    Arm.solveIK(-16.5, 13.5, -3);
     Arm.updatePosition("largePackage");
 }
