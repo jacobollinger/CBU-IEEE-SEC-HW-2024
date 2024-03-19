@@ -1,5 +1,4 @@
 import cv2
-from math import exp, sqrt
 import numpy as np
 import torch
 
@@ -16,16 +15,17 @@ from time import sleep
 DEBUG_VIDEO_STREAM = True
 DEBUG_IMSHOW = False
 
-SMALL_PACKAGE_WIDTH_THRESHOLD = 20 # 75
+PIX_PER_DEG = 8.9333
+PIX_PER_INCH = 80
+SMALL_PACKAGE_WIDTH_THRESHOLD = 20
 SMALL_PACKAGE_DISTANCE_THRESHOLD = 15
 
+degrees_turned = 0
 fixedCamera = Camera()
 model = create_model(num_classes=NUM_CLASSES, size=640)
 timer = Timer()
-serial = SerialInterface("/dev/ttyACM1", 4800)
+serial = SerialInterface("/dev/ttyACM0", 4800)
 # serial = SerialInterface()
-
-
 
 if DEBUG_IMSHOW:
     from custom_object_detection_ieee.src.config import COLORS
@@ -46,7 +46,7 @@ if DEBUG_VIDEO_STREAM:
 
 
 model.load_state_dict(
-    torch.load("./data/out/ieee/e337l/best_model.pth", map_location=DEVICE)[
+    torch.load("./data/out/ieee/e273_BEST/best_model.pth", map_location=DEVICE)[
         "model_state_dict"
     ]
 )
@@ -54,23 +54,43 @@ model.to(DEVICE).eval()
 
 serial.start()
 
+
 def main():
 
     # Wait for signal from the Arduino to pick up the small packages
-    print("Waiting for start signal")
-    # while not detect_start_signal():
-    #     pass
+    print("Waiting for signal from Arduino to pickup small packages...")
+    while not detect_jetson_start_signal():
+        pass
 
-    # Collect the small package
-    # for i in range(3):
-    while (True):
-        collect_a_small_packages()
+    # # Collect the small package
+    # for i in range(3000):
+    #     print(f"Collecting small package {i + 1}")
+    #     collect_a_small_packages(i + 1)
 
-    # Handover control to the Arduino to do everything else
-    serial.write_line("done")
+    # # Handover control to the Arduino to do everything else
+    # serial.write_line("END")
+    
+    speed = 50
+    
+    i = 0
+    while True:
+        object_positions = scan_for_objects(object_types=["small_package"])
+        if serial.is_waiting():
+            if i == 0:
+                serial.write_line(f"rotateClockwise 45 {speed} ")
+            elif i == 1:
+                serial.write_line(f"rotateCounterClockwise 90 {speed} ")
+            elif i == 2:
+                serial.write_line(f"rotateClockwise 45 {speed} ")
+            elif i == 3:
+                serial.write_line(f"rotateCounterClockwise 180 100 ")
+            elif i == 4:
+                serial.write_line(f"rotateClockwise 180 100 ")
+            else:
+                i = 0
 
 
-def detect_start_signal():
+def detect_jetson_start_signal():
     """Detects the start signal
 
     Returns:
@@ -96,7 +116,7 @@ def scan_for_objects(
     fixed_ret = []
 
     images = [fixedCamera.get_image() for _ in range(num_images)]
-    images = [cv2.resize(image, (640, 640)) for image in images]
+    images = [cv2.resize(image, (640, 640)) for image in images if image is not None and len(image) > 0]
     # ? Does this need to be converted from BGR to RGB?
     images = [
         cv2.cvtColor(image, cv2.COLOR_BGR2RGB).astype(np.float32) for image in images
@@ -130,44 +150,102 @@ def scan_for_objects(
                 if class_name not in object_types:
                     continue
                 fixed_ret.append([class_name, box])
-                if DEBUG_VIDEO_STREAM or DEBUG_IMSHOW:
+                # if DEBUG_VIDEO_STREAM or DEBUG_IMSHOW:
                     # draw a line at 4.3481x-1268.9 +- THRESHOLD
-                    print(f"(292, {int(4.3481 * 292 - 1268.9)}), ({int(fixedCamera.width)}, {int(400 - 4.3481 * fixedCamera.width - 1268.9)})")
-                    cv2.line(image_np, (292, int(4.3481 * 292 - 1268.9)), (int(fixedCamera.width), int(4.3481 * fixedCamera.width - 1268.9)), (255,255,255), 2)
-                    cv2.line(image_np, (292 - SMALL_PACKAGE_WIDTH_THRESHOLD, int(4.3481 * 292 - 1268.9)), (int(fixedCamera.width) - SMALL_PACKAGE_WIDTH_THRESHOLD, int(4.3481 * fixedCamera.width - 1268.9)), (0, 255, 0), 2)
-                    cv2.line(image_np, (292 + SMALL_PACKAGE_WIDTH_THRESHOLD, int(4.3481 * 292 - 1268.9)), (int(fixedCamera.width) + SMALL_PACKAGE_WIDTH_THRESHOLD, int(4.3481 * fixedCamera.width - 1268.9)), (0, 255, 0), 2)
-                    
+                    # print(
+                    #     f"(292, {int(4.3481 * 292 - 1268.9)}), ({int(fixedCamera.width)}, {int(400 - 4.3481 * fixedCamera.width - 1268.9)})"
+                    # )
+                    # cv2.line(
+                    #     image_np,
+                    #     (292, int(4.3481 * 292 - 1268.9)),
+                    #     (
+                    #         int(fixedCamera.width),
+                    #         int(4.3481 * fixedCamera.width - 1268.9),
+                    #     ),
+                    #     (255, 255, 255),
+                    #     2,
+                    # )
+                    # cv2.line(
+                    #     image_np,
+                    #     (
+                    #         292 - SMALL_PACKAGE_WIDTH_THRESHOLD,
+                    #         int(4.3481 * 292 - 1268.9),
+                    #     ),
+                    #     (
+                    #         int(fixedCamera.width) - SMALL_PACKAGE_WIDTH_THRESHOLD,
+                    #         int(4.3481 * fixedCamera.width - 1268.9),
+                    #     ),
+                    #     (0, 255, 0),
+                    #     2,
+                    # )
+                    # cv2.line(
+                    #     image_np,
+                    #     (
+                    #         292 + SMALL_PACKAGE_WIDTH_THRESHOLD,
+                    #         int(4.3481 * 292 - 1268.9),
+                    #     ),
+                    #     (
+                    #         int(fixedCamera.width) + SMALL_PACKAGE_WIDTH_THRESHOLD,
+                    #         int(4.3481 * fixedCamera.width - 1268.9),
+                    #     ),
+                    #     (0, 255, 0),
+                    #     2,
+                    # )
+
                     # cv2.line(image_np, (400 - SMALL_PACKAGE_WIDTH_THRESHOLD, 0), (400 - SMALL_PACKAGE_WIDTH_THRESHOLD, int(fixedCamera.height)), (0, 255, 0), 2)
                     # cv2.line(image_np, (400 + SMALL_PACKAGE_WIDTH_THRESHOLD, 0), (400 + SMALL_PACKAGE_WIDTH_THRESHOLD, int(fixedCamera.height)), (0, 255, 0), 2)
-                    
+
                     # draw a horizontal line at the THRESHOLDS
-                    cv2.line(image_np, (0, 400 - SMALL_PACKAGE_DISTANCE_THRESHOLD), (int(fixedCamera.width), 400 - SMALL_PACKAGE_DISTANCE_THRESHOLD), (255, 0, 0), 2)
-                    cv2.line(image_np, (0, 400 + SMALL_PACKAGE_DISTANCE_THRESHOLD), (int(fixedCamera.width), 400 + SMALL_PACKAGE_DISTANCE_THRESHOLD), (255, 0, 0), 2)
+                    # cv2.line(
+                    #     image_np,
+                    #     (0, 400 - SMALL_PACKAGE_DISTANCE_THRESHOLD),
+                    #     (
+                    #         int(fixedCamera.width),
+                    #         400 - SMALL_PACKAGE_DISTANCE_THRESHOLD,
+                    #     ),
+                    #     (255, 0, 0),
+                    #     2,
+                    # )
+                    # cv2.line(
+                    #     image_np,
+                    #     (0, 400 + SMALL_PACKAGE_DISTANCE_THRESHOLD),
+                    #     (
+                    #         int(fixedCamera.width),
+                    #         400 + SMALL_PACKAGE_DISTANCE_THRESHOLD,
+                    #     ),
+                    #     (255, 0, 0),
+                    #     2,
+                    # )
 
-
-                    color = COLORS[CLASSES.index(class_name)]
-                    xmin = int((box[0] / images[i].shape[1]) * images[0].shape[1])
-                    ymin = int((box[1] / images[i].shape[0]) * images[0].shape[0])
-                    xmax = int((box[2] / images[i].shape[1]) * images[0].shape[1])
-                    ymax = int((box[3] / images[i].shape[0]) * images[0].shape[0])
-                    cv2.rectangle(
-                        image_np,
-                        (xmin, ymin),
-                        (xmax, ymax),
-                        color[::-1],
-                        3,
-                    )
-                    cv2.putText(
-                        image_np,
-                        f"{class_name} {scores[j]:.2f}",
-                        (xmin, ymin - 5),
-                        cv2.FONT_HERSHEY_SIMPLEX,
-                        0.8,
-                        color[::-1],
-                        2,
-                        lineType=cv2.LINE_AA,
-                    )
-                    cv2.circle(image_np, ((xmin + xmax) // 2, (ymin + ymax) // 2), 5, (0, 0, 255), -1)
+                    # color = COLORS[CLASSES.index(class_name)]
+                    # xmin = int((box[0] / images[i].shape[1]) * images[0].shape[1])
+                    # ymin = int((box[1] / images[i].shape[0]) * images[0].shape[0])
+                    # xmax = int((box[2] / images[i].shape[1]) * images[0].shape[1])
+                    # ymax = int((box[3] / images[i].shape[0]) * images[0].shape[0])
+                    # cv2.rectangle(
+                    #     image_np,
+                    #     (xmin, ymin),
+                    #     (xmax, ymax),
+                    #     color[::-1],
+                    #     3,
+                    # )
+                    # cv2.putText(
+                    #     image_np,
+                    #     f"{class_name} {scores[j]:.2f}",
+                    #     (xmin, ymin - 5),
+                    #     cv2.FONT_HERSHEY_SIMPLEX,
+                    #     0.8,
+                    #     color[::-1],
+                    #     2,
+                    #     lineType=cv2.LINE_AA,
+                    # )
+                    # cv2.circle(
+                    #     image_np,
+                    #     ((xmin + xmax) // 2, (ymin + ymax) // 2),
+                    #     5,
+                    #     (0, 0, 255),
+                    #     -1,
+                    # )
 
             if DEBUG_VIDEO_STREAM:
                 image_np = cv2.resize(image_np, (1920, 1080))
@@ -181,18 +259,66 @@ def scan_for_objects(
                 if cv2.waitKey(1) & 0xFF == ord("q"):
                     break
 
+    annotations = []
+    # include annotations only if they appear in multiple images
+    # for i in range(len(outputs)):
+    #     output1 = outputs[i]
+    #     boxes1 = output1["boxes"].data.numpy()
+    #     for j in range(len(boxes)):
+    #         box1 = boxes1[j]
+    #         for k in range(i, len(outputs)):
+    #             output2 = outputs[k]
+    #             boxes2 = output2["boxes"].data.numpy()
+    #             for l in range(len(outputs[k])):
+    #                 box2 = boxes2[l]
+                    
+
+    #                 # if the boxes overlap
+    #                 if (
+    #                     outputs[i]["labels"][j] == outputs[k]["labels"][l]
+    #                     and box1[0] < box2[2]
+    #                     and box1[2] > box2[0]
+    #                     and box1[1] < box2[3]
+    #                     and box1[3] > box2[1]
+    #                 ):
+    #                     intersection = [
+    #                         max(box1[0], box2[0]),
+    #                         max(box1[1], box2[1]),
+    #                         min(box1[2], box2[2]),
+    #                         min(box1[3], box2[3]),
+    #                     ]
+    #                     class_name = CLASSES[output["labels"][j].cpu().numpy()]
+    #                     annotations.append([class_name, intersection])
+
     return fixed_ret
 
-PIX_PER_DEG = 8.9333
-PIX_PER_INCH = 80
-def collect_a_small_packages():
+
+def collect_a_small_packages(num):
     """Collects the small packages from the environment"""
+    global degrees_turned
     closest_small_package_center = [fixedCamera.width / 2, 0]
     degree = 16
     distance = 2
     speed = 50
 
-    while (True):
+    object_positions = scan_for_objects(object_types=["small_package"])
+    if len(object_positions) == 0:
+        # rotate back to straight
+        print("No small packages found. Rotating back to center")
+        if degrees_turned < 0:
+            print(f"rotateClockwise {abs(degrees_turned)} {speed} ")
+            serial.write_line(f"rotateClockwise {abs(degrees_turned)} {speed} ")
+        elif degrees_turned > 0:
+            print(f"rotateCounterClockwise {abs(degrees_turned)} {speed} ")
+            serial.write_line(f"rotateCounterClockwise {abs(degrees_turned)} {speed} ")
+        else:
+            print("Centered but no small packages found")
+
+        degrees_turned = 0
+    # elif not num == 3:
+    #     return
+
+    while True:
         object_positions = scan_for_objects(object_types=["small_package"])
         closest_small_package = max(
             (pos for obj, pos in object_positions if obj == "small_package"),
@@ -200,45 +326,60 @@ def collect_a_small_packages():
             key=lambda x: x[3],
         )
 
-        if closest_small_package is None:
-            print("No small packages found")
-            continue
-
-        closest_small_package_center = (
-            (closest_small_package[0] + closest_small_package[2]) / 2,
-            (closest_small_package[1] + closest_small_package[3]) / 2,
-        )
-        
-        degree = (closest_small_package_center[0] - (closest_small_package_center[1] + 1268.9) / 4.3481) / PIX_PER_DEG
-        
-        # print(f"Center: {closest_small_package_center[0]}, {closest_small_package_center[1]}: solveIK 0 {solveY(closest_small_package_center[1])} -1")
-
         if serial.is_waiting():
-            
+            if closest_small_package is None:
+                print("No small packages found while rotating")
+                continue
+                # return
+
+            closest_small_package_center = (
+                (closest_small_package[0] + closest_small_package[2]) / 2,
+                (closest_small_package[1] + closest_small_package[3]) / 2,
+            )
+
+            degree = (
+                closest_small_package_center[0]
+                - (closest_small_package_center[1] + 1268.9) / 4.3481
+            ) / PIX_PER_DEG
+
+            # print(f"Center: {closest_small_package_center[0]}, {closest_small_package_center[1]}: solveIK 0 {solveY(closest_small_package_center[1])} -1")
+
+            print(f"Total degrees turned: {degrees_turned}")
             if (
                 closest_small_package_center[0]
-                < (closest_small_package_center[1] + 1268.9) / 4.3481 - SMALL_PACKAGE_WIDTH_THRESHOLD
+                < (closest_small_package_center[1] + 1268.9) / 4.3481
+                - SMALL_PACKAGE_WIDTH_THRESHOLD
             ):
+                degrees_turned = degrees_turned + degree
                 degree = degree * -1
-                print(f"Moving to closest small package center: {closest_small_package_center[0]}, {closest_small_package_center[1]}")
+                print(
+                    f"Moving to closest small package center: {closest_small_package_center[0]}, {closest_small_package_center[1]}"
+                )
                 print(f"Rotate counter clockwise {degree:.2f} degrees at speed {speed}")
                 serial.write_line(f"rotateCounterClockwise {degree:.2f} {speed} ")
             elif (
                 closest_small_package_center[0]
-                > (closest_small_package_center[1] + 1268.9) / 4.3481 + SMALL_PACKAGE_WIDTH_THRESHOLD
+                > (closest_small_package_center[1] + 1268.9) / 4.3481
+                + SMALL_PACKAGE_WIDTH_THRESHOLD
             ):
-                print(f"Moving to closest small package center: {closest_small_package_center[0]}, {closest_small_package_center[1]}")
+                degrees_turned = degrees_turned + degree
+                print(
+                    f"Moving to closest small package center: {closest_small_package_center[0]}, {closest_small_package_center[1]}"
+                )
                 print(f"Rotate clockwise {degree} degrees at speed {speed}")
                 serial.write_line(f"rotateClockwise {degree:.2f} {speed} ")
             else:
+                print("Centered on small package rotation")
                 break
                 # pass
 
             if speed > 64:
                 speed = speed / 2
+        # else:
+            # print("Waiting for Arduino to finish previous command")
 
-    speed = 256
-    while (True):
+    speed = 100
+    while True:
         object_positions = scan_for_objects(object_types=["small_package"])
         closest_small_package = max(
             (pos for obj, pos in object_positions if obj == "small_package"),
@@ -246,32 +387,31 @@ def collect_a_small_packages():
             key=lambda x: x[3],
         )
 
-        if closest_small_package is None:
-            print("No small packages found 2")
-            continue
-
-        closest_small_package_center = (
-            (closest_small_package[0] + closest_small_package[2]) / 2,
-            (closest_small_package[1] + closest_small_package[3]) / 2,
-        )
-        
-        distance = abs((400 - closest_small_package_center[1]) / PIX_PER_INCH)
-        
-        # print(f"Center: {closest_small_package_center[0]}, {closest_small_package_center[1]}")
-
         if serial.is_waiting():
+
+            if closest_small_package is None:
+                print("No small packages found while moving forward or backward")
+                serial.write_line(f"moveBackwardEncoders 1 50 ")
+                continue
+                # return
+
+            closest_small_package_center = (
+                (closest_small_package[0] + closest_small_package[2]) / 2,
+                (closest_small_package[1] + closest_small_package[3]) / 2,
+            )
+
+            distance = abs((400 - closest_small_package_center[1]) / PIX_PER_INCH)
+
+            # print(f"Center: {closest_small_package_center[0]}, {closest_small_package_center[1]}")
+
             print(
                 f"Moving to closest small package center: {closest_small_package_center[0]}, {closest_small_package_center[1]}"
             )
-            if (
-                closest_small_package_center[1]
-                < 400 - SMALL_PACKAGE_DISTANCE_THRESHOLD
-            ):
+            if closest_small_package_center[1] < 400 - SMALL_PACKAGE_DISTANCE_THRESHOLD:
                 print(f"moveForwardEncoders {distance}")
                 serial.write_line(f"moveForwardEncoders {distance} {speed} ")
             elif (
-                closest_small_package_center[1]
-                > 400 + SMALL_PACKAGE_DISTANCE_THRESHOLD
+                closest_small_package_center[1] > 400 + SMALL_PACKAGE_DISTANCE_THRESHOLD
             ):
                 print(f"moveBackwardEncoders {distance}")
                 serial.write_line(f"moveBackwardEncoders {distance} {speed} ")
@@ -280,9 +420,9 @@ def collect_a_small_packages():
                 # pass
 
             if speed > 32:
-                    speed = speed / 2
+                speed = speed / 2
 
-    while (False):
+    while False:
         object_positions = scan_for_objects(object_types=["small_package"])
         closest_small_package = max(
             (pos for obj, pos in object_positions if obj == "small_package"),
@@ -291,34 +431,32 @@ def collect_a_small_packages():
         )
 
         if closest_small_package is None:
-            print("No small packages found")
+            print("No small packages found while rotating 2")
             continue
 
         closest_small_package_center = (
             (closest_small_package[0] + closest_small_package[2]) / 2,
             (closest_small_package[1] + closest_small_package[3]) / 2,
         )
-        
+
         degree = (400 - closest_small_package_center[0]) / PIX_PER_DEG
-        
+
         # print(f"Center: {closest_small_package_center[0]}, {closest_small_package_center[1]}: solveIK 0 {solveY(closest_small_package_center[1])} -1")
 
         if serial.is_waiting() or True:
             # degree = degree + 10
-            
-            if (
-                closest_small_package_center[0]
-                < 400 - SMALL_PACKAGE_WIDTH_THRESHOLD
-            ):
-                print(f"Moving to closest small package center: {closest_small_package_center[0]}, {closest_small_package_center[1]}")
+
+            if closest_small_package_center[0] < 400 - SMALL_PACKAGE_WIDTH_THRESHOLD:
+                print(
+                    f"Moving to closest small package center: {closest_small_package_center[0]}, {closest_small_package_center[1]}"
+                )
                 print(f"Rotate counter clockwise {degree:.2f} degrees at speed {speed}")
                 serial.write_line(f"rotateCounterClockwise {degree:.2f} {speed} ")
-            elif (
-                closest_small_package_center[0]
-                > 400 + SMALL_PACKAGE_WIDTH_THRESHOLD
-            ):
+            elif closest_small_package_center[0] > 400 + SMALL_PACKAGE_WIDTH_THRESHOLD:
                 degree = degree * -1
-                print(f"Moving to closest small package center: {closest_small_package_center[0]}, {closest_small_package_center[1]}")
+                print(
+                    f"Moving to closest small package center: {closest_small_package_center[0]}, {closest_small_package_center[1]}"
+                )
                 print(f"Rotate clockwise {degree} degrees at speed {speed}")
                 serial.write_line(f"rotateClockwise {degree:.2f} {speed} ")
             else:
@@ -330,11 +468,10 @@ def collect_a_small_packages():
 
     while not serial.is_waiting():
         pass
-    sleep(5)
-    print("Picking up the small package")
+    sleep(1)
     # coords = input("Enter the coordinates of the small package: ")
     # serial.write_line(f"solveIK {coords} ")
-    
+
     # while (True):
     #     scan_for_objects()
     #     closest_small_package_area = (closest_small_package[2] - closest_small_package[0]) * (closest_small_package[3] - closest_small_package[1])
@@ -347,11 +484,14 @@ def collect_a_small_packages():
     #     while not serial.is_waiting():
     #         pass
 
-
-    serial.write_line(f"solveIK {solveX(closest_small_package_center[0])} {solveY(closest_small_package_center[1])} 3 ")
+    print("Moving arm to small package")
+    serial.write_line(
+        f"solveIK {solveX(closest_small_package_center[0])} {solveY(closest_small_package_center[1])} 2.54 "
+    )
     while not serial.is_waiting():
         pass
     sleep(1)
+    print("Picking up the small package")
     serial.write_line("pickupSmallPackage")
     while not serial.is_waiting():
         pass
@@ -359,6 +499,7 @@ def collect_a_small_packages():
 
 def solveX(value):
     return 0.033 * value - 13.053
+
 
 def solveY(value):
     return 11 / 400 * value

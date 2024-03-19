@@ -13,6 +13,7 @@ class SerialInterface:
     def start(self):
         if self.port is None:
             print("Serial port is not specified.")
+            self._store_data("START")
             return
         self.serial = serial.Serial(self.port, self.baudrate)
         self.running = True
@@ -47,6 +48,8 @@ class SerialInterface:
         return len(self.lines) > 0
     
     def is_waiting(self):
+        if self.port is None:
+            return True
         return self.waiting
 
     def _read_data(self):

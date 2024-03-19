@@ -9,7 +9,7 @@ void FunctionMap::init()
     functionCount = 0;
 }
 
-void FunctionMap::addFunction(const char *name, void (*function)(const char *args[]))
+void FunctionMap::addFunction(String name, void (*function)(String *args))
 {
     Function *newFunctions = new Function[functionCount + 1];
     for (int i = 0; i < functionCount; i++)
@@ -30,21 +30,32 @@ void FunctionMap::addFunctions(const Function *newFunctions, int count)
     for (int i = 0; i < count; i++)
     {
         Logger::log("Adding function: ", false);
-        Logger::log((String)newFunctions[i].name);
+        Logger::log(newFunctions[i].name);
         addFunction(newFunctions[i].name, newFunctions[i].function);
     }
 }
 
-void FunctionMap::callFunction(const char *name, const char *args[])
+void FunctionMap::callFunction(String name, String *args)
 {
     for (int i = 0; i < functionCount; i++)
     {
-        if (strcmp(functions[i].name, name) == 0)
+        if (functions[i].name == name)
         {
-            Logger::log("Calling function: ", false);
-            Logger::log((String)functions[i].name);
+            String log = "Calling function: ";
+            log += name;
+            log += " with args: ";
+            for (int j = 0; j < sizeof(args); j++)
+            {
+                log += args[j];
+                log += " ";
+            }
+            Logger::log(log);
+
             functions[i].function(args);
             return;
         }
     }
+
+    String log = "Function not found: " + name;
+    Logger::log(log);
 }

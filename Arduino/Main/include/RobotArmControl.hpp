@@ -6,7 +6,7 @@
 #include <math.h>
 
 #include "Defines.hpp"
-#include "FunctionMap.hpp"
+// #include "FunctionMap.hpp"
 
 class RobotArmControl
 {
@@ -28,21 +28,21 @@ public:
     // void updatePosition(double x, double y, double z, double g);
     void updatePosition(String objective);
     void solveIK(double x, double y, double z);
+    void sweep();
     void calibrate();
 
-    // int getFunctionCount();
-    // FunctionMap::Function *getFunctions();
-    // void updatePositionSerial(String *args);
-    // void solveIKSerial(String *args);
+    // static int getFunctionCount();
+    // static FunctionMap::Function *getFunctions();
 
 private:
     Servo gripperServo; // DMA-MG90-A 270
 
     // Predefined Angles *Determine these
-    const double gripLargePackage = 46;
-    const double gripSmallPackage = 27;
+    const double gripLargePackage =30;
+    const double gripSmallPackage = 35;
     const double gripBooster = 18;
     const double gripRelease = 70;
+    const double gripSweep = 5; 
 
     // Store specific angles in arrays
     // double dropBridgeAngles[4] = {90, 90, 90, 90};			  // set angles for droppping off bridge *update
@@ -56,10 +56,12 @@ private:
     Angles dropSmallContainer = {2094, 138, 7, 0};
     Angles dropLargeContainer = {1888, 154, 7, 20};
     Angles initializedAngles = {888, 170, 25, gripRelease};
+    Angles negativeInitializedAngles = {2000, 170, 25, gripRelease};
+    Angles centerGravityForward = {888, 120, 75, gripRelease};
     Angles uprightAngles = {888, 180, 85, gripRelease};
-    Angles dropOffAnglesLargePkg = {1583, 167.22, 14, 46};
-    Angles dropOffAnglesSmallPkg = {2222, 147, 35, gripSmallPackage};
-    // Angles dropOffAnglesBoosters = {90, 90, 90, 18};
+    Angles dropOffAnglesLargePkg = {1583, 167.22, 14, gripLargePackage};
+    Angles dropOffAnglesSmallPkg = {2222, 147, 35, 35};
+    Angles pickupSweep= {2177, 145, 5, gripRelease};
 
     const float L0 = 10.125;   // length from ground to second joint (shoulder)
     const float L1 = 18.25625; // length from 2nd joint to 3rd joint (shoulder to wrist)

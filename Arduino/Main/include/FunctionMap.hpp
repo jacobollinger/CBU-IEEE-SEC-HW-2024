@@ -10,14 +10,14 @@ class FunctionMap
 public:
     struct Function
     {
-        const char *name;
-        void (*function)(const char *args[]);
+        String name;
+        void (*function)(String *args);
     };
 
     static void init();
-    static void addFunction(const char *name, void (*function)(const char *args[]));
+    static void addFunction(String name, void (*function)(String *args));
     static void addFunctions(const Function *functions, int count);
-    static void callFunction(const char *name, const char *args[]);
+    static void callFunction(String name, String *args);
 
 private:
     static Function *functions;
