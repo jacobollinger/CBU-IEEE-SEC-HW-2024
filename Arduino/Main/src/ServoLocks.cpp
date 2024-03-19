@@ -6,9 +6,9 @@ ServoLocks::ServoLocks()
 
 void ServoLocks::init()
 {
-    smallPackageContainerLock.attach(4);
-    largePackageContainerLock.attach(5);
-    bridgeLock.attach(13);
+    // smallPackageContainerLock.attach(13);
+    largePackageContainerLock.attach(4);
+    bridgeLock.attach(5);
 
     smallPackageContainerLock.write(smallPackageLockPos);
     delay(600);

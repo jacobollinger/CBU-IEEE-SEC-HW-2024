@@ -24,8 +24,8 @@ private:
     int smallPackageUnlockPos = 0;   // servo1 to drop container and bridge
     int bridgeLockPos = 0;           // servo1 to drop container and bridge
     int bridgeUnlockPos = 180;       // servo3 position for the bridge
-    int largePackageLockPos = 50;    // servo2 posiiton for setup
-    int largePackageUnlockPos = 150; // servo2 to drop container
+    int largePackageLockPos = 90;    // servo2 posiiton for setup
+    int largePackageUnlockPos = 180; // servo2 to drop container
 };
 
 #endif // SERVOLOCKS_HPP
