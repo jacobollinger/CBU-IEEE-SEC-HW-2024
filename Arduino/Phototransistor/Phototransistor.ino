@@ -1,7 +1,7 @@
 void setup()
 {
     Serial.begin(115200);
-    pinMode(A0, INPUT);
+    pinMode(A13, INPUT);
 }
 
 void loop()

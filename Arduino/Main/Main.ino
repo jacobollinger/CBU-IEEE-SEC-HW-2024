@@ -58,7 +58,8 @@ void loop()
 
     Logger::log("Starting loop...");
     delay(50); // Small delay for stability
-    // collectLargePackages();
+
+    waitForStartLED();
 
     collectSmallPackages();
 
