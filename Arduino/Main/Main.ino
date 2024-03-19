@@ -2,6 +2,7 @@
 
 #include "./include/Defines.hpp"
 #include "./include/FunctionMap.hpp"
+#include "./include/LCDScreen.hpp"
 #include "./include/Logger.hpp"
 #include "./include/Phototransistor.hpp"
 #include "./include/RobotArmControl.hpp"
@@ -12,6 +13,7 @@
 
 bool hasExecutedOnce = false;
 
+LCDScreen lcdScreen = LCDScreen();
 Phototransistor phototransistor = Phototransistor(PHOTOTRANSISTOR_PIN);
 RobotArmControl robotArmControl = RobotArmControl();
 ServoLocks servoLocks = ServoLocks();
@@ -27,6 +29,8 @@ void setup()
 
     servoLocks.init();
     wheelControls = WheelControls();
+
+    lcdScreen.init();
 
     // FunctionMap::init();
     // FunctionMap::addFunctions(robotArmControl.getFunctions(), robotArmControl.getFunctionCount());

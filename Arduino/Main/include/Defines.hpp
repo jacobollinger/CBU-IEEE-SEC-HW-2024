@@ -4,7 +4,6 @@
 #define DEBUG true
 #define BAUDRATE 4800
 
-#pragma region Wheel Definitions
 #define WHEELS_M1_FLT 33
 #define WHEELS_M1_PWM 8
 #define WHEELS_M1_SLP 30
@@ -24,10 +23,7 @@
 #define WHEELS_M2_ENCA 2
 #define WHEELS_M2_ENCB 3
 
-#pragma endregion
-
 // TODO: Add arm definitions
-#pragma region ADC Definitions
 #define ARM_BASE_PIN 12
 #define ARM_SHOULDER_PIN 11
 #define ARM_WRIST_PIN 10
@@ -46,14 +42,12 @@
 #define ARM_GRIPPER_MIN 440
 #define ARM_GRIPPER_MAX 1408
 
-#define ARM_GRIPPER_OPEN
-#define ARM_GRIPPER_GRIP_FUEL_TANK
-#define ARM_GRIPPER_GRIP_SMALL_PACKAGE
-#define ARM_GRIPPER_GRIP_LARGE_PACKAGE
-
-#pragma endregion
-
-#pragma region Phototransistor Definitions
+#define LCD_SCREEN_RS_PIN 42
+#define LCD_SCREEN_E_PIN 43
+#define LCD_SCREEN_D4_PIN 44
+#define LCD_SCREEN_D5_PIN 45
+#define LCD_SCREEN_D6_PIN 46
+#define LCD_SCREEN_D7_PIN 47
 #define PHOTOTRANSISTOR_PIN A13
 // TODO: Add phototransistor threshold
 #define PHOTOTRANSISTOR_THRESHOLD 1000

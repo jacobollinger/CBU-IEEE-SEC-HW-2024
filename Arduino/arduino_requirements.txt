@@ -1,4 +1,5 @@
 DualG2HighPowerMotorShield
+LiquidCrystal
 NewPing
 Servo
 ServoEasing
