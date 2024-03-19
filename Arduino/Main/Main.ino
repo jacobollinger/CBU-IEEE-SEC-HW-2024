@@ -63,29 +63,25 @@ void loop()
 
 void collectLargePackages()
 {
-    // delay(1000);
-    //  Collect Center package
-    robotArmControl.solveIK(-3.81, 13, 1.27);
-    robotArmControl.updatePosition("largePackage");
+    // Collect Center package 
+    Arm.solveIK(-4.5, 13, 1.27);
+    Arm.updatePosition("largePackage2");
 
-    // Collect Right1 package
-    robotArmControl.solveIK(2.54, 14, 2.54);
-    robotArmControl.updatePosition("largePackage");
+    // Collect Right1 package 
+    Arm.solveIK(1.8, 14, 2.54);
+    Arm.updatePosition("largePackage");
 
-    // Collect Left1 package
-    robotArmControl.solveIK(-10, 12, 0);
-    robotArmControl.updatePosition("largePackage");
+    // Collect Left1 package 
+    Arm.solveIK(-11, 13, 0);
+    Arm.updatePosition("largePackage");
 
-    // Collect Right2 package
-    robotArmControl.solveIK(10, 17, 0);
-    robotArmControl.updatePosition("largePackage");
+    // Collect Right2 package 
+    Arm.solveIK(9, 17, 0);
+    Arm.updatePosition("largePackage");
 
-    // Collect Left2 package
-    robotArmControl.solveIK(-18, 13, -3);
-    robotArmControl.updatePosition("largePackage");
-
-    // Return to initial position
-    robotArmControl.updatePosition("initial");
+    // Collect Left2 package 
+    Arm.solveIK(-16.5, 13.5, -3);
+    Arm.updatePosition("largePackage");
 }
 
 void collectSmallPackages()
