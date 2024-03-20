@@ -1,4 +1,4 @@
-#include "../include/RobotArmControl.h"
+#include "../include/RobotArmControl.hpp"
 
 #include <ServoEasing.hpp>
 #define EASE_SPEED 80
@@ -142,8 +142,11 @@ void RobotArmControl::updatePosition(String objective){
         sweep();
     }
     else if(objective == "disposeSweep") {
-        moveToAngle(disposeSweepAngles.base, uprightAngles.shoulder, uprightAngles.wrist, gripSweep);
+        moveToAngle(disposeSweepAngles.base, uprightAngles.shoulder, 33, gripSweep);
+        wristServo.easeTo(uprightAngles.wrist, EASE_SPEED);
+        delay(100);
         moveToAngle(disposeSweepAngles);
+        delay(100);
         updatePosition("release");
 
     

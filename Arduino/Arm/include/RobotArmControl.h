@@ -41,7 +41,7 @@ private:
     const double gripLargePackage = 38;
     const double gripSmallPackage = 35;
     const double gripBooster = 18;
-    const double gripRelease = 70;
+    const double gripRelease = 60;
     const double gripSweep = 5; 
 
     // Store specific angles in arrays

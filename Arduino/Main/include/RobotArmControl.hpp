@@ -6,6 +6,7 @@
 #include <math.h>
 
 #include "Defines.hpp"
+#include "Logger.hpp"
 // #include "FunctionMap.hpp"
 
 class RobotArmControl
@@ -41,7 +42,7 @@ private:
     const double gripLargePackage = 38;
     const double gripSmallPackage = 35;
     const double gripBooster = 18;
-    const double gripRelease = 70;
+    const double gripRelease = 60;
     const double gripSweep = 5; 
 
     // Store specific angles in arrays
@@ -53,8 +54,8 @@ private:
     // double dropOffAnglesBoosters[4] = {90, 90, 90, 18};		  // set angles for dropping off boosters *update) {}
 
     Angles dropBridgeAngles = {1888, 152, 34, 0};
-    Angles dropSmallContainer = {2094, 138, 7, gripSmallPackage};
-    Angles dropLargeContainer = {1888, 154, 7, gripLargePackage};
+    Angles dropSmallContainer = {2094, 138, 7, 0};
+    Angles dropLargeContainer = {1888, 154, 7, 0};
     Angles initializedAngles = {888, 170, 25, gripRelease};
     Angles negativeInitializedAngles = {2000, 170, 25, gripRelease};
     Angles centerGravityForward = {888, 120, 75, gripRelease};
