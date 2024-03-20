@@ -60,6 +60,7 @@ void setup()
     while (!startButton.armed() && input != "arm")
     {
         Logger::log("Waiting for input...");
+        Logger::log(startButton.isPressed());
         delay(1000);
         if (Serial.available())
         {
@@ -163,12 +164,12 @@ void loop()
 
     delay(50); // Small delay for stability
 
-    waitForStartLED();
+    // waitForStartLED();
 
-    collectLargePackages();
+    // collectLargePackages();
 
-    // collectSmallPackages();
-    sweepSmallPackages();
+    // // collectSmallPackages();
+    // sweepSmallPackages();
 
     everythingElse();
 
@@ -188,24 +189,24 @@ void waitForStartLED()
 void collectLargePackages()
 {
     // Collect Center package 
-    Arm.solveIK(-4.5, 13, 1.27);
-    Arm.updatePosition("largePackage2");
+    robotArmControl.solveIK(-4.5, 13, 1.27);
+    robotArmControl.updatePosition("largePackage2");
 
     // Collect Right1 package 
-    Arm.solveIK(1.8, 14, 2.54);
-    Arm.updatePosition("largePackage");
+    robotArmControl.solveIK(1.8, 14, 2.54);
+    robotArmControl.updatePosition("largePackage");
 
     // Collect Left1 package 
-    Arm.solveIK(-11, 13, 0);
-    Arm.updatePosition("largePackage");
+    robotArmControl.solveIK(-11, 13, 0);
+    robotArmControl.updatePosition("largePackage");
 
     // Collect Right2 package 
-    Arm.solveIK(9, 17, 0);
-    Arm.updatePosition("largePackage");
+    robotArmControl.solveIK(9, 17, 0);
+    robotArmControl.updatePosition("largePackage");
 
     // Collect Left2 package 
-    Arm.solveIK(-16.5, 13.5, -3);
-    Arm.updatePosition("largePackage");
+    robotArmControl.solveIK(-16.5, 13.5, -3);
+    robotArmControl.updatePosition("largePackage");
 }
 
 void sweepSmallPackages()
@@ -226,6 +227,7 @@ void sweepSmallPackages()
     robotArmControl.updatePosition("sweep");
     delay(20);
     // TODO: Get rid of sweeper
+    robotArmControl.updatePosition("disposeSweep");
     robotArmControl.updatePosition("initial");
     wheelControls.moveBackwardEncoders(4, 100);
 }
@@ -339,82 +341,82 @@ void collectSmallPackages()
 
 void everythingElse()
 {
+    robotArmControl.updatePosition("initial");
+    delay(20);
+
+    robotArmControl.updatePosition("centerGravityForward");
+    delay(20);
+
+    wheelControls.moveForwardEncoders(32.0, 400);
+    delay(100);
+
+
+    wheelControls.rotateClockwise(180, 250);
+    delay(20);
+
+    wheelControls.moveBackwardEncoders(19.0, 200);
+    delay(20);
+
+    robotArmControl.updatePosition("negativeInitial");
+    delay(20);
+
+    wheelControls.rotateCounterClockwise(90, 250);
+    delay(20);
+
+    wheelControls.moveUltrasonicsForward(3, 250);
+    delay(20);
+
+    wheelControls.moveUltrasonicsBackward(6, 250);
+    delay(20);
+
+    wheelControls.rotateCounterClockwise(90, 250);
+    delay(20);
+
+    wheelControls.lineFollowConstant(7.0, 100, 75, 75);
+
+    wheelControls.moveUltrasonicsForward(6, 250);
+
+    wheelControls.rotateClockwise(90, 250);
+    delay(20);
+
+    // wheelControls.moveUltrasonicsForward(5, 250);
+    // delay(20);
+
+    // wheelControls.rotateClockwise(90, 100);
+    // delay(20);
+
+    servoLocks.unlockLargePackageContainer();
+    delay(20);
+
+    robotArmControl.updatePosition("dropLarge");
+    delay(20);
+
+    robotArmControl.updatePosition("initial");
+    delay(20);
+
+    wheelControls.moveUltrasonicsBackward(7, 250);
+    delay(20);
+
+    wheelControls.rotateCounterClockwise(90, 250);
+    delay(20);
+
+    // servoLocks.unlockSmallPackageContainer();
+    // delay(20);
+
+    // robotArmControl.updatePosition("dropSmall");
+    // delay(20);
+
     // robotArmControl.updatePosition("initial");
     // delay(20);
 
-    // robotArmControl.updatePosition("centerGravityForward");
+    // wheelControls.rotateClockwise(45, 100);
     // delay(20);
 
-    // wheelControls.moveForwardEncoders(32.0, 400);
-    // delay(100);
+    wheelControls.moveUltrasonicsBackward(6, 300);
+    delay(20);
 
-
-    // wheelControls.rotateClockwise(180, 250);
-    // delay(20);
-
-    // wheelControls.moveBackwardEncoders(19.0, 200);
-    // delay(20);
-
-    // robotArmControl.updatePosition("initial");
-    // delay(20);
-
-    // wheelControls.rotateCounterClockwise(90, 250);
-    // delay(20);
-
-    // wheelControls.moveUltrasonicsForward(3, 250);
-    // delay(20);
-
-    // wheelControls.moveUltrasonicsBackward(6, 250);
-    // delay(20);
-
-    // wheelControls.rotateCounterClockwise(90, 250);
-    // delay(20);
-
-    // wheelControls.lineFollowConstant(7.0, 100, 75, 75);
-
-    // wheelControls.moveUltrasonicsForward(6, 250);
-
-    // wheelControls.rotateClockwise(90, 250);
-    // delay(20);
-
-    // // wheelControls.moveUltrasonicsForward(5, 250);
-    // // delay(20);
-
-    // // wheelControls.rotateClockwise(90, 100);
-    // // delay(20);
-
-    // servoLocks.unlockLargePackageContainer();
-    // delay(20);
-
-    // robotArmControl.updatePosition("dropLarge");
-    // delay(20);
-
-    // robotArmControl.updatePosition("initial");
-    // delay(20);
-
-    // wheelControls.moveUltrasonicsBackward(7, 250);
-    // delay(20);
-
-    // wheelControls.rotateCounterClockwise(90, 250);
-    // delay(20);
-
-    // // servoLocks.unlockSmallPackageContainer();
-    // // delay(20);
-
-    // // robotArmControl.updatePosition("dropSmall");
-    // // delay(20);
-
-    // // robotArmControl.updatePosition("initial");
-    // // delay(20);
-
-    // // wheelControls.rotateClockwise(45, 100);
-    // // delay(20);
-
-    // wheelControls.moveUltrasonicsBackward(6, 300);
-    // delay(20);
-
-    // wheelControls.rotateCounterClockwise(90, 250);
-    // delay(20);
+    wheelControls.rotateCounterClockwise(90, 250);
+    delay(20);
 
     wheelControls.lineFollowConstant(13.0, 100, 75, 75);
     delay(20);
@@ -477,8 +479,8 @@ void everythingElse()
     delay(100);
 
     Logger::log("Team promo");
-    // lcdScreen.teamPromo();
-    // delay(20);
+    lcdScreen.teamPromo();
+    delay(20);
 
     Logger::log("Ultrasonics after team promo");
     wheelControls.moveUltrasonicsForward(3, 430);

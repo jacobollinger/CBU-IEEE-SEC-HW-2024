@@ -38,7 +38,7 @@ private:
     Servo gripperServo; // DMA-MG90-A 270
 
     // Predefined Angles *Determine these
-    const double gripLargePackage =30;
+    const double gripLargePackage = 38;
     const double gripSmallPackage = 35;
     const double gripBooster = 18;
     const double gripRelease = 70;
@@ -53,17 +53,18 @@ private:
     // double dropOffAnglesBoosters[4] = {90, 90, 90, 18};		  // set angles for dropping off boosters *update) {}
 
     Angles dropBridgeAngles = {1888, 152, 34, 0};
-    Angles dropSmallContainer = {2094, 138, 7, 0};
-    Angles dropLargeContainer = {1888, 154, 7, 20};
+    Angles dropSmallContainer = {2094, 138, 7, gripSmallPackage};
+    Angles dropLargeContainer = {1888, 154, 7, gripLargePackage};
     Angles initializedAngles = {888, 170, 25, gripRelease};
     Angles negativeInitializedAngles = {2000, 170, 25, gripRelease};
     Angles centerGravityForward = {888, 120, 75, gripRelease};
     Angles uprightAngles = {888, 180, 85, gripRelease};
-    Angles dropOffAnglesLargePkg = {1583, 167.22, 14, gripLargePackage};
+    Angles dropOffAnglesLargePkg = {1583, 175, 5, 46};
     Angles dropOffAnglesSmallPkg = {2222, 147, 35, 35};
-    Angles pickupSweep= {2177, 145, 5, gripRelease};
+    Angles pickupSweep = {2177, 145, 5, gripRelease};
+    Angles disposeSweepAngles = {2222, 115.2, 87.6, gripSweep};
 
-    const float L0 = 10.125;   // length from ground to second joint (shoulder)
+    const float L0 = 12.5;   // length from ground to first joint
     const float L1 = 18.25625; // length from 2nd joint to 3rd joint (shoulder to wrist)
     const float L2 = 12.7;     // length from 3rd joint to gripper tip
     const float pi = 3.141592653589793;
