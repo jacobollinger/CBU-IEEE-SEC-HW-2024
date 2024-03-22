@@ -139,7 +139,7 @@ void setup()
     //     }
     // }
 
-    Logger::log("Armed! Waiting for start signal or button press...");
+    // Logger::log("Armed! Waiting for start signal or button press...");
 }
 
 void loop()
@@ -151,11 +151,12 @@ void loop()
 
     delay(50); // Small delay for stability
 
+    Logger::log("Waiting for start button press...");
     while (!startButton.isPressed())
     {
     }
 
-    waitForStartLED(millis(), 15);
+    waitForStartLED(millis(), 15000);
 
     collectLargePackages();
 

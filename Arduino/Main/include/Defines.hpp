@@ -54,6 +54,6 @@
 #define PHOTOTRANSISTOR_THRESHOLD 50
 
 // TODO: Define start button pin
-#define START_BUTTON_PIN 999
+#define START_BUTTON_PIN 48
 
 #endif // DEFINES_HPP
