@@ -14,7 +14,7 @@ void LCD_Screen::teamPromo() {
     delay(2000);
     promoLCD.clear();
     promoLCD.setCursor(0, 0);
-    promoLCD.print("CBU IEEERobotics");
+    promoLCD.print("CBU IEEERobotic");
     delay(2000);
     promoLCD.noDisplay();
 }

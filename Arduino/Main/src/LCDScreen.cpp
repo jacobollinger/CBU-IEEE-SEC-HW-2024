@@ -12,8 +12,8 @@ void LCDScreen::init()
 
 void LCDScreen::teamPromo()
 {
-    promoLCD.print("GO BUCS!");
-    delay(10);
+    // promoLCD.print("GO BUCS!");
+    // delay(10);
     promoLCD.setCursor(0, 0);
     promoLCD.print("CBU IEEE");
     promoLCD.setCursor(0, 1);
