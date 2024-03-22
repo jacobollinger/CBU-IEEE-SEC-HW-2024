@@ -1,13 +1,13 @@
 #include "./include/RobotArmControl.h"
 
 #include <Servo.h>
-RobotArmControl Arm;
+RobotArmControl robotArmControl;
 
 void setup(){
 
     Serial.begin(BAUDRATE); // Initialize serial communication
-    Arm.initialize(); // Initialize the robot arm
-    Arm.updatePosition("initial");
+    robotArmControl.initialize(); // Initialize the robot arm
+    robotArmControl.updatePosition("initial");
     delay(500);
   //  collectLargePackages();
 }
@@ -61,8 +61,8 @@ if (spaceIndex1 != -1) {
             Serial.println(obj);
             
 // Set the servo position to y degrees
-     Arm.solveIK(x,y,z);
-     Arm.updatePosition(obj);
+     robotArmControl.solveIK(x,y,z);
+     robotArmControl.updatePosition(obj);
      delay(500); 
      }
     }
@@ -73,22 +73,22 @@ if (spaceIndex1 != -1) {
 void collectLargePackages(){
     //delay(1000);
     // Collect Center package 
-    Arm.solveIK(-3.5, 14, 4);
-    Arm.updatePosition("largePackage2");
+    robotArmControl.solveIK(-3.5, 14, 4);
+    robotArmControl.updatePosition("largePackage2");
 
     // Collect Right1 package 
-    Arm.solveIK(2.5, 15.5, 3);
-    Arm.updatePosition("largePackage");
+    robotArmControl.solveIK(2.5, 15.5, 3);
+    robotArmControl.updatePosition("largePackage");
 
     // Collect Left1 package 
-    Arm.solveIK(-10, 13, 0);
-    Arm.updatePosition("largePackage");
+    robotArmControl.solveIK(-10, 13, 0);
+    robotArmControl.updatePosition("largePackage");
 
     // Collect Right2 package 
-    // Arm.solveIK(9, 17, 0);
-    // Arm.updatePosition("largePackage");
+    // robotArmControl.solveIK(9, 17, 0);
+    // robotArmControl.updatePosition("largePackage");
 
     // Collect Left2 package 
-    Arm.solveIK(-16.5, 14.75, -1);
-    Arm.updatePosition("largePackage");
+    robotArmControl.solveIK(-16.5, 14.75, -1);
+    robotArmControl.updatePosition("largePackage");
 }
