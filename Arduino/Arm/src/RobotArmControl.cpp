@@ -2,6 +2,7 @@
 
 #include <ServoEasing.hpp>
 #define EASE_SPEED 80
+#define EASE_SPEED_FAST 100
 #define SHOULDER_MID_POSITION 80 
 #define WRIST_MID_POSITION 60
 #define BASE_X_AXIS_LOCATION 330
@@ -90,17 +91,17 @@ void RobotArmControl::updatePosition(String objective){
 		moveToAngle(initializedAngles.base, initializedAngles.shoulder, initializedAngles.wrist, initializedAngles.gripper);
         //delay(500);
     }
-    else if (objective == "dropSmall"){
-        delay(500);
-        moveToAngle(dropSmallContainer.base, uprightAngles.shoulder, uprightAngles.wrist, dropSmallContainer.gripper);
-        moveToAngle(dropSmallContainer.base, dropSmallContainer.shoulder, dropSmallContainer.wrist, dropSmallContainer.gripper);        //gripperServo.write(dropSmallContainer.gripper, EASE_SPEED);
-        baseServo.easeTo(2200,EASE_SPEED);
-        }
+    // else if (objective == "dropSmall"){
+    //     delay(500);
+    //     moveToAngle(dropSmallContainer.base, uprightAngles.shoulder, uprightAngles.wrist, dropSmallContainer.gripper);
+    //     moveToAngle(dropSmallContainer.base, dropSmallContainer.shoulder, dropSmallContainer.wrist, dropSmallContainer.gripper);        //gripperServo.write(dropSmallContainer.gripper, EASE_SPEED);
+    //     baseServo.easeTo(2200,EASE_SPEED);
+    //     }
     else if(objective == "dropLarge"){
-        moveToAngle(dropLargeContainer.base, uprightAngles.shoulder, uprightAngles.wrist, dropLargeContainer.gripper);
-        moveToAngle(dropLargeContainer);
+        moveToAngleLessEase(dropLargeContainer.base, uprightAngles.shoulder, uprightAngles.wrist, dropLargeContainer.gripper);
+        moveToAngleLessEase(dropLargeContainer);
         //wristServo.easeTo(dropLargeContainer.wrist, EASE_SPEED);
-        baseServo.easeTo(BASE_NEGATIVE_X_AXIS_LOCATION, EASE_SPEED); 
+        baseServo.easeTo(BASE_NEGATIVE_X_AXIS_LOCATION, EASE_SPEED_FAST); 
     }
     else if(objective == "dropBridge"){
         moveToAngle(dropBridgeAngles);
@@ -177,6 +178,38 @@ void RobotArmControl::moveToAngle(Angles angles){
 	else{
 		;
 	}
+}
+
+void RobotArmControl::moveToAngleLessEase(Angles angles){
+    if(90 > angles.shoulder)    { // Moving down move base, wrist, shoulder 
+		baseServo.easeTo(angles.base, EASE_SPEED_FAST);
+		// baseServo.writeMicroseconds(angleToMicroseconds360(angles.base));
+		//delay(500);
+		shoulderServo.easeTo(angles.shoulder, EASE_SPEED_FAST);
+		//delay(500);
+		wristServo.easeTo(angles.wrist, EASE_SPEED_FAST); // Warning: .writeMicroseconds converts the motor into continuous
+		//delay(500);
+		gripperServo.write(angles.gripper);
+		//delay(500);
+	 }
+	 else if (90 < angles.shoulder){ // moving up: wrist, shoulder, base
+		wristServo.easeTo(angles.wrist, EASE_SPEED_FAST); // Warning: .writeMicroseconds converts the motor into continuous
+		//delay(500);
+		shoulderServo.easeTo(angles.shoulder, EASE_SPEED_FAST);
+		//delay(500);
+		gripperServo.write(angles.gripper);
+		//delay(500);
+		baseServo.easeTo(angles.base, EASE_SPEED_FAST);
+		// baseServo.writeMicroseconds(angleToMicroseconds360(angles.base));
+		//delay(500);
+	}
+	else{
+		;
+	}
+}
+
+void RobotArmControl::moveToAngleLessEase(int baseAngle, float shoulderAngle, float wristAngle, float gripperAngle){
+    moveToAngleLessEase(Angles{baseAngle, shoulderAngle, wristAngle, gripperAngle});
 }
 
 int RobotArmControl::calcVectorAngle(double x_coordinate, double y_coordinate){

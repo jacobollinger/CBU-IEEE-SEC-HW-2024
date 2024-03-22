@@ -57,99 +57,99 @@ void setup()
     // delay(5000);
 
     String input = "";
-    while (!startButton.armed() && input != "arm")
-    {
-        Logger::log("Waiting for input...");
-        delay(1000);
-        if (Serial.available())
-        {
-            input = Serial.readString();
+    // while (!startButton.armed() && input != "arm")
+    // {
+    //     Logger::log("Waiting for input...");
+    //     delay(1000);
+    //     if (Serial.available())
+    //     {
+    //         input = Serial.readString();
 
-            String command = input.substring(0, input.indexOf(" "));
-            String args[MAX_ARGS];
+    //         String command = input.substring(0, input.indexOf(" "));
+    //         String args[MAX_ARGS];
 
-            input = input.substring(input.indexOf(" ") + 1); // Remove the command and the following space from the input
-            if (input.indexOf(" ") != -1)
-            {
-                for (int i = 0; input.indexOf(" ") != -1 && i < MAX_ARGS; i++)
-                {
-                    int spaceIndex = input.indexOf(" ");
-                    args[i] = input.substring(0, spaceIndex);
-                    input = input.substring(spaceIndex + 1);
-                }
-            }
+    //         input = input.substring(input.indexOf(" ") + 1); // Remove the command and the following space from the input
+    //         if (input.indexOf(" ") != -1)
+    //         {
+    //             for (int i = 0; input.indexOf(" ") != -1 && i < MAX_ARGS; i++)
+    //             {
+    //                 int spaceIndex = input.indexOf(" ");
+    //                 args[i] = input.substring(0, spaceIndex);
+    //                 input = input.substring(spaceIndex + 1);
+    //             }
+    //         }
 
-            if (command == "updatePosition")
-            {
-                robotArmControl.updatePosition(args[0]);
-            }
-            else if (command == "solveIK")
-            {
-                robotArmControl.solveIK(args[0].toDouble(), args[1].toDouble(), args[2].toDouble());
-            }
-            else if (command == "rotateCounterClockwise")
-            {
-                // delay(100);
-                wheelControls.rotateCounterClockwise(args[0].toFloat(), args[1].toInt());
-            }
-            else if (command == "rotateClockwise")
-            {
-                wheelControls.rotateClockwise(args[0].toFloat(), args[1].toInt());
-            }
-            else if (command == "moveForwardEncoders")
-            {
-                Logger::log("Moving forward...");
-                wheelControls.moveForwardEncoders(args[0].toFloat(), args[1].toInt());
-                delay(100);
-            }
-            else if (command == "moveBackwardEncoders")
-            {
-                Logger::log("Moving backward...");
-                wheelControls.moveBackwardEncoders(args[0].toFloat(), args[1].toInt());
-                delay(100);
-            }
-            else if (command == "collectLargePackages")
-            {
-                collectLargePackages();
-                delay(100);
-            }
-            else if (command == "initial")
-            {
-                robotArmControl.updatePosition("initial");
-                delay(100);
-            }
-            else if (command == "sweepPackages")
-            {
-                sweepSmallPackages();
-                delay(100);
-            }
-            else if (command == "sweep")
-            {
-                robotArmControl.updatePosition("sweep");
-                delay(100);
-            }
-            else if (command == "promo")
-            {
-                lcdScreen.teamPromo();
-                delay(100);
-            }
-            else if (command == "unlock")
-            {
-                servoLocks.unlockAll();
-                delay(100);
-            }
-            else if (command == "lock")
-            {
-                servoLocks.lockAll();
-                delay(100);
-            }
-            else
-            {
-                Logger::log("Command not found: ", false);
-                Logger::log(command);
-            }
-        }
-    }
+    //         if (command == "updatePosition")
+    //         {
+    //             robotArmControl.updatePosition(args[0]);
+    //         }
+    //         else if (command == "solveIK")
+    //         {
+    //             robotArmControl.solveIK(args[0].toDouble(), args[1].toDouble(), args[2].toDouble());
+    //         }
+    //         else if (command == "rotateCounterClockwise")
+    //         {
+    //             // delay(100);
+    //             wheelControls.rotateCounterClockwise(args[0].toFloat(), args[1].toInt());
+    //         }
+    //         else if (command == "rotateClockwise")
+    //         {
+    //             wheelControls.rotateClockwise(args[0].toFloat(), args[1].toInt());
+    //         }
+    //         else if (command == "moveForwardEncoders")
+    //         {
+    //             Logger::log("Moving forward...");
+    //             wheelControls.moveForwardEncoders(args[0].toFloat(), args[1].toInt());
+    //             delay(100);
+    //         }
+    //         else if (command == "moveBackwardEncoders")
+    //         {
+    //             Logger::log("Moving backward...");
+    //             wheelControls.moveBackwardEncoders(args[0].toFloat(), args[1].toInt());
+    //             delay(100);
+    //         }
+    //         else if (command == "collectLargePackages")
+    //         {
+    //             collectLargePackages();
+    //             delay(100);
+    //         }
+    //         else if (command == "initial")
+    //         {
+    //             robotArmControl.updatePosition("initial");
+    //             delay(100);
+    //         }
+    //         else if (command == "sweepPackages")
+    //         {
+    //             sweepSmallPackages();
+    //             delay(100);
+    //         }
+    //         else if (command == "sweep")
+    //         {
+    //             robotArmControl.updatePosition("sweep");
+    //             delay(100);
+    //         }
+    //         else if (command == "promo")
+    //         {
+    //             lcdScreen.teamPromo();
+    //             delay(100);
+    //         }
+    //         else if (command == "unlock")
+    //         {
+    //             servoLocks.unlockAll();
+    //             delay(100);
+    //         }
+    //         else if (command == "lock")
+    //         {
+    //             servoLocks.lockAll();
+    //             delay(100);
+    //         }
+    //         else
+    //         {
+    //             Logger::log("Command not found: ", false);
+    //             Logger::log(command);
+    //         }
+    //     }
+    // }
 
     Logger::log("Armed! Waiting for start signal or button press...");
 }
@@ -163,7 +163,11 @@ void loop()
 
     delay(50); // Small delay for stability
 
-    waitForStartLED();
+    while (!startButton.isPressed())
+    {
+    }
+
+    waitForStartLED(millis(), 15);
 
     collectLargePackages();
 
@@ -176,9 +180,9 @@ void loop()
     hasExecutedOnce = true;
 }
 
-void waitForStartLED()
+void waitForStartLED(float startTime, float waitTime)
 {
-    while (!phototransistor.isIlluminated(PHOTOTRANSISTOR_THRESHOLD) && !startButton.starting())
+    while (!phototransistor.isIlluminated(PHOTOTRANSISTOR_THRESHOLD) && !(millis() - startTime > waitTime))
     {
         String log = "Waiting for light. Light level: ";
         log += phototransistor.read();
@@ -188,31 +192,42 @@ void waitForStartLED()
 }
 
 void collectLargePackages(){
-    //delay(1000);
-    // Collect Center package 
-    robotArmControl.solveIK(-3.25, 13, 1.27);
+    // //delay(1000);
+    // // Collect Center package 
+    // robotArmControl.solveIK(-3.25, 13, 1.27);
+    // robotArmControl.updatePosition("largePackage2");
+
+    // // Collect Right1 package 
+    // robotArmControl.solveIK(2.25, 15, 1.27);
+    // robotArmControl.updatePosition("largePackage");
+
+    // // Collect Left1 package 
+    // robotArmControl.solveIK(-10, 13, 0);
+    // robotArmControl.updatePosition("largePackage");
+
+    // // Collect Right2 package 
+    // // robotArmControl.solveIK(9, 17, 0);
+    // // robotArmControl.updatePosition("largePackage");
+
+    // // Collect Left2 package 
+    // robotArmControl.solveIK(-16.5, 14.75, -1);
+    // robotArmControl.updatePosition("largePackage");
+
+    robotArmControl.solveIK(-3.5, 14, 4);
     robotArmControl.updatePosition("largePackage2");
 
     // Collect Right1 package 
-    robotArmControl.solveIK(2.25, 15, 1.27);
+    robotArmControl.solveIK(2.5, 15.5, 3);
     robotArmControl.updatePosition("largePackage");
 
     // Collect Left1 package 
     robotArmControl.solveIK(-10, 13, 0);
     robotArmControl.updatePosition("largePackage");
-
-    // Collect Right2 package 
-    // robotArmControl.solveIK(9, 17, 0);
-    // robotArmControl.updatePosition("largePackage");
-
-    // Collect Left2 package 
-    robotArmControl.solveIK(-16.5, 14.75, -1);
-    robotArmControl.updatePosition("largePackage");
 }
 
 void sweepSmallPackages()
 {
-    wheelControls.rotateClockwise(65, 250);
+    wheelControls.rotateClockwise(63, 250);
     delay(20);
     wheelControls.moveBackwardEncoders(2, 100);
     delay(20);
@@ -225,7 +240,7 @@ void sweepSmallPackages()
     delay(20);
     wheelControls.lineFollowConstant(6, 100, 75, 75);
     delay(20);
-    wheelControls.moveBackwardEncoders(8, 100);
+    wheelControls.moveBackwardEncoders(7, 100);
     delay(20);
     robotArmControl.updatePosition("sweep");
     delay(20);
@@ -360,7 +375,7 @@ void everythingElse()
     wheelControls.rotateClockwise(175, 250);
     delay(20);
 
-    wheelControls.moveBackwardEncoders(17.0, 200);
+    wheelControls.moveBackwardEncoders(19.0, 200);
     delay(20);
 
     wheelControls.rotateCounterClockwise(90, 250);
@@ -379,7 +394,7 @@ void everythingElse()
 
     wheelControls.moveUltrasonicsForward(7, 250);
 
-    wheelControls.rotateClockwise(75, 250);
+    wheelControls.rotateClockwise(85, 250);
     delay(20);
 
     wheelControls.moveUltrasonicsBackward(9, 250);
@@ -400,7 +415,7 @@ void everythingElse()
     // wheelControls.moveUltrasonicsBackward(7, 250);
     // delay(20);
 
-    wheelControls.rotateCounterClockwise(90, 250);
+    wheelControls.rotateCounterClockwise(100, 250);
     delay(20);
 
     // servoLocks.unlockSmallPackageContainer();
@@ -415,7 +430,7 @@ void everythingElse()
     // wheelControls.rotateClockwise(45, 100);
     // delay(20);
 
-    wheelControls.moveUltrasonicsBackward(6, 300);
+    wheelControls.moveUltrasonicsBackward(7, 300);
     delay(20);
 
     wheelControls.rotateCounterClockwise(90, 250);
@@ -436,7 +451,7 @@ void everythingElse()
     // robotArmControl.updatePosition("centerGravityForward");
     // delay(20);
 
-    wheelControls.moveForwardEncoders(30.0, 400);
+    wheelControls.moveForwardEncoders(27.0, 400);
     delay(1500);
 
     // robotArmControl.updatePosition("initial");
@@ -448,22 +463,22 @@ void everythingElse()
     wheelControls.rotateClockwise(180, 250);
     delay(20);
 
-    wheelControls.moveBackwardUntilSensors(70, 50);
+    wheelControls.moveBackwardUntilSensors(40, 50);
     delay(20);
 
     wheelControls.moveForwardEncoders(0.5, 100);
     delay(20);
 
     servoLocks.unlockBridge();
-    delay(1500);
+    delay(1000);
 
-    wheelControls.moveBackwardEncoders(2.0, 100);
+    // wheelControls.moveBackwardEncoders(2.0, 100);
+    // delay(20);
+
+    wheelControls.moveForwardEncoders(1.0, 200);
     delay(20);
 
-    wheelControls.moveForwardEncoders(3.0, 200);
-    delay(20);
-
-    wheelControls.rotateClockwise(180, 250);
+    wheelControls.rotateClockwise(178, 250);
     delay(20);
 
     wheelControls.moveForwardEncoders(7.0, 200);
@@ -478,15 +493,15 @@ void everythingElse()
     // delay(20);
 
     Logger::log("Forward after line follow");
-    wheelControls.moveForwardEncoders(20.0, 300);
-    delay(100);
+    wheelControls.moveForwardEncoders(20.0, 400);
+    delay(20);
 
     Logger::log("Team promo");
     lcdScreen.teamPromo();
     delay(20);
 
     Logger::log("Ultrasonics after team promo");
-    wheelControls.moveUltrasonicsForward(3, 430);
+    wheelControls.moveUltrasonicsForward(3, 400);
     delay(20);
 
     Logger::log("Rotate after ultrasonics");

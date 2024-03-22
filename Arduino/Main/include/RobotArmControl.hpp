@@ -25,6 +25,8 @@ public:
     int angleToMicroseconds360(double angle);
     int calcVectorAngle(double x, double y); // Calculate angle of vector
     void moveToAngle(Angles angles);
+    void moveToAngleLessEase(int x, float y, float z, float g);
+    void moveToAngleLessEase(Angles angles);
     void moveToAngle(int x, float y, float z, float g);
     // void updatePosition(double x, double y, double z, double g);
     void updatePosition(String objective);
@@ -55,7 +57,7 @@ private:
 
     Angles dropBridgeAngles = {1888, 152, 34, 0};
     Angles dropSmallContainer = {2094, 138, 7, 0};
-    Angles dropLargeContainer = {1888, 154, 7, 0};
+    Angles dropLargeContainer = {1888, 150, 7, 0};
     Angles initializedAngles = {888, 170, 25, gripRelease};
     Angles negativeInitializedAngles = {2000, 170, 25, gripRelease};
     Angles centerGravityForward = {888, 120, 75, gripRelease};

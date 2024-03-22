@@ -73,11 +73,11 @@ if (spaceIndex1 != -1) {
 void collectLargePackages(){
     //delay(1000);
     // Collect Center package 
-    Arm.solveIK(-3.25, 13, 1.27);
+    Arm.solveIK(-3.5, 14, 4);
     Arm.updatePosition("largePackage2");
 
     // Collect Right1 package 
-    Arm.solveIK(2.25, 15, 1.27);
+    Arm.solveIK(2.5, 15.5, 3);
     Arm.updatePosition("largePackage");
 
     // Collect Left1 package 
