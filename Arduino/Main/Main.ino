@@ -54,13 +54,11 @@ void setup()
         RISING);
 
     Logger::log("Setup complete!");
-    // delay(5000);
 
     String input = "";
     // while (!startButton.armed() && input != "arm")
     // {
     //     Logger::log("Waiting for input...");
-    //     delay(1000);
     //     if (Serial.available())
     //     {
     //         input = Serial.readString();
@@ -89,7 +87,6 @@ void setup()
     //         }
     //         else if (command == "rotateCounterClockwise")
     //         {
-    //             // delay(100);
     //             wheelControls.rotateCounterClockwise(args[0].toFloat(), args[1].toInt());
     //         }
     //         else if (command == "rotateClockwise")
@@ -100,48 +97,39 @@ void setup()
     //         {
     //             Logger::log("Moving forward...");
     //             wheelControls.moveForwardEncoders(args[0].toFloat(), args[1].toInt());
-    //             delay(100);
     //         }
     //         else if (command == "moveBackwardEncoders")
     //         {
     //             Logger::log("Moving backward...");
     //             wheelControls.moveBackwardEncoders(args[0].toFloat(), args[1].toInt());
-    //             delay(100);
     //         }
     //         else if (command == "collectLargePackages")
     //         {
     //             collectLargePackages();
-    //             delay(100);
     //         }
     //         else if (command == "initial")
     //         {
     //             robotArmControl.updatePosition("initial");
-    //             delay(100);
     //         }
     //         else if (command == "sweepPackages")
     //         {
     //             sweepSmallPackages();
-    //             delay(100);
     //         }
     //         else if (command == "sweep")
     //         {
     //             robotArmControl.updatePosition("sweep");
-    //             delay(100);
     //         }
     //         else if (command == "promo")
     //         {
     //             lcdScreen.teamPromo();
-    //             delay(100);
     //         }
     //         else if (command == "unlock")
     //         {
     //             servoLocks.unlockAll();
-    //             delay(100);
     //         }
     //         else if (command == "lock")
     //         {
     //             servoLocks.lockAll();
-    //             delay(100);
     //         }
     //         else
     //         {
@@ -192,7 +180,6 @@ void waitForStartLED(float startTime, float waitTime)
 }
 
 void collectLargePackages(){
-    // //delay(1000);
     // // Collect Center package 
     // robotArmControl.solveIK(-3.25, 13, 1.27);
     // robotArmControl.updatePosition("largePackage2");
@@ -306,47 +293,34 @@ void collectSmallPackages()
         }
         else if (command == "rotateCounterClockwise")
         {
-            // delay(100);
             wheelControls.rotateCounterClockwise(args[0].toFloat(), args[1].toInt());
-            Serial.println("WAITING");
         }
         else if (command == "rotateClockwise")
         {
             wheelControls.rotateClockwise(args[0].toFloat(), args[1].toInt());
-            Serial.println("WAITING");
         }
         else if (command == "moveForwardEncoders")
         {
             Logger::log("Moving forward...");
             wheelControls.moveForwardEncoders(args[0].toFloat(), args[1].toInt());
-            delay(100);
-            Serial.println("WAITING");
         }
         else if (command == "moveBackwardEncoders")
         {
             Logger::log("Moving backward...");
             wheelControls.moveBackwardEncoders(args[0].toFloat(), args[1].toInt());
-            delay(100);
-            Serial.println("WAITING");
         }
         else if (command == "pickupSmallPackage")
         {
             robotArmControl.updatePosition("smallPackage");
-            delay(100);
             robotArmControl.updatePosition("initial");
-            Serial.println("WAITING");
         }
         else if (command == "initial")
         {
             robotArmControl.updatePosition("initial");
-            delay(100);
-            Serial.println("WAITING");
         }
         else if (command == "sweep")
         {
             robotArmControl.updatePosition("sweep");
-            delay(100);
-            Serial.println("WAITING");
         }
         else
         {
