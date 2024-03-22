@@ -180,35 +180,36 @@ void waitForStartLED(float startTime, float waitTime)
     }
 }
 
-void collectLargePackages(){
-    // // Collect Center package 
+void collectLargePackages()
+{
+    // // Collect Center package
     // robotArmControl.solveIK(-3.25, 13, 1.27);
     // robotArmControl.updatePosition("largePackage2");
 
-    // // Collect Right1 package 
+    // // Collect Right1 package
     // robotArmControl.solveIK(2.25, 15, 1.27);
     // robotArmControl.updatePosition("largePackage");
 
-    // // Collect Left1 package 
+    // // Collect Left1 package
     // robotArmControl.solveIK(-10, 13, 0);
     // robotArmControl.updatePosition("largePackage");
 
-    // // Collect Right2 package 
+    // // Collect Right2 package
     // // robotArmControl.solveIK(9, 17, 0);
     // // robotArmControl.updatePosition("largePackage");
 
-    // // Collect Left2 package 
+    // // Collect Left2 package
     // robotArmControl.solveIK(-16.5, 14.75, -1);
     // robotArmControl.updatePosition("largePackage");
 
     robotArmControl.solveIK(-3.5, 14, 4);
     robotArmControl.updatePosition("largePackage2");
 
-    // Collect Right1 package 
+    // Collect Right1 package
     robotArmControl.solveIK(2.5, 15.5, 3);
     robotArmControl.updatePosition("largePackage");
 
-    // Collect Left1 package 
+    // Collect Left1 package
     robotArmControl.solveIK(-10, 13, 0);
     robotArmControl.updatePosition("largePackage");
 }
@@ -342,7 +343,8 @@ void everythingElse()
     // delay(20);
 
     wheelControls.moveForwardEncoders(32.0, 400);
-    delay(100);
+    delay(20);
+    // delay(100);
 
     // robotArmControl.updatePosition("negativeInitial");
     // delay(20);
@@ -367,7 +369,7 @@ void everythingElse()
 
     wheelControls.lineFollowConstant(9.0, 100, 75, 75);
 
-    wheelControls.moveUltrasonicsForward(7, 250);
+    wheelControls.moveUltrasonicsForward(8, 250);
 
     wheelControls.rotateClockwise(85, 250);
     delay(20);
@@ -411,7 +413,7 @@ void everythingElse()
     wheelControls.rotateCounterClockwise(90, 250);
     // delay(20);
 
-    wheelControls.lineFollowConstant(8.0, 100, 75, 75);
+    wheelControls.lineFollowConstant(9.0, 100, 75, 75);
     delay(20);
 
     wheelControls.moveUltrasonicsForward(7, 250);
@@ -426,8 +428,9 @@ void everythingElse()
     // robotArmControl.updatePosition("centerGravityForward");
     // delay(20);
 
-    wheelControls.moveForwardEncoders(27.0, 400);
-    delay(1500);
+    wheelControls.moveForwardEncoders(27.5, 400);
+    delay(500);
+    // delay(1500);
 
     // robotArmControl.updatePosition("initial");
     // delay(20);
@@ -453,7 +456,7 @@ void everythingElse()
     wheelControls.moveForwardEncoders(1.0, 200);
     delay(20);
 
-    wheelControls.rotateClockwise(178, 250);
+    wheelControls.rotateClockwise(175, 250);
     delay(20);
 
     wheelControls.moveForwardEncoders(7.0, 200);
@@ -484,6 +487,6 @@ void everythingElse()
     delay(20);
 
     Logger::log("Push button");
-    wheelControls.moveForwardEncoders(7.0, 200);
+    wheelControls.moveForwardEncoders(8.0, 200);
     delay(20);
 }

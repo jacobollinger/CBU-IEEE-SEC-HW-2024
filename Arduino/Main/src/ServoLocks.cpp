@@ -1,5 +1,7 @@
 #include "../include/ServoLocks.hpp"
 
+const int delayTime = 300;
+
 ServoLocks::ServoLocks()
 {
 }
@@ -11,48 +13,47 @@ void ServoLocks::init()
     bridgeLock.attach(5);
 
     smallPackageContainerLock.write(smallPackageLockPos);
-    delay(600);
+    delay(delayTime);
     bridgeLock.write(bridgeLockPos);
-    delay(600);
+    delay(delayTime);
     largePackageContainerLock.write(largePackageLockPos);
-    delay(600);
+    delay(delayTime);
 }
 
 void ServoLocks::unlockSmallPackageContainer()
 {
     smallPackageContainerLock.write(smallPackageUnlockPos);
-    delay(600);
+    delay(delayTime);
 }
 
 void ServoLocks::unlockLargePackageContainer()
 {
     largePackageContainerLock.write(largePackageUnlockPos);
-    delay(600);
+    delay(delayTime);
 }
 
 void ServoLocks::unlockBridge()
 {
     bridgeLock.write(bridgeUnlockPos);
-    delay(600);
+    delay(delayTime);
 }
 
 void ServoLocks::lockAll()
 {
     smallPackageContainerLock.write(smallPackageLockPos);
-    delay(600);
+    delay(delayTime);
     largePackageContainerLock.write(largePackageLockPos);
-    delay(600);
+    delay(delayTime);
     bridgeLock.write(bridgeLockPos);
-    delay(600);
+    delay(delayTime);
 }
 
 void ServoLocks::unlockAll()
 {
     smallPackageContainerLock.write(bridgeLockPos);
-    delay(600);
+    delay(delayTime);
     largePackageContainerLock.write(largePackageUnlockPos);
-    delay(600);
+    delay(delayTime);
     bridgeLock.write(bridgeUnlockPos);
-    delay(600);
+    delay(delayTime);
 }
-

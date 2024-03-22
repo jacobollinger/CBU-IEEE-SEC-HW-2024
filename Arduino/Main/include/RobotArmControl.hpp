@@ -57,7 +57,7 @@ private:
 
     Angles dropBridgeAngles = {1888, 152, 34, 0};
     Angles dropSmallContainer = {2094, 138, 7, 0};
-    Angles dropLargeContainer = {1888, 150, 7, 0};
+    Angles dropLargeContainer = {1888, 140, 7, 0};
     Angles initializedAngles = {888, 170, 25, gripRelease};
     Angles negativeInitializedAngles = {2000, 170, 25, gripRelease};
     Angles centerGravityForward = {888, 120, 75, gripRelease};
