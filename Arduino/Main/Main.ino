@@ -7,14 +7,14 @@
 #include "./include/Phototransistor.hpp"
 #include "./include/RobotArmControl.hpp"
 #include "./include/ServoLocks.hpp"
-#include "./include/StartButton.hpp"
+#include "./include/ManualStartButton.hpp"
 #include "./include/WheelControls.hpp"
 
 #define MAX_ARGS 10
 
 bool hasExecutedOnce = false;
 
-StartButton startButton = StartButton(START_BUTTON_PIN);
+ManualStartButton manualStartButton = ManualStartButton(START_BUTTON_PIN);
 LCDScreen lcdScreen = LCDScreen();
 Phototransistor phototransistor = Phototransistor(PHOTOTRANSISTOR_PIN);
 RobotArmControl robotArmControl = RobotArmControl();
@@ -40,7 +40,7 @@ void setup()
     // Attach interrupt == Start button
     attachInterrupt(
         digitalPinToInterrupt(START_BUTTON_PIN), []()
-        { startButton.readPin(); },
+        { manualStartButton.readPin(); },
         FALLING);
 
     // Attach interrupts == Once a high ENCA is read pulse counting begins
@@ -151,12 +151,12 @@ void loop()
 
     delay(50); // Small delay for stability
 
-    Logger::log("Waiting for start button press...");
-    while (!startButton.isPressed())
-    {
-    }
+    // Logger::log("Waiting for start button press...");
+    // while (!startButton.isPressed())
+    // {
+    // }
 
-    waitForStartLED(millis(), 15000);
+    waitForStartLED();
 
     collectLargePackages();
 
@@ -169,9 +169,9 @@ void loop()
     hasExecutedOnce = true;
 }
 
-void waitForStartLED(float startTime, float waitTime)
+void waitForStartLED()
 {
-    while (!phototransistor.isIlluminated(PHOTOTRANSISTOR_THRESHOLD) && !(millis() - startTime > waitTime))
+    while (!phototransistor.isIlluminated(PHOTOTRANSISTOR_THRESHOLD) && !manualStartButton.isPressed())
     {
         String log = "Waiting for light. Light level: ";
         log += phototransistor.read();
@@ -237,7 +237,7 @@ void sweepSmallPackages()
     delay(10);
     robotArmControl.updatePosition("negativeInitial");
     delay(10);
-    wheelControls.moveBackwardEncoders(3, 100);
+    wheelControls.moveBackwardEncoders(4, 100);
 }
 
 void collectSmallPackages()
