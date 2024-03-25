@@ -62,10 +62,8 @@ void setup()
     //     if (Serial.available())
     //     {
     //         input = Serial.readString();
-
     //         String command = input.substring(0, input.indexOf(" "));
     //         String args[MAX_ARGS];
-
     //         input = input.substring(input.indexOf(" ") + 1); // Remove the command and the following space from the input
     //         if (input.indexOf(" ") != -1)
     //         {
@@ -76,7 +74,6 @@ void setup()
     //                 input = input.substring(spaceIndex + 1);
     //             }
     //         }
-
     //         if (command == "updatePosition")
     //         {
     //             robotArmControl.updatePosition(args[0]);
@@ -361,10 +358,10 @@ void everythingElse()
     wheelControls.moveUltrasonicsForward(3, 250);
     delay(20);
 
-    wheelControls.moveUltrasonicsBackward(6, 250);
+    wheelControls.moveUltrasonicsBackward(6, 200);
     delay(20);
 
-    wheelControls.rotateCounterClockwise(90, 250);
+    wheelControls.rotateCounterClockwise(90, 225);
     delay(20);
 
     wheelControls.lineFollowConstant(9.0, 100, 75, 75);
@@ -407,19 +404,19 @@ void everythingElse()
     // wheelControls.rotateClockwise(45, 100);
     // delay(20);
 
-    wheelControls.moveUltrasonicsBackward(7, 300);
+    wheelControls.moveUltrasonicsBackward(7, 200);
     delay(20);
 
-    wheelControls.rotateCounterClockwise(90, 250);
+    wheelControls.rotateCounterClockwise(80, 250);
     // delay(20);
 
     wheelControls.lineFollowConstant(9.0, 100, 75, 75);
     delay(20);
 
-    wheelControls.moveUltrasonicsForward(7, 250);
+    wheelControls.moveUltrasonicsForward(8, 200);
     delay(20);
 
-    wheelControls.rotateCounterClockwise(90, 250);
+    wheelControls.rotateCounterClockwise(85, 250);
     delay(20);
 
     // robotArmControl.updatePosition("initial");
@@ -448,7 +445,7 @@ void everythingElse()
     delay(20);
 
     servoLocks.unlockBridge();
-    delay(1000);
+    delay(1300);
 
     // wheelControls.moveBackwardEncoders(2.0, 100);
     // delay(20);
@@ -456,7 +453,7 @@ void everythingElse()
     wheelControls.moveForwardEncoders(1.0, 200);
     delay(20);
 
-    wheelControls.rotateClockwise(175, 250);
+    wheelControls.rotateClockwise(180, 200);
     delay(20);
 
     wheelControls.moveForwardEncoders(7.0, 200);
